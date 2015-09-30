@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +35,7 @@ import pe.com.viajes.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.viajes.bean.negocio.ServicioProveedor;
 import pe.com.viajes.bean.negocio.Telefono;
 import pe.com.viajes.bean.negocio.TipoCambio;
+import pe.com.viajes.bean.reportes.CheckIn;
 import pe.com.viajes.negocio.dao.ArchivoReporteDao;
 import pe.com.viajes.negocio.dao.ClienteDao;
 import pe.com.viajes.negocio.dao.ComprobanteNovaViajesDao;
@@ -757,5 +759,15 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 		TipoCambioDao tipoCambioDao = new TipoCambioDaoImpl();
 
 		return tipoCambioDao.listarTipoCambio(fecha);
+	}
+	
+	@Override
+	public List<CheckIn> consultarCheckInPendientes() throws SQLException{
+		ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
+		
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.HOUR, 48);
+				
+		return servicioNegocioDao.consultarcheckinpendientes(cal.getTime());
 	}
 }

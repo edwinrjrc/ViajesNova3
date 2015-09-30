@@ -21,6 +21,7 @@ import pe.com.viajes.bean.base.BaseVO;
 import pe.com.viajes.bean.jasper.DetalleServicio;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.bean.negocio.ServicioProveedor;
+import pe.com.viajes.bean.reportes.CheckIn;
 import pe.com.viajes.bean.util.UtilParse;
 import pe.com.viajes.negocio.dao.ServicioNegocioDao;
 import pe.com.viajes.negocio.util.UtilConexion;
@@ -76,6 +77,10 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 		return resultado;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see pe.com.viajes.negocio.dao.ServicioNegocioDao#proveedoresXServicio(pe.com.viajes.bean.base.BaseVO)
+	 */
 	@Override
 	public List<ServicioProveedor> proveedoresXServicio(BaseVO servicio)
 			throws SQLException {
@@ -127,6 +132,10 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 		return resultado;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see pe.com.viajes.negocio.dao.ServicioNegocioDao#consultarServicioVentaJR(java.lang.Integer)
+	 */
 	@Override
 	public List<DetalleServicio> consultarServicioVentaJR(Integer idServicio)
 			throws SQLException {
@@ -171,6 +180,61 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 				total = UtilJdbc.obtenerBigDecimal(rs, "montototal");
 				detalle.setTotal(df.format(total.doubleValue()));
 				resultado.add(detalle);
+			}
+
+			return resultado;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLException(e);
+		} finally {
+			if (rs != null) {
+				rs.close();
+			}
+			if (cs != null) {
+				cs.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see pe.com.viajes.negocio.dao.ServicioNegocioDao#consultarCheckInPendientes()
+	 */
+	@Override
+	public List<CheckIn> consultarcheckinpendientes(Date fechaHasta) throws SQLException {
+		List<CheckIn> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "";
+		try {
+			sql = "{ ? = call negocio.fn_consultarcheckinpendientes(?) }";
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(1, Types.OTHER);
+			cs.setTimestamp(2, UtilJdbc.convertirUtilDateTimeStamp(fechaHasta));
+			cs.execute();
+
+			rs = (ResultSet) cs.getObject(1);
+			CheckIn checkIn = null;
+			resultado = new ArrayList<CheckIn>();
+			
+			while (rs.next()) {
+				checkIn = new CheckIn();
+				checkIn.setIdServicio(UtilJdbc.obtenerNumero(rs, "id"));
+				checkIn.getCliente().setNombre(UtilJdbc.obtenerCadena(rs, "nombrecliente"));
+				checkIn.getOrigen().setNombre(UtilJdbc.obtenerCadena(rs, "descripcionorigen"));
+				checkIn.getDestino().setNombre(UtilJdbc.obtenerCadena(rs, "descripciondestino"));
+				checkIn.setFechaSalida(UtilJdbc.obtenerFecha(rs, "fechasalida"));
+				checkIn.setFechaLlegada(UtilJdbc.obtenerFecha(rs, "fechallegada"));
+				checkIn.getAerolinea().setNombre(UtilJdbc.obtenerCadena(rs, "nombreaerolinea"));
+				checkIn.setCodigoReserva(UtilJdbc.obtenerCadena(rs, "codigoreserva"));
+				checkIn.setNumeroBoleto(UtilJdbc.obtenerCadena(rs, "numeroboleto"));
+				
+				resultado.add(checkIn);
 			}
 
 			return resultado;
