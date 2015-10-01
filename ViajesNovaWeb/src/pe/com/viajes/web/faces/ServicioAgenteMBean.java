@@ -143,6 +143,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private boolean verDetalleServicio;
 	private boolean mostrarCuenta;
 	private boolean mostrarTarjeta;
+	private boolean aplicaIGV;
 
 	private ParametroServicio parametroServicio;
 	private NegocioServicio negocioServicio;
@@ -1026,8 +1027,11 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.getDetalleServicio().getServicioProveedor().setProveedor(null);
 			this.getDetalleServicio().setConfiguracionTipoServicio(null);
 			this.setCargoConfiguracionTipoServicio(false);
+			this.getDetalleServicio().setAplicaIGV(true);
+			this.setAplicaIGV(false);
 
 			if (oe != null) {
+				this.setAplicaIGV(true);
 				String valor = oe.toString();
 
 				Parametro param = this.parametroServicio
@@ -2919,5 +2923,19 @@ public class ServicioAgenteMBean extends BaseMBean {
 	 */
 	public void setMostrarTarjeta(boolean mostrarTarjeta) {
 		this.mostrarTarjeta = mostrarTarjeta;
+	}
+
+	/**
+	 * @return the aplicaIGV
+	 */
+	public boolean isAplicaIGV() {
+		return aplicaIGV;
+	}
+
+	/**
+	 * @param aplicaIGV the aplicaIGV to set
+	 */
+	public void setAplicaIGV(boolean aplicaIGV) {
+		this.aplicaIGV = aplicaIGV;
 	}
 }

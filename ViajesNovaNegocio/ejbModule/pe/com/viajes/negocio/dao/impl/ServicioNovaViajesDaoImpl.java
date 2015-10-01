@@ -286,7 +286,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		Integer resultado = 0;
 		CallableStatement cs = null;
 
-		String sql = "{ ? = call negocio.fn_ingresarserviciodetalle(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarserviciodetalle(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
 		try {
 			cs = conn.prepareCall(sql);
@@ -420,6 +420,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			} else {
 				cs.setNull(i++, Types.INTEGER);
 			}
+			cs.setBoolean(i++, detalleServicio.isAplicaIGV());
 			cs.setString(i++, detalleServicio.getUsuarioCreacion());
 			cs.setString(i++, detalleServicio.getIpCreacion());
 			cs.execute();

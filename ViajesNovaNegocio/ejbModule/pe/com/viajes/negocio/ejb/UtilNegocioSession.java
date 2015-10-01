@@ -309,16 +309,7 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 				}
 			}
 
-			boolean calcularIGV = false;
-			for (Tramo tramo : detalleServicio.getRuta().getTramos()) {
-				calcularIGV = ("PE".equalsIgnoreCase(tramo.getOrigen()
-						.getPais().getAbreviado()) || "PE"
-						.equalsIgnoreCase(tramo.getDestino().getPais()
-								.getAbreviado()));
-				if (calcularIGV) {
-					break;
-				}
-			}
+			boolean calcularIGV = detalleServicio.isAplicaIGV();
 
 			if (detalleServicio.getPrecioUnitarioAnterior() != null) {
 				detalleServicio.setPrecioUnitario(detalleServicio
@@ -596,16 +587,7 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 				}
 			}
 
-			boolean calcularIGV = false;
-			for (Tramo tramo : detalleServicio.getRuta().getTramos()) {
-				calcularIGV = ("PE".equalsIgnoreCase(tramo.getOrigen()
-						.getPais().getAbreviado()) || "PE"
-						.equalsIgnoreCase(tramo.getDestino().getPais()
-								.getAbreviado()));
-				if (calcularIGV) {
-					break;
-				}
-			}
+			boolean calcularIGV = detalleServicio.isAplicaIGV();
 
 			if (detalleServicio.getPrecioUnitarioAnterior() != null) {
 				detalleServicio.setPrecioUnitario(detalleServicio

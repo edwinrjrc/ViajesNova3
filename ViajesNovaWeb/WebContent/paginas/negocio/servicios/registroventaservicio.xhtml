@@ -202,7 +202,7 @@
 											<f:selectItem itemLabel="-Seleccione-" />
 											<f:selectItems value="#{catalogoMBean.catalogoTipoServicio}" />
 											<a4j:ajax event="valueChange"
-												render="idFrNuevServicio,idGrComiPro" />
+												render="idFrNuevServicio,idGrComiPro,idPnIGV" />
 										</h:selectOneMenu>
 										<rich:message for="idSelTipoServicio" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
@@ -465,6 +465,16 @@
 									           servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraComision}"
 										value="#{servicioAgenteMBean.detalleServicio.tarifaNegociada}">
 									</h:selectBooleanCheckbox>
+								</h:panelGrid>
+
+								<h:panelGrid columns="4" cellpadding="0" cellspacing="0" id="idPnIGV"
+									border="0" style="width:100%;" rendered="#{servicioAgenteMBean.aplicaIGV}"
+									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
+									<h:outputText value="Aplica IGV" />
+									<h:selectBooleanCheckbox value="#{servicioAgenteMBean.detalleServicio.aplicaIGV}" />
+									
+									<h:outputText value="" />
+									<h:outputText value="" />
 								</h:panelGrid>
 
 								<f:facet name="footer">

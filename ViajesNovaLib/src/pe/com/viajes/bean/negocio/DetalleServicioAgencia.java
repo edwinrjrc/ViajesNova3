@@ -71,6 +71,8 @@ public class DetalleServicioAgencia extends BaseNegocio {
 
 	private String codigoReserva;
 	private String numeroBoleto;
+	
+	private boolean aplicaIGV;
 
 	/**
 	 * @return the tipoServicio
@@ -739,6 +741,20 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setPrecioUnitarioAnterior(BigDecimal precioUnitarioAnterior) {
 		this.precioUnitarioAnterior = precioUnitarioAnterior;
+	}
+
+	/**
+	 * @return the aplicaIGV
+	 */
+	public boolean isAplicaIGV() {
+		return aplicaIGV;
+	}
+
+	/**
+	 * @param aplicaIGV the aplicaIGV to set
+	 */
+	public void setAplicaIGV(boolean aplicaIGV) {
+		this.aplicaIGV = aplicaIGV;
 	}
 
 }
