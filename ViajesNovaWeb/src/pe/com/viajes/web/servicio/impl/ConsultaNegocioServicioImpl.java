@@ -25,6 +25,7 @@ import pe.com.viajes.bean.negocio.CuentaBancaria;
 import pe.com.viajes.bean.negocio.CuotaPago;
 import pe.com.viajes.bean.negocio.DetalleServicioAgencia;
 import pe.com.viajes.bean.negocio.DocumentoAdicional;
+import pe.com.viajes.bean.negocio.ImpresionArchivoCargado;
 import pe.com.viajes.bean.negocio.MaestroServicio;
 import pe.com.viajes.bean.negocio.MovimientoCuenta;
 import pe.com.viajes.bean.negocio.PagoServicio;
@@ -49,9 +50,6 @@ public class ConsultaNegocioServicioImpl implements ConsultaNegocioServicio {
 
 	final String ejbBeanName = "ConsultaNegocioSession";
 
-	/**
-	 * 
-	 */
 	public ConsultaNegocioServicioImpl(ServletContext context)
 			throws NamingException {
 
@@ -83,8 +81,7 @@ public class ConsultaNegocioServicioImpl implements ConsultaNegocioServicio {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * pe.com.viajes.web.servicio.ConsultaNegocioServicio#listarProveedor
+	 * @see pe.com.viajes.web.servicio.ConsultaNegocioServicio#listarProveedor
 	 * (pe.com.viajes.bean.negocio.Proveedor)
 	 */
 	@Override
@@ -109,8 +106,7 @@ public class ConsultaNegocioServicioImpl implements ConsultaNegocioServicio {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * pe.com.viajes.web.servicio.ConsultaNegocioServicio#buscarProveedor
+	 * @see pe.com.viajes.web.servicio.ConsultaNegocioServicio#buscarProveedor
 	 * (pe.com.viajes.bean.negocio.Proveedor)
 	 */
 	@Override
@@ -122,8 +118,7 @@ public class ConsultaNegocioServicioImpl implements ConsultaNegocioServicio {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * pe.com.viajes.web.servicio.ConsultaNegocioServicio#listarCliente()
+	 * @see pe.com.viajes.web.servicio.ConsultaNegocioServicio#listarCliente()
 	 */
 	@Override
 	public List<Cliente> listarCliente() throws SQLException {
@@ -133,8 +128,7 @@ public class ConsultaNegocioServicioImpl implements ConsultaNegocioServicio {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * pe.com.viajes.web.servicio.ConsultaNegocioServicio#buscarCliente(pe
+	 * @see pe.com.viajes.web.servicio.ConsultaNegocioServicio#buscarCliente(pe
 	 * .com.logistica.bean.negocio.Cliente)
 	 */
 	@Override
@@ -145,8 +139,7 @@ public class ConsultaNegocioServicioImpl implements ConsultaNegocioServicio {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * pe.com.viajes.web.servicio.ConsultaNegocioServicio#consultarCliente
+	 * @see pe.com.viajes.web.servicio.ConsultaNegocioServicio#consultarCliente
 	 * (int)
 	 */
 	@Override
@@ -395,8 +388,14 @@ public class ConsultaNegocioServicioImpl implements ConsultaNegocioServicio {
 	public List<TipoCambio> listarTipoCambio(Date fecha) throws SQLException {
 		return ejbSession.listarTipoCambio(fecha);
 	}
-	
-	public List<CheckIn> consultarCheckInPendiente() throws SQLException{
+
+	public List<CheckIn> consultarCheckInPendiente() throws SQLException {
 		return ejbSession.consultarCheckInPendientes();
+	}
+
+	@Override
+	public List<ImpresionArchivoCargado> consultaImpresionArchivoCargado(
+			Integer idArchivoCargado) throws SQLException {
+		return ejbSession.consultaImpresionArchivoCargado(idArchivoCargado);
 	}
 }

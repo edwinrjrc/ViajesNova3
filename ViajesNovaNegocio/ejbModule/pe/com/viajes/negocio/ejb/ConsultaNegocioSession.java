@@ -24,6 +24,7 @@ import pe.com.viajes.bean.negocio.CuotaPago;
 import pe.com.viajes.bean.negocio.DetalleServicioAgencia;
 import pe.com.viajes.bean.negocio.Direccion;
 import pe.com.viajes.bean.negocio.DocumentoAdicional;
+import pe.com.viajes.bean.negocio.ImpresionArchivoCargado;
 import pe.com.viajes.bean.negocio.Maestro;
 import pe.com.viajes.bean.negocio.MaestroServicio;
 import pe.com.viajes.bean.negocio.MovimientoCuenta;
@@ -769,5 +770,12 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 		cal.add(Calendar.HOUR, 48);
 				
 		return servicioNegocioDao.consultarcheckinpendientes(cal.getTime());
+	}
+	
+	@Override
+	public List<ImpresionArchivoCargado> consultaImpresionArchivoCargado(Integer idArchivoCargado) throws SQLException{
+		ArchivoReporteDao archivoReporteDao = new ArchivoReporteDaoImpl();
+		
+		return archivoReporteDao.consultaImpresionArchivoCargado(idArchivoCargado);
 	}
 }

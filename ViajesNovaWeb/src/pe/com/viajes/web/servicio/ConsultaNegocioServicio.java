@@ -19,6 +19,7 @@ import pe.com.viajes.bean.negocio.CuentaBancaria;
 import pe.com.viajes.bean.negocio.CuotaPago;
 import pe.com.viajes.bean.negocio.DetalleServicioAgencia;
 import pe.com.viajes.bean.negocio.DocumentoAdicional;
+import pe.com.viajes.bean.negocio.ImpresionArchivoCargado;
 import pe.com.viajes.bean.negocio.MaestroServicio;
 import pe.com.viajes.bean.negocio.MovimientoCuenta;
 import pe.com.viajes.bean.negocio.PagoServicio;
@@ -160,4 +161,7 @@ public interface ConsultaNegocioServicio {
 			throws SQLException;
 
 	List<TipoCambio> listarTipoCambio(Date fecha) throws SQLException;
+
+	List<ImpresionArchivoCargado> consultaImpresionArchivoCargado(
+			Integer idArchivoCargado) throws SQLException;
 }

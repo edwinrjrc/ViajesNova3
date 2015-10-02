@@ -104,6 +104,10 @@ public class UtilWeb {
 		return 0;
 	}
 
+	/**
+	 * Nombre de la semana de la fecha de hoy
+	 * @return
+	 */
 	public static String diaHoy() {
 		Calendar cal = Calendar.getInstance();
 
@@ -126,7 +130,31 @@ public class UtilWeb {
 
 		return "";
 	}
+	
+	/**
+	 * Devuelve el valor de dia de la fecha de hoy
+	 * @return
+	 */
+	public static String diaFechaHoy() {
+		Calendar cal = Calendar.getInstance();
 
+		String valor = Integer.valueOf(cal.get(Calendar.DATE)).toString();
+		
+		return completarCaracter(valor, "0", 2, "I");
+	}
+	
+	public static String anioFechaHoy() {
+		Calendar cal = Calendar.getInstance();
+
+		String valor = Integer.valueOf(cal.get(Calendar.YEAR)).toString();
+		
+		return valor;
+	}
+
+	/**
+	 * Nombre del mes de la fecha de hoy
+	 * @return
+	 */
 	public static String mesHoy() {
 		Calendar cal = Calendar.getInstance();
 
@@ -158,6 +186,51 @@ public class UtilWeb {
 		}
 
 		return "";
+	}
+	
+	/**
+	 * Numero del mes completo, ejm. 01, 03, 10, 12
+	 * @return
+	 */
+	public static String mesHoyNumero() {
+		Calendar cal = Calendar.getInstance();
+
+		String mes = "";
+		mes = Integer.valueOf(cal.get(Calendar.MONTH) + 1).toString();
+		mes = completarCaracter(mes,"0",2,"I");
+		
+		return mes;
+	}
+	
+	/**
+	 * Completa caracteres segun la cantidad y la direccion
+	 * 
+	 * @param cadena
+	 * @param caracter
+	 * @param cantidad
+	 * @param direccion
+	 * @return
+	 */
+	public static String completarCaracter(String cadena, String caracter,
+			int cantidad, String direccion) {
+		if ("D".equals(direccion)) {
+			String cadenaNueva = cadena;
+			int i = 0;
+			while ((cadena.length() + i) < cantidad) {
+				cadenaNueva = cadenaNueva + caracter;
+				i++;
+			}
+			return cadenaNueva;
+		} else if ("I".equals(direccion)) {
+			String cadenaNueva = cadena;
+			int i = 0;
+			while ((cadena.length() + i) < cantidad) {
+				cadenaNueva = caracter + cadenaNueva;
+				i++;
+			}
+			return cadenaNueva;
+		}
+		return cadena;
 	}
 
 	public static boolean validaEnteroEsNuloOCero(Integer numero) {
@@ -216,6 +289,12 @@ public class UtilWeb {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static String fechaHoy(String pattern) {
+		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+
+		return sdf.format(new Date());
 	}
 
 	public static String obtenerDato(HSSFCell celda) {

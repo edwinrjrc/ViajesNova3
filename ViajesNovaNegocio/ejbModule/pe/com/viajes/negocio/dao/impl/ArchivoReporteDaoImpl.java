@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import pe.com.viajes.bean.cargaexcel.ColumnasExcel;
 import pe.com.viajes.bean.cargaexcel.ReporteArchivo;
 import pe.com.viajes.bean.cargaexcel.ReporteArchivoBusqueda;
+import pe.com.viajes.bean.negocio.ImpresionArchivoCargado;
 import pe.com.viajes.negocio.dao.ArchivoReporteDao;
 import pe.com.viajes.negocio.util.UtilConexion;
 import pe.com.viajes.negocio.util.UtilJdbc;
@@ -338,4 +339,53 @@ public class ArchivoReporteDaoImpl implements ArchivoReporteDao {
 		return resultado;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see pe.com.viajes.negocio.dao.ArchivoReporteDao#consultaImpresionArchivoCargado(java.lang.Integer)
+	 */
+	@Override
+	public List<ImpresionArchivoCargado> consultaImpresionArchivoCargado(
+			Integer idArchivoCargado) throws SQLException {
+		List<ImpresionArchivoCargado> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_generaimparchivocargado(?) }";
+		
+		try{
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(1, Types.OTHER);
+			cs.setInt(2, idArchivoCargado.intValue());
+			cs.execute();
+			rs = (ResultSet) cs.getObject(1);
+			
+			resultado = new ArrayList<ImpresionArchivoCargado>();
+			ImpresionArchivoCargado bean = null;
+			while (rs.next()){
+				bean = new ImpresionArchivoCargado();
+				bean.setNombresCliente(UtilJdbc.obtenerCadena(rs, "nombres"));
+				bean.setPaternoCliente(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
+				bean.setNumeroBoleto(UtilJdbc.obtenerCadena(rs, "numeroboleto"));
+				
+				resultado.add(bean);
+			}
+			
+			return resultado;
+		}
+		catch (SQLException e){
+			throw new SQLException(e);
+		}
+		finally{
+			if (rs != null){
+				rs.close();
+			}
+			if (cs != null){
+				cs.close();
+			}
+			if (conn != null){
+				conn.close();
+			}
+		}
+	}
 }

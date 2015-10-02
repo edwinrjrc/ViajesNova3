@@ -10,6 +10,7 @@ import java.util.List;
 import pe.com.viajes.bean.cargaexcel.ColumnasExcel;
 import pe.com.viajes.bean.cargaexcel.ReporteArchivo;
 import pe.com.viajes.bean.cargaexcel.ReporteArchivoBusqueda;
+import pe.com.viajes.bean.negocio.ImpresionArchivoCargado;
 
 /**
  * @author Edwin
@@ -49,4 +50,11 @@ public interface ArchivoReporteDao {
 			ReporteArchivoBusqueda reporteBusqueda) throws SQLException,
 			Exception;
 
+	/**
+	 * 
+	 * @param idArchivoCargado
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<ImpresionArchivoCargado> consultaImpresionArchivoCargado(Integer idArchivoCargado) throws SQLException;
 }
