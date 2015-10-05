@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,6 +47,7 @@ import pe.com.viajes.web.servicio.ConsultaNegocioServicio;
 import pe.com.viajes.web.servicio.NegocioServicio;
 import pe.com.viajes.web.servicio.impl.ConsultaNegocioServicioImpl;
 import pe.com.viajes.web.servicio.impl.NegocioServicioImpl;
+import pe.com.viajes.web.util.UtilConvertirNumeroLetras;
 import pe.com.viajes.web.util.UtilWeb;
 
 /**
@@ -266,7 +268,16 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 
 	public void generarComprobante(ReporteArchivoBusqueda reporteCargado) {
 		try {
-			
+			/**
+			 * Informacion de prueba
+			 */
+			reporteCargado.getMoneda().setAbreviatura("$");
+			reporteCargado.setMontoSubtotal(BigDecimal.valueOf(60.69));
+			reporteCargado.setMontoIGV(BigDecimal.valueOf(10.92));
+			reporteCargado.setMontoTotal(BigDecimal.valueOf(71.61));
+			/**
+			 * ==============================================================
+			 */
 			Proveedor proveedor = this.consultaNegocioServicio.consultarProveedor(reporteCargado.getProveedor().getCodigoEntero());
 			
 			HSSFWorkbook archivoExcel = new HSSFWorkbook();
@@ -412,7 +423,7 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 			hoja1.addMergedRegion(region11);
 			fila.setHeightInPoints((float) 22.50);
 			celda = fila.createCell(1);
-			celda.setCellValue("Setenta y uno con 61/100 Dólares americanos");
+			celda.setCellValue(UtilConvertirNumeroLetras.convertNumberToLetter(reporteCargado.getMontoTotal().toString()));
 			celda.setCellStyle(estiloCalibri);
 
 			fila = hoja1.getRow(24);
@@ -429,13 +440,14 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 
 			celda = fila.createCell(5);
 			celda.setCellStyle(sCalibriNegrita12);
-			celda.setCellValue("$ 60.69");
+			celda.setCellValue(reporteCargado.getMoneda()+" "+reporteCargado.getMontoSubtotal());
+			
 			celda = fila.createCell(6);
 			celda.setCellStyle(sCalibriNegrita12);
-			celda.setCellValue("$ 10.92");
-			celda.setCellStyle(sCalibriNegrita12);
+			celda.setCellValue(reporteCargado.getMoneda()+" "+reporteCargado.getMontoIGV());
+			
 			celda = fila.createCell(7);
-			celda.setCellValue("$ 71.61");
+			celda.setCellValue(reporteCargado.getMoneda()+" "+reporteCargado.getMontoTotal());
 			celda.setCellStyle(sCalibriNegrita12);
 
 			HttpServletResponse response = obtenerResponse();

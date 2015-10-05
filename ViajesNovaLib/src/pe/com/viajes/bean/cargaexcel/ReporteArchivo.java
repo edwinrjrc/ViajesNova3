@@ -3,6 +3,7 @@
  */
 package pe.com.viajes.bean.cargaexcel;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +15,7 @@ import pe.com.viajes.bean.base.BaseVO;
  *
  */
 public class ReporteArchivo extends BaseNegocio {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 4535753868757301213L;
 
 	private String nombreArchivo;
@@ -28,7 +27,12 @@ public class ReporteArchivo extends BaseNegocio {
 	private List<ColumnasExcel> dataExcel;
 	private BaseVO tipoComprobante;
 	private String numeroComprobante;
+	private BaseVO moneda;
+	private BigDecimal montoSubtotal;
+	private BigDecimal montoIGV;
+	private BigDecimal montoTotal;
 
+	
 	/**
 	 * @return the nombreArchivo
 	 */
@@ -174,6 +178,65 @@ public class ReporteArchivo extends BaseNegocio {
 	 */
 	public void setNumeroComprobante(String numeroComprobante) {
 		this.numeroComprobante = numeroComprobante;
+	}
+
+	/**
+	 * @return the montoSubtotal
+	 */
+	public BigDecimal getMontoSubtotal() {
+		return montoSubtotal;
+	}
+
+	/**
+	 * @param montoSubtotal the montoSubtotal to set
+	 */
+	public void setMontoSubtotal(BigDecimal montoSubtotal) {
+		this.montoSubtotal = montoSubtotal;
+	}
+
+	/**
+	 * @return the montoIGV
+	 */
+	public BigDecimal getMontoIGV() {
+		return montoIGV;
+	}
+
+	/**
+	 * @param montoIGV the montoIGV to set
+	 */
+	public void setMontoIGV(BigDecimal montoIGV) {
+		this.montoIGV = montoIGV;
+	}
+
+	/**
+	 * @return the montoTotal
+	 */
+	public BigDecimal getMontoTotal() {
+		return montoTotal;
+	}
+
+	/**
+	 * @param montoTotal the montoTotal to set
+	 */
+	public void setMontoTotal(BigDecimal montoTotal) {
+		this.montoTotal = montoTotal;
+	}
+
+	/**
+	 * @return the moneda
+	 */
+	public BaseVO getMoneda() {
+		if (moneda == null){
+			moneda = new BaseVO();
+		}
+		return moneda;
+	}
+
+	/**
+	 * @param moneda the moneda to set
+	 */
+	public void setMoneda(BaseVO moneda) {
+		this.moneda = moneda;
 	}
 
 }
