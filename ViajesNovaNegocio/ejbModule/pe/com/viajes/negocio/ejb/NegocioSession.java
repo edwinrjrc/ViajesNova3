@@ -2,6 +2,7 @@ package pe.com.viajes.negocio.ejb;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import pe.com.viajes.bean.negocio.DocumentoAdicional;
 import pe.com.viajes.bean.negocio.EventoObsAnu;
 import pe.com.viajes.bean.negocio.MaestroServicio;
 import pe.com.viajes.bean.negocio.PagoServicio;
+import pe.com.viajes.bean.negocio.Parametro;
 import pe.com.viajes.bean.negocio.ProgramaNovios;
 import pe.com.viajes.bean.negocio.Proveedor;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
@@ -51,6 +53,7 @@ import pe.com.viajes.negocio.dao.CuentaBancariaDao;
 import pe.com.viajes.negocio.dao.DestinoDao;
 import pe.com.viajes.negocio.dao.DireccionDao;
 import pe.com.viajes.negocio.dao.MaestroServicioDao;
+import pe.com.viajes.negocio.dao.ParametroDao;
 import pe.com.viajes.negocio.dao.PersonaDao;
 import pe.com.viajes.negocio.dao.ProveedorDao;
 import pe.com.viajes.negocio.dao.ServicioNegocioDao;
@@ -67,6 +70,7 @@ import pe.com.viajes.negocio.dao.impl.CuentaBancariaDaoImpl;
 import pe.com.viajes.negocio.dao.impl.DestinoDaoImpl;
 import pe.com.viajes.negocio.dao.impl.DireccionDaoImpl;
 import pe.com.viajes.negocio.dao.impl.MaestroServicioDaoImpl;
+import pe.com.viajes.negocio.dao.impl.ParametroDaoImpl;
 import pe.com.viajes.negocio.dao.impl.PersonaDaoImpl;
 import pe.com.viajes.negocio.dao.impl.ProveedorDaoImpl;
 import pe.com.viajes.negocio.dao.impl.ServicioNegocioDaoImpl;
@@ -1420,8 +1424,31 @@ public class NegocioSession implements NegocioSessionRemote,
 		Connection conn = null;
 
 		try {
+			BigDecimal monto = BigDecimal.ZERO;
+			if (dataExcel != null){
+				for (ColumnasExcel columnaExcel : dataExcel){
+					if (columnaExcel.isSeleccionar()){
+						monto = monto.add(UtilEjb.convertirCadenaDecimal(columnaExcel.getColumna9().getValorCadena()));
+					}
+				}
+			}
+			
+			{
+				reporteArchivo.setMontoSubtotal(monto);
+				ParametroDao parametroDao = new ParametroDaoImpl();
+				BigDecimal valorParametro = BigDecimal.ZERO;
+				Parametro param = parametroDao
+						.consultarParametro(UtilEjb
+								.obtenerEnteroPropertieMaestro(
+										"codigoParametroImptoIGV",
+										"aplicacionDatosEjb"));
+				reporteArchivo.setMontoIGV( monto.multiply(UtilEjb.convertirCadenaDecimal(param.getValor())) );
+				reporteArchivo.setMontoTotal(reporteArchivo.getMontoSubtotal().add(reporteArchivo.getMontoSubtotal()));
+			}
+			
 			userTransaction.begin();
 			conn = UtilConexion.obtenerConexion();
+			
 			int idArchivo = archivoReporteDao.registrarArchivoReporteCabecera(
 					reporteArchivo, conn);
 			columnasExcel.setIdArchivo(idArchivo);

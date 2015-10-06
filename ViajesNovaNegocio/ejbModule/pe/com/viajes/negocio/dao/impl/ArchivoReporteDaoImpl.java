@@ -37,9 +37,8 @@ public class ArchivoReporteDaoImpl implements ArchivoReporteDao {
 	@Override
 	public Integer registrarArchivoReporteCabecera(
 			ReporteArchivo reporteArchivo, Connection conn) throws SQLException {
-		Integer resultado = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresararchivocargado(?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresararchivocargado(?,?,?,?,?,?,?,?,?,?,?) }";
 
 		try {
 			cs = conn.prepareCall(sql);
@@ -51,11 +50,15 @@ public class ArchivoReporteDaoImpl implements ArchivoReporteDao {
 					.intValue());
 			cs.setInt(i++, reporteArchivo.getNumeroFilas());
 			cs.setInt(i++, reporteArchivo.getNumeroColumnas());
+			cs.setInt(i++, reporteArchivo.getMoneda().getCodigoEntero().intValue());
+			cs.setBigDecimal(i++, reporteArchivo.getMontoSubtotal());
+			cs.setBigDecimal(i++, reporteArchivo.getMontoIGV());
+			cs.setBigDecimal(i++, reporteArchivo.getMontoTotal());
 			cs.setString(i++, reporteArchivo.getUsuarioCreacion());
 			cs.setString(i++, reporteArchivo.getIpCreacion());
 			cs.execute();
 
-			resultado = cs.getInt(1);
+			return cs.getInt(1);
 		} catch (SQLException e) {
 			throw new SQLException(e);
 		} finally {
@@ -64,7 +67,6 @@ public class ArchivoReporteDaoImpl implements ArchivoReporteDao {
 			}
 		}
 
-		return resultado;
 	}
 
 	/*
