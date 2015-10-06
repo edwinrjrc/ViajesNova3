@@ -148,7 +148,7 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 					iCelda = this.getColumnaInicial();
 					celda = null;
 					while (!registroCabecera
-							&& iCelda < (this.getNroColumnas())) {
+							&& iCelda <= (this.getNroColumnas())) {
 						celda = fila.getCell(iCelda);
 						String dato = UtilWeb.obtenerDato(celda);
 						cabecera.add(dato);
@@ -158,7 +158,7 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 						columna = new ColumnasExcel();
 						registroCabecera = true;
 					}
-					if (i > this.getFilaInicial()) {
+					if (i > (this.getFilaInicial()-1)) {
 						int j = 1;
 						while (iCelda <= this.getNroColumnas()) {
 							celda = fila.getCell(iCelda);
@@ -423,13 +423,13 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 			hoja1.addMergedRegion(region11);
 			fila.setHeightInPoints((float) 22.50);
 			celda = fila.createCell(1);
-			celda.setCellValue(UtilConvertirNumeroLetras.convertNumberToLetter(reporteCargado.getMontoTotal().toString()));
+			celda.setCellValue(UtilConvertirNumeroLetras.convertNumberToLetter(reporteCargado.getMontoTotal().doubleValue()));
 			celda.setCellStyle(estiloCalibri);
 
 			fila = hoja1.getRow(24);
 			fila.setHeightInPoints((float) 31.5);
 			celda = fila.getCell(0);
-			celda.setCellValue(UtilWeb.diaHoy());
+			celda.setCellValue(UtilWeb.diaFechaHoy());
 			celda.setCellStyle(estiloCalibriDerecha);
 			celda = fila.createCell(1);
 			celda.setCellValue(UtilWeb.mesHoy());
@@ -440,14 +440,14 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 
 			celda = fila.createCell(5);
 			celda.setCellStyle(sCalibriNegrita12);
-			celda.setCellValue(reporteCargado.getMoneda()+" "+reporteCargado.getMontoSubtotal());
+			celda.setCellValue(reporteCargado.getMoneda().getAbreviatura()+" "+reporteCargado.getMontoSubtotal());
 			
 			celda = fila.createCell(6);
 			celda.setCellStyle(sCalibriNegrita12);
-			celda.setCellValue(reporteCargado.getMoneda()+" "+reporteCargado.getMontoIGV());
+			celda.setCellValue(reporteCargado.getMoneda().getAbreviatura()+" "+reporteCargado.getMontoIGV());
 			
 			celda = fila.createCell(7);
-			celda.setCellValue(reporteCargado.getMoneda()+" "+reporteCargado.getMontoTotal());
+			celda.setCellValue(reporteCargado.getMoneda().getAbreviatura()+" "+reporteCargado.getMontoTotal());
 			celda.setCellStyle(sCalibriNegrita12);
 
 			HttpServletResponse response = obtenerResponse();

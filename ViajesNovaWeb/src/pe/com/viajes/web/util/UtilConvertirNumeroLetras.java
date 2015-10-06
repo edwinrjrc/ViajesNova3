@@ -5,6 +5,8 @@ package pe.com.viajes.web.util;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 /**
  * @author EDWREB
@@ -55,9 +57,10 @@ public class UtilConvertirNumeroLetras {
 		// System.out.println("Numero a letras ::"+doubleNumber);
 		StringBuilder converted = new StringBuilder();
 
-		String patternThreeDecimalPoints = "#.###";
+		String patternThreeDecimalPoints = "###,###.##";
 
-		DecimalFormat format = new DecimalFormat(patternThreeDecimalPoints);
+		DecimalFormatSymbols decimalSymbols = new DecimalFormatSymbols(Locale.US);
+		DecimalFormat format = new DecimalFormat(patternThreeDecimalPoints, decimalSymbols);
 		format.setRoundingMode(RoundingMode.DOWN);
 
 		// formateamos el numero, para ajustarlo a el formato de tres puntos

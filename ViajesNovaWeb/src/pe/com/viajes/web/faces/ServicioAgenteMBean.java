@@ -403,6 +403,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 				}
 			}
+			
 		} catch (ErrorRegistroDataException e) {
 			logger.error(e.getMessage(), e);
 			this.mostrarMensajeError(e.getMessage());
@@ -414,6 +415,15 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.mostrarMensajeError(e.getMessage());
 		}
 
+		inicializaTipoServicio();
+	}
+
+	private void inicializaTipoServicio() {
+		this.setDetalleServicio(null);
+		this.setDetalleServicio2(null);
+		this.setEditarComision(false);
+		this.setEditarVenta(false);
+		this.setAplicaIGV(false);
 	}
 
 	public void actualizarServicio() {
