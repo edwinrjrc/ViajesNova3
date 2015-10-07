@@ -3,6 +3,7 @@ package pe.com.viajes.negocio.ejb;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -1434,16 +1435,18 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 			
 			{
-				reporteArchivo.setMontoSubtotal(monto);
 				ParametroDao parametroDao = new ParametroDaoImpl();
-				BigDecimal valorParametro = BigDecimal.ZERO;
 				Parametro param = parametroDao
 						.consultarParametro(UtilEjb
 								.obtenerEnteroPropertieMaestro(
 										"codigoParametroImptoIGV",
 										"aplicacionDatosEjb"));
-				reporteArchivo.setMontoIGV( monto.multiply(UtilEjb.convertirCadenaDecimal(param.getValor())) );
-				reporteArchivo.setMontoTotal(reporteArchivo.getMontoSubtotal().add(reporteArchivo.getMontoSubtotal()));
+				
+				reporteArchivo.setMontoTotal(monto);
+				BigDecimal igv = UtilEjb.convertirCadenaDecimal(param.getValor());
+				BigDecimal subtotal = reporteArchivo.getMontoTotal().divide(igv.add(BigDecimal.ONE), RoundingMode.HALF_UP);
+				reporteArchivo.setMontoSubtotal(subtotal);
+				reporteArchivo.setMontoIGV( reporteArchivo.getMontoTotal().subtract(reporteArchivo.getMontoSubtotal()) );
 			}
 			
 			userTransaction.begin();
@@ -1510,9 +1513,11 @@ public class NegocioSession implements NegocioSessionRemote,
 			userTransaction.commit();
 			return true;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			userTransaction.rollback();
 			throw new ErrorRegistroDataException(e);
 		} catch (Exception e) {
+			e.printStackTrace();
 			userTransaction.rollback();
 			throw new ErrorRegistroDataException(e);
 		} finally {

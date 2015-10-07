@@ -145,7 +145,7 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 				for (int i = (this.getFilaInicial() - 1); i < hojaInicial
 						.getLastRowNum(); i++) {
 					fila = hojaInicial.getRow(i);
-					iCelda = this.getColumnaInicial();
+					iCelda = this.getColumnaInicial()-1;
 					celda = null;
 					while (!registroCabecera
 							&& iCelda <= (this.getNroColumnas())) {
@@ -264,6 +264,7 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 		this.setColumnaInicial(null);
 		this.setFilaInicial(null);
 		this.setNroColumnas(null);
+		this.getReporteArchivo().getMoneda().setCodigoEntero(2);
 	}
 
 	public void generarComprobante(ReporteArchivoBusqueda reporteCargado) {
