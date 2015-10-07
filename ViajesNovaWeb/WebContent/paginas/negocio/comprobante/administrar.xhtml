@@ -168,6 +168,11 @@
 					<h:outputText value="" />
 				</h:panelGrid>
 			</h:panelGrid>
+
+			<h:panelGrid style="display:none;">
+				<h:commandButton id="idBtnGeneraComprobante" action="#{comprobanteMBean.generarComprobante}"
+					value="Generar Comprobante" style="display:none;" />
+			</h:panelGrid>
 		</h:form>
 
 		<ui:include

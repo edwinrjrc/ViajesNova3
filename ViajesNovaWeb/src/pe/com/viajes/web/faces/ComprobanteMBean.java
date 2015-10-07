@@ -20,9 +20,7 @@ import pe.com.viajes.bean.negocio.ComprobanteBusqueda;
 import pe.com.viajes.bean.negocio.Proveedor;
 import pe.com.viajes.negocio.exception.ErrorConsultaDataException;
 import pe.com.viajes.web.servicio.ConsultaNegocioServicio;
-import pe.com.viajes.web.servicio.NegocioServicio;
 import pe.com.viajes.web.servicio.impl.ConsultaNegocioServicioImpl;
-import pe.com.viajes.web.servicio.impl.NegocioServicioImpl;
 
 /**
  * @author EDWREB
@@ -48,7 +46,7 @@ public class ComprobanteMBean extends BaseMBean {
 	private List<Comprobante> listaComprobantes;
 	private List<Proveedor> listadoProveedores;
 
-	private NegocioServicio negocioServicio;
+	//private NegocioServicio negocioServicio;
 	private ConsultaNegocioServicio consultaNegocioServicio;
 
 	/**
@@ -58,7 +56,7 @@ public class ComprobanteMBean extends BaseMBean {
 		try {
 			ServletContext servletContext = (ServletContext) FacesContext
 					.getCurrentInstance().getExternalContext().getContext();
-			negocioServicio = new NegocioServicioImpl(servletContext);
+			//negocioServicio = new NegocioServicioImpl(servletContext);
 			consultaNegocioServicio = new ConsultaNegocioServicioImpl(
 					servletContext);
 		} catch (NamingException e) {
@@ -97,6 +95,10 @@ public class ComprobanteMBean extends BaseMBean {
 		} catch (ErrorConsultaDataException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void generarComprobante(){
+		System.out.println("Genera Comprobante");
 	}
 
 	/**
