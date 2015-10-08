@@ -322,6 +322,12 @@ public class ArchivoReporteDaoImpl implements ArchivoReporteDao {
 						.obtenerNumero(rs, "numerocolumnas"));
 				reporteArchivoBusqueda.setNumeroSeleccionados(UtilJdbc
 						.obtenerNumero(rs, "seleccionados"));
+				reporteArchivoBusqueda.getMoneda().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idmoneda"));
+				reporteArchivoBusqueda.getMoneda().setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
+				reporteArchivoBusqueda.getMoneda().setAbreviatura(UtilJdbc.obtenerCadena(rs, "abreviatura"));
+				reporteArchivoBusqueda.setMontoSubtotal(UtilJdbc.obtenerBigDecimal(rs, "montosubtotal"));
+				reporteArchivoBusqueda.setMontoIGV(UtilJdbc.obtenerBigDecimal(rs, "montoigv"));
+				reporteArchivoBusqueda.setMontoTotal(UtilJdbc.obtenerBigDecimal(rs, "montototal"));
 				resultado.add(reporteArchivoBusqueda);
 			}
 		} catch (SQLException e) {

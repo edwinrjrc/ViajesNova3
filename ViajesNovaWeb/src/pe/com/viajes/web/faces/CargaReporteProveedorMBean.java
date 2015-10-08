@@ -272,10 +272,10 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 			/**
 			 * Informacion de prueba
 			 */
-			reporteCargado.getMoneda().setAbreviatura("$");
+			/*reporteCargado.getMoneda().setAbreviatura("$");
 			reporteCargado.setMontoSubtotal(BigDecimal.valueOf(60.69));
 			reporteCargado.setMontoIGV(BigDecimal.valueOf(10.92));
-			reporteCargado.setMontoTotal(BigDecimal.valueOf(71.61));
+			reporteCargado.setMontoTotal(BigDecimal.valueOf(71.61));*/
 			/**
 			 * ==============================================================
 			 */

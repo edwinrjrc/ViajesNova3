@@ -150,6 +150,13 @@ public class UtilWeb {
 		
 		return valor;
 	}
+	
+	public static String anioFechaHoyYY() {
+		Date fecha = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yy");
+		
+		return sdf.format(fecha);
+	}
 
 	/**
 	 * Nombre del mes de la fecha de hoy
