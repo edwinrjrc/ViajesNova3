@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -30,7 +29,6 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import pe.com.viajes.bean.negocio.Cliente;
 import pe.com.viajes.bean.negocio.Comprobante;
 import pe.com.viajes.bean.negocio.ComprobanteBusqueda;
-import pe.com.viajes.bean.negocio.ImpresionArchivoCargado;
 import pe.com.viajes.bean.negocio.Proveedor;
 import pe.com.viajes.negocio.exception.ErrorConsultaDataException;
 import pe.com.viajes.web.servicio.ConsultaNegocioServicio;
@@ -122,9 +120,6 @@ public class ComprobanteMBean extends BaseMBean {
 			fuenteDefecto.setFontName("Calibri");
 			fuenteDefecto.setFontHeightInPoints((short) 10);
 
-			String nombreHoja = "Comprobante";
-			HSSFSheet hoja1 = archivoExcel.createSheet(nombreHoja);
-
 			/**
 			 * Creacion de estilos
 			 */
@@ -173,52 +168,44 @@ public class ComprobanteMBean extends BaseMBean {
 			 * Fin de estilos
 			 */
 			
+			HSSFSheet hoja1 = null;
 			
-			HSSFRow fila = null;
-			HSSFCell celda = null;
-			for (int i = 0; i < 30; i++) {
-				fila = hoja1.createRow(i);
-				celda = fila.createCell(0);
-				if (i == 0) {
-					for (int j = 0; j < 10; j++) {
-						celda = fila.createCell(j);
-						celda.setCellStyle(estiloCalibri);
-					}
-				}
-
-				celda.setCellStyle(estiloCalibri);
+			// FACTURA
+			if (this.getComprobanteDetalle().getTipoComprobante().getCodigoEntero().intValue() == 1){
+				hoja1 = archivoExcel.createSheet("Factura");
 			}
-
-			hoja1.setColumnWidth(0, 11 * 256);
-			hoja1.setColumnWidth(1, 12 * 256);
-			hoja1.setColumnWidth(2, 13 * 256);
-			hoja1.setColumnWidth(3, 2940);
-			hoja1.setColumnWidth(4, 2940);
-			hoja1.setColumnWidth(5, 2940);
-			hoja1.setColumnWidth(6, 2940);
-			hoja1.setColumnWidth(7, 2940);
-			hoja1.setColumnWidth(8, 2940);
-			hoja1.setColumnWidth(9, 2940);
-			hoja1.setColumnWidth(10, 2940);
-			hoja1.setColumnWidth(11, 2940);
-
-			fila = hoja1.getRow(1);
-			fila.setHeightInPoints((float) 20.25);
-			fila = hoja1.getRow(4);
-			fila.setHeightInPoints((float) 20.25);
-			fila = hoja1.getRow(5);
-			celda.setCellStyle(estiloCalibri);
+			// BOLETA
+			else if (this.getComprobanteDetalle().getTipoComprobante().getCodigoEntero().intValue() == 2){
+				hoja1 = archivoExcel.createSheet("Boleta");
+			}
+			// DOCUMENTO DE COBRANZA
+			else if (this.getComprobanteDetalle().getTipoComprobante().getCodigoEntero().intValue() == 3){
+				hoja1 = archivoExcel.createSheet("Documento de Cobranza");
+				/**
+				 * Inicio de configuracion de hoja excel
+				 */
+				
+				hoja1 = this.configuracionDocumentoCobranza(hoja1);
+				
+				/**
+				 * Fin configuracion hoja excel
+				 */
+			}
 			
-			CellRangeAddress region = new CellRangeAddress(6, 6, 0, 1);
-			hoja1.addMergedRegion(region);
-			CellRangeAddress region2 = new CellRangeAddress(6, 6, 2, 5);
-			hoja1.addMergedRegion(region2);
-			CellRangeAddress region3 = new CellRangeAddress(7, 7, 2, 6);
-			hoja1.addMergedRegion(region3);
-
-			fila = hoja1.getRow(6);
-			fila.setHeightInPoints((float) 25.5);
-			celda = fila.getCell(0);
+			/**
+			 * Inicio datos de excel
+			 */
+			String linea1 = "Referencia: Pax PEÑA/OSCAR X 02";
+			String linea2 = "Por boleto aereo LIM/TBP/LIM";
+			String linea3 = "por cuenta de LAN PERU";
+			String linea4 = "544 9232559559/ 544 9232559560";
+			String linea5 = "";
+			String linea6 = "";
+			String linea7 = "";
+			String monto = "416.84";
+			
+			HSSFRow fila = hoja1.getRow(6);
+			HSSFCell celda = fila.getCell(0);
 			celda.setCellStyle(estiloCalibriIzquierda);
 			String fechaHoy = "     "+UtilWeb.diaFechaHoy();
 			fechaHoy = fechaHoy + "   " + UtilWeb.mesHoyNumero();
@@ -236,68 +223,78 @@ public class ComprobanteMBean extends BaseMBean {
 			celda.setCellStyle(estiloCalibriIzquierda);
 
 			fila = hoja1.createRow(9);
-			fila.setHeightInPoints((float) 19.5);
 			celda = fila.createCell(0);
 			
-			fila = hoja1.getRow(13);
-			celda = fila.createCell(1);
-			CellRangeAddress region4 = new CellRangeAddress(13, 13, 1, 6);
-			hoja1.addMergedRegion(region4);
-			celda.setCellValue("Por la comisión en la venta de tkt aéreo a favor de:");
-			celda.setCellStyle(estiloCalibri);
-
-			/*List<ImpresionArchivoCargado> listado = this.consultaNegocioServicio.consultaImpresionArchivoCargado(reporteCargado.getCodigoEntero());
-			if (listado != null){
-				int i=14;
-				for (ImpresionArchivoCargado impresionArchivoCargado : listado) {
-					fila = hoja1.getRow(i);
-					celda = fila.createCell(1);
-					CellRangeAddress region5 = new CellRangeAddress(i, i, 1, 6);
-					hoja1.addMergedRegion(region5);
-					String v = "Pax: "+impresionArchivoCargado.getPaternoCliente()+"/"+impresionArchivoCargado.getNombresCliente()+" - Tkt: "+impresionArchivoCargado.getNumeroBoleto();
-					celda.setCellValue(v);
-					celda.setCellStyle(estiloCalibri);
-				}
-			}*/
-			
-
-			fila = hoja1.getRow(20);
-			fila.setHeightInPoints((float) 10.50);
-
-			fila = hoja1.getRow(22);
-			fila.setHeightInPoints((float) 3.0);
-
-			fila = hoja1.getRow(23);
-			CellRangeAddress region11 = new CellRangeAddress(23, 23, 1, 6);
-			hoja1.addMergedRegion(region11);
-			fila.setHeightInPoints((float) 22.50);
-			celda = fila.createCell(1);
-			//celda.setCellValue(UtilConvertirNumeroLetras.convertNumberToLetter(reporteCargado.getMontoTotal().doubleValue()));
-			celda.setCellStyle(estiloCalibri);
-
-			fila = hoja1.getRow(24);
-			fila.setHeightInPoints((float) 31.5);
-			celda = fila.getCell(0);
-			celda.setCellValue(UtilWeb.diaFechaHoy());
-			celda.setCellStyle(estiloCalibriDerecha);
-			celda = fila.createCell(1);
-			celda.setCellValue(UtilWeb.mesHoy());
-			celda.setCellStyle(estiloCalibri);
-			celda = fila.createCell(2);
-			celda.setCellStyle(estiloCalibriDerecha);
-			celda.setCellValue(UtilWeb.anioFechaHoy());
-
-			celda = fila.createCell(5);
-			celda.setCellStyle(sCalibriNegrita12);
-			//celda.setCellValue(reporteCargado.getMoneda().getAbreviatura()+" "+reporteCargado.getMontoSubtotal());
-			
-			celda = fila.createCell(6);
-			celda.setCellStyle(sCalibriNegrita12);
-			//celda.setCellValue(reporteCargado.getMoneda().getAbreviatura()+" "+reporteCargado.getMontoIGV());
+			fila = hoja1.getRow(12);
+			celda = fila.getCell(1);
+			if (celda == null){
+				celda = fila.createCell(1);
+			}
+			celda.setCellStyle(estiloCalibriIzquierda);
+			celda.setCellValue(linea1);
 			
 			celda = fila.createCell(7);
-			//celda.setCellValue(reporteCargado.getMoneda().getAbreviatura()+" "+reporteCargado.getMontoTotal());
-			celda.setCellStyle(sCalibriNegrita12);
+			celda.setCellValue("$ "+monto);
+			celda.setCellStyle(estiloCalibriDerecha);
+			
+			fila = hoja1.getRow(13);
+			celda = fila.getCell(1);
+			if (celda == null){
+				celda = fila.createCell(1);
+			}
+			celda.setCellValue(linea2);
+			celda.setCellStyle(estiloCalibri);
+			
+			fila = hoja1.getRow(14);
+			celda = fila.getCell(1);
+			if (celda == null){
+				celda = fila.createCell(1);
+			}
+			celda.setCellValue(linea3);
+			celda.setCellStyle(estiloCalibri);
+			
+			fila = hoja1.getRow(15);
+			celda = fila.getCell(1);
+			if (celda == null){
+				celda = fila.createCell(1);
+			}
+			celda.setCellValue(linea4);
+			celda.setCellStyle(estiloCalibri);
+			
+			fila = hoja1.getRow(16);
+			celda = fila.getCell(1);
+			if (celda == null){
+				celda = fila.createCell(1);
+			}
+			celda.setCellValue(linea5);
+			celda.setCellStyle(estiloCalibri);
+			
+			fila = hoja1.getRow(17);
+			celda = fila.getCell(1);
+			if (celda == null){
+				celda = fila.createCell(1);
+			}
+			celda.setCellValue(linea6);
+			celda.setCellStyle(estiloCalibri);
+			
+			fila = hoja1.getRow(18);
+			celda = fila.getCell(1);
+			if (celda == null){
+				celda = fila.createCell(1);
+			}
+			fila = hoja1.getRow(21);
+			celda = fila.getCell(0);
+			if (celda == null){
+				celda = fila.createCell(0);
+			}
+			String montoLetras = UtilConvertirNumeroLetras.convertNumberToLetter(monto);
+			celda.setCellValue("   SON: "+montoLetras+" DOLARES AMERICANOS");
+			celda.setCellStyle(estiloCalibriIzquierda);
+			
+			fila = hoja1.getRow(22);
+			celda = fila.createCell(7);
+			celda.setCellValue("$ "+monto);
+			celda.setCellStyle(estiloCalibriDerecha);
 
 			HttpServletResponse response = obtenerResponse();
 			response.setContentType("application/vnd.ms-excel");
@@ -327,7 +324,150 @@ public class ComprobanteMBean extends BaseMBean {
 			e.printStackTrace();
 		}
 	}
+	
+	private HSSFSheet configuracionDocumentoCobranza(HSSFSheet hoja1){
+		HSSFRow fila = null;
+		for (int i = 0; i < 30; i++) {
+			fila = hoja1.createRow(i);
+			fila.createCell(0);
+			if (i == 0) {
+				for (int j = 0; j < 10; j++) {
+					fila.createCell(j);
+				}
+			}
 
+		}
+
+		hoja1.setColumnWidth(0, 2800);
+		hoja1.setColumnWidth(1, 2500);
+		hoja1.setColumnWidth(2, 2940);
+		hoja1.setColumnWidth(3, 2940);
+		hoja1.setColumnWidth(4, 2940);
+		hoja1.setColumnWidth(5, 2050);
+		hoja1.setColumnWidth(6, 1975);
+		hoja1.setColumnWidth(7, 2940);
+		hoja1.setColumnWidth(8, 2940);
+		hoja1.setColumnWidth(9, 2940);
+		hoja1.setColumnWidth(10, 2940);
+		hoja1.setColumnWidth(11, 2940);
+
+		fila = hoja1.getRow(0);
+		fila.setHeightInPoints((float) 15.00);
+		fila = hoja1.getRow(1);
+		fila.setHeightInPoints((float) 15.00);
+		fila = hoja1.getRow(2);
+		fila.setHeightInPoints((float) 15.00);
+		fila = hoja1.getRow(3);
+		fila.setHeightInPoints((float) 15.00);
+		fila = hoja1.getRow(4);
+		fila.setHeightInPoints((float) 18.75);
+		fila = hoja1.getRow(5);
+		fila.setHeightInPoints((float) 18.75);
+		fila = hoja1.getRow(6);
+		fila.setHeightInPoints((float) 15.00);
+		fila = hoja1.getRow(7);
+		fila.setHeightInPoints((float) 13.50);
+		fila = hoja1.getRow(8);
+		fila.setHeightInPoints((float) 10.50);
+		for (int i=9; i<=22; i++){
+			fila = hoja1.getRow(i);
+			fila.setHeightInPoints((float) 15.00);
+		}
+		fila = hoja1.getRow(19);
+		fila.setHeightInPoints((float) 10.50);
+		
+		CellRangeAddress region = new CellRangeAddress(6, 6, 0, 1);
+		hoja1.addMergedRegion(region);
+		CellRangeAddress region2 = new CellRangeAddress(6, 6, 2, 5);
+		hoja1.addMergedRegion(region2);
+		CellRangeAddress region3 = new CellRangeAddress(7, 7, 2, 6);
+		hoja1.addMergedRegion(region3);
+		
+		for (int i=12; i<=18; i++){
+			hoja1.addMergedRegion(new CellRangeAddress(i, i, 1, 6));
+		}
+		hoja1.addMergedRegion(new CellRangeAddress(21, 21, 0, 6));
+		
+		return hoja1;
+	}
+
+	private HSSFSheet configuracionBoletaVenta(HSSFSheet hoja1){
+		HSSFRow fila = null;
+		for (int i = 0; i < 30; i++) {
+			fila = hoja1.createRow(i);
+			fila.createCell(0);
+			if (i == 0) {
+				for (int j = 0; j < 10; j++) {
+					fila.createCell(j);
+				}
+			}
+
+		}
+
+		/**
+		 * Configuracion de columnas
+		 */
+		hoja1.setColumnWidth(0, 2800);
+		hoja1.setColumnWidth(1, 2500);
+		hoja1.setColumnWidth(2, 2940);
+		hoja1.setColumnWidth(3, 2940);
+		hoja1.setColumnWidth(4, 2940);
+		hoja1.setColumnWidth(5, 2050);
+		hoja1.setColumnWidth(6, 1975);
+		hoja1.setColumnWidth(7, 2940);
+		hoja1.setColumnWidth(8, 2940);
+		hoja1.setColumnWidth(9, 2940);
+		hoja1.setColumnWidth(10, 2940);
+		hoja1.setColumnWidth(11, 2940);
+		/**
+		 * Fin de configuracion de columnas
+		 */
+
+		/**
+		 * Configuracion de filas
+		 */
+		fila = hoja1.getRow(0);
+		fila.setHeightInPoints((float) 15.00);
+		fila = hoja1.getRow(1);
+		fila.setHeightInPoints((float) 15.00);
+		fila = hoja1.getRow(2);
+		fila.setHeightInPoints((float) 15.00);
+		fila = hoja1.getRow(3);
+		fila.setHeightInPoints((float) 15.00);
+		fila = hoja1.getRow(4);
+		fila.setHeightInPoints((float) 18.75);
+		fila = hoja1.getRow(5);
+		fila.setHeightInPoints((float) 18.75);
+		fila = hoja1.getRow(6);
+		fila.setHeightInPoints((float) 15.00);
+		fila = hoja1.getRow(7);
+		fila.setHeightInPoints((float) 13.50);
+		fila = hoja1.getRow(8);
+		fila.setHeightInPoints((float) 10.50);
+		for (int i=9; i<=22; i++){
+			fila = hoja1.getRow(i);
+			fila.setHeightInPoints((float) 15.00);
+		}
+		fila = hoja1.getRow(19);
+		fila.setHeightInPoints((float) 10.50);
+		/**
+		 * Fin de configuracion de filas
+		 */
+		
+		CellRangeAddress region = new CellRangeAddress(6, 6, 0, 1);
+		hoja1.addMergedRegion(region);
+		CellRangeAddress region2 = new CellRangeAddress(6, 6, 2, 5);
+		hoja1.addMergedRegion(region2);
+		CellRangeAddress region3 = new CellRangeAddress(7, 7, 2, 6);
+		hoja1.addMergedRegion(region3);
+		
+		for (int i=12; i<=18; i++){
+			hoja1.addMergedRegion(new CellRangeAddress(i, i, 1, 6));
+		}
+		hoja1.addMergedRegion(new CellRangeAddress(21, 21, 0, 6));
+		
+		return hoja1;
+	}
 	/**
 	 * ========================================================================
 	 * ===============================================================

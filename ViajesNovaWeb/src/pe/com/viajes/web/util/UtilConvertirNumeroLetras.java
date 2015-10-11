@@ -38,7 +38,7 @@ public class UtilConvertirNumeroLetras {
 	 */
 	public static String convertNumberToLetter(String number)
 			throws NumberFormatException {
-		return convertNumberToLetter(Double.parseDouble(number));
+		return convertirNumeroALetras(Double.parseDouble(number));
 	}
 
 	/**
@@ -124,6 +124,94 @@ public class UtilConvertirNumeroLetras {
 		else if (centavos > 1)
 			converted.append(" CON " + convertNumber(String.valueOf(centavos))
 					+ "CENTAVOS");
+
+		return converted.toString();
+	}
+	
+	/**
+	 * Convierte un numero en representacion numerica a uno en representacion de
+	 * texto. El numero es valido si esta entre 0 y 999'999.999
+	 * 
+	 * @param number
+	 *            Numero a convertir
+	 * @return Numero convertido a texto
+	 * @throws NumberFormatException
+	 *             Si el numero esta fuera del rango
+	 */
+	public static String convertirNumeroALetras(double doubleNumber)
+			throws NumberFormatException {
+
+		StringBuilder converted = new StringBuilder();
+
+		String patternThreeDecimalPoints = "###,###.##";
+
+		DecimalFormatSymbols decimalSymbols = new DecimalFormatSymbols(Locale.US);
+		DecimalFormat format = new DecimalFormat(patternThreeDecimalPoints, decimalSymbols);
+		format.setRoundingMode(RoundingMode.DOWN);
+
+		// formateamos el numero, para ajustarlo a el formato de tres puntos
+		// decimales
+		String formatedDouble = format.format(doubleNumber);
+		doubleNumber = Double.parseDouble(formatedDouble);
+
+		// Validamos que sea un numero legal
+		if (doubleNumber > 999999999){
+			throw new NumberFormatException(
+					"El numero es mayor de 999'999.999, "
+							+ "no es posible convertirlo");
+		}
+
+		if (doubleNumber < 0){
+			throw new NumberFormatException("El numero debe ser positivo");
+		}
+
+		String splitNumber[] = String.valueOf(doubleNumber).replace('.', '#')
+				.split("#");
+
+		// Descompone el trio de millones
+		int millon = Integer.parseInt(String.valueOf(getDigitAt(splitNumber[0],
+				8))
+				+ String.valueOf(getDigitAt(splitNumber[0], 7))
+				+ String.valueOf(getDigitAt(splitNumber[0], 6)));
+		if (millon == 1){
+			converted.append("UN MILLON ");
+		}
+		else if (millon > 1){
+			converted.append(convertNumber(String.valueOf(millon))
+					+ "MILLONES ");
+		}
+
+		// Descompone el trio de miles
+		int miles = Integer.parseInt(String.valueOf(getDigitAt(splitNumber[0],
+				5))
+				+ String.valueOf(getDigitAt(splitNumber[0], 4))
+				+ String.valueOf(getDigitAt(splitNumber[0], 3)));
+		if (miles == 1){
+			converted.append("MIL ");
+		}
+		else if (miles > 1){
+			converted.append(convertNumber(String.valueOf(miles)) + "MIL ");
+		}
+
+		// Descompone el ultimo trio de unidades
+		int cientos = Integer.parseInt(String.valueOf(getDigitAt(
+				splitNumber[0], 2))
+				+ String.valueOf(getDigitAt(splitNumber[0], 1))
+				+ String.valueOf(getDigitAt(splitNumber[0], 0)));
+		if (cientos == 1){
+			converted.append("UN");
+		}
+
+		if (millon + miles + cientos == 0){
+			converted.append("CERO");
+		}
+		if (cientos > 1){
+			converted.append(convertNumber(String.valueOf(cientos)));
+		}
+
+		// Descompone los centavos
+		String decimales = splitNumber[1]; 
+		converted.append(" CON "+decimales+"/100");
 
 		return converted.toString();
 	}
