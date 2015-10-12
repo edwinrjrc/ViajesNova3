@@ -116,58 +116,6 @@ public class ComprobanteMBean extends BaseMBean {
 		try {
 			HSSFWorkbook archivoExcel = new HSSFWorkbook();
 			
-			HSSFFont fuenteDefecto = archivoExcel.createFont();
-			fuenteDefecto.setFontName("Calibri");
-			fuenteDefecto.setFontHeightInPoints((short) 10);
-
-			/**
-			 * Creacion de estilos
-			 */
-			HSSFCellStyle estiloCalibri = archivoExcel.createCellStyle();
-			HSSFFont fuente = archivoExcel.createFont();
-			fuente.setFontName("Calibri");
-			fuente.setFontHeightInPoints((short) 10);
-			estiloCalibri.setFont(fuente);
-
-			HSSFCellStyle estiloCalibriNegrita = archivoExcel.createCellStyle();
-			fuente = archivoExcel.createFont();
-			fuente.setFontName("Calibri");
-			fuente.setFontHeightInPoints((short) 10);
-			fuente.setBold(true);
-			estiloCalibriNegrita.setFont(fuente);
-
-			HSSFCellStyle sCalibriNegrita12 = archivoExcel.createCellStyle();
-			fuente = archivoExcel.createFont();
-			fuente.setFontName("Calibri");
-			fuente.setFontHeightInPoints((short) 10);
-			fuente.setBold(true);
-			sCalibriNegrita12.setFont(fuente);
-
-			HSSFCellStyle estiloCalibriCentro = archivoExcel.createCellStyle();
-			fuente = archivoExcel.createFont();
-			fuente.setFontName("Calibri");
-			fuente.setFontHeightInPoints((short) 10);
-			estiloCalibriCentro.setFont(fuente);
-			estiloCalibriCentro.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-
-			HSSFCellStyle estiloCalibriDerecha = archivoExcel.createCellStyle();
-			fuente = archivoExcel.createFont();
-			fuente.setFontName("Calibri");
-			fuente.setFontHeightInPoints((short) 10);
-			estiloCalibriDerecha.setFont(fuente);
-			estiloCalibriDerecha.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-			
-			HSSFCellStyle estiloCalibriIzquierda = archivoExcel.createCellStyle();
-			fuente = archivoExcel.createFont();
-			fuente.setFontName("Calibri");
-			fuente.setFontHeightInPoints((short) 10);
-			estiloCalibriIzquierda.setFont(fuente);
-			estiloCalibriIzquierda.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-
-			/**
-			 * Fin de estilos
-			 */
-			
 			HSSFSheet hoja1 = null;
 			
 			// FACTURA
@@ -177,6 +125,24 @@ public class ComprobanteMBean extends BaseMBean {
 			// BOLETA
 			else if (this.getComprobanteDetalle().getTipoComprobante().getCodigoEntero().intValue() == 2){
 				hoja1 = archivoExcel.createSheet("Boleta");
+				/**
+				 * Inicio de configuracion de hoja excel
+				 */
+				
+				hoja1 = this.configuracionBoletaVenta(hoja1);
+				
+				/**
+				 * Fin configuracion hoja excel
+				 */
+				
+				/**
+				 * Inicio data documento de cobranza
+				 */
+				
+				this.dataBoletaVenta(hoja1, archivoExcel);
+				/**
+				 * Fin data documento de cobranza
+				 */
 			}
 			// DOCUMENTO DE COBRANZA
 			else if (this.getComprobanteDetalle().getTipoComprobante().getCodigoEntero().intValue() == 3){
@@ -190,111 +156,21 @@ public class ComprobanteMBean extends BaseMBean {
 				/**
 				 * Fin configuracion hoja excel
 				 */
+				
+				/**
+				 * Inicio data documento de cobranza
+				 */
+				
+				this.dataDocumentoCobranza(hoja1, archivoExcel);
+				/**
+				 * Fin data documento de cobranza
+				 */
 			}
 			
 			/**
 			 * Inicio datos de excel
 			 */
-			String linea1 = "Referencia: Pax PEÑA/OSCAR X 02";
-			String linea2 = "Por boleto aereo LIM/TBP/LIM";
-			String linea3 = "por cuenta de LAN PERU";
-			String linea4 = "544 9232559559/ 544 9232559560";
-			String linea5 = "";
-			String linea6 = "";
-			String linea7 = "";
-			String monto = "416.84";
 			
-			HSSFRow fila = hoja1.getRow(6);
-			HSSFCell celda = fila.getCell(0);
-			celda.setCellStyle(estiloCalibriIzquierda);
-			String fechaHoy = "     "+UtilWeb.diaFechaHoy();
-			fechaHoy = fechaHoy + "   " + UtilWeb.mesHoyNumero();
-			fechaHoy = fechaHoy + "     " + UtilWeb.anioFechaHoyYY();
-			celda.setCellValue(fechaHoy);
-			
-			celda = fila.createCell(2);
-			celda.setCellStyle(estiloCalibriIzquierda);
-			Cliente cliente = this.consultaNegocioServicio.consultarCliente(this.getComprobanteDetalle().getTitular().getCodigoEntero());
-			celda.setCellValue(cliente.getNombreCompleto());
-			
-			fila = hoja1.getRow(7);
-			celda = fila.createCell(2);
-			celda.setCellValue(cliente.getDocumentoIdentidad().getNumeroDocumento());
-			celda.setCellStyle(estiloCalibriIzquierda);
-
-			fila = hoja1.createRow(9);
-			celda = fila.createCell(0);
-			
-			fila = hoja1.getRow(12);
-			celda = fila.getCell(1);
-			if (celda == null){
-				celda = fila.createCell(1);
-			}
-			celda.setCellStyle(estiloCalibriIzquierda);
-			celda.setCellValue(linea1);
-			
-			celda = fila.createCell(7);
-			celda.setCellValue("$ "+monto);
-			celda.setCellStyle(estiloCalibriDerecha);
-			
-			fila = hoja1.getRow(13);
-			celda = fila.getCell(1);
-			if (celda == null){
-				celda = fila.createCell(1);
-			}
-			celda.setCellValue(linea2);
-			celda.setCellStyle(estiloCalibri);
-			
-			fila = hoja1.getRow(14);
-			celda = fila.getCell(1);
-			if (celda == null){
-				celda = fila.createCell(1);
-			}
-			celda.setCellValue(linea3);
-			celda.setCellStyle(estiloCalibri);
-			
-			fila = hoja1.getRow(15);
-			celda = fila.getCell(1);
-			if (celda == null){
-				celda = fila.createCell(1);
-			}
-			celda.setCellValue(linea4);
-			celda.setCellStyle(estiloCalibri);
-			
-			fila = hoja1.getRow(16);
-			celda = fila.getCell(1);
-			if (celda == null){
-				celda = fila.createCell(1);
-			}
-			celda.setCellValue(linea5);
-			celda.setCellStyle(estiloCalibri);
-			
-			fila = hoja1.getRow(17);
-			celda = fila.getCell(1);
-			if (celda == null){
-				celda = fila.createCell(1);
-			}
-			celda.setCellValue(linea6);
-			celda.setCellStyle(estiloCalibri);
-			
-			fila = hoja1.getRow(18);
-			celda = fila.getCell(1);
-			if (celda == null){
-				celda = fila.createCell(1);
-			}
-			fila = hoja1.getRow(21);
-			celda = fila.getCell(0);
-			if (celda == null){
-				celda = fila.createCell(0);
-			}
-			String montoLetras = UtilConvertirNumeroLetras.convertNumberToLetter(monto);
-			celda.setCellValue("   SON: "+montoLetras+" DOLARES AMERICANOS");
-			celda.setCellStyle(estiloCalibriIzquierda);
-			
-			fila = hoja1.getRow(22);
-			celda = fila.createCell(7);
-			celda.setCellValue("$ "+monto);
-			celda.setCellStyle(estiloCalibriDerecha);
 
 			HttpServletResponse response = obtenerResponse();
 			response.setContentType("application/vnd.ms-excel");
@@ -401,19 +277,18 @@ public class ComprobanteMBean extends BaseMBean {
 					fila.createCell(j);
 				}
 			}
-
 		}
 
 		/**
 		 * Configuracion de columnas
 		 */
 		hoja1.setColumnWidth(0, 2800);
-		hoja1.setColumnWidth(1, 2500);
+		hoja1.setColumnWidth(1, 1825);
 		hoja1.setColumnWidth(2, 2940);
 		hoja1.setColumnWidth(3, 2940);
 		hoja1.setColumnWidth(4, 2940);
 		hoja1.setColumnWidth(5, 2050);
-		hoja1.setColumnWidth(6, 1975);
+		hoja1.setColumnWidth(6, 3875);
 		hoja1.setColumnWidth(7, 2940);
 		hoja1.setColumnWidth(8, 2940);
 		hoja1.setColumnWidth(9, 2940);
@@ -435,38 +310,366 @@ public class ComprobanteMBean extends BaseMBean {
 		fila = hoja1.getRow(3);
 		fila.setHeightInPoints((float) 15.00);
 		fila = hoja1.getRow(4);
-		fila.setHeightInPoints((float) 18.75);
+		fila.setHeightInPoints((float) 27.00);
 		fila = hoja1.getRow(5);
 		fila.setHeightInPoints((float) 18.75);
 		fila = hoja1.getRow(6);
 		fila.setHeightInPoints((float) 15.00);
 		fila = hoja1.getRow(7);
-		fila.setHeightInPoints((float) 13.50);
+		fila.setHeightInPoints((float) 15.00);
 		fila = hoja1.getRow(8);
-		fila.setHeightInPoints((float) 10.50);
-		for (int i=9; i<=22; i++){
+		fila.setHeightInPoints((float) 15.00);
+		fila = hoja1.getRow(9);
+		fila.setHeightInPoints((float) 19.50);
+		for (int i=10; i<=15; i++){
 			fila = hoja1.getRow(i);
 			fila.setHeightInPoints((float) 15.00);
 		}
+		fila = hoja1.getRow(16);
+		fila.setHeightInPoints((float) 14.25);
+		fila = hoja1.getRow(17);
+		fila.setHeightInPoints((float) 15.00);
+		fila = hoja1.getRow(18);
+		fila.setHeightInPoints((float) 17.25);
 		fila = hoja1.getRow(19);
+		fila.setHeightInPoints((float) 18.00);
+		fila = hoja1.getRow(20);
 		fila.setHeightInPoints((float) 10.50);
+		fila = hoja1.getRow(21);
+		fila.setHeightInPoints((float) 15.00);
+		fila = hoja1.getRow(22);
+		fila.setHeightInPoints((float) 9.00);
+		fila = hoja1.getRow(21);
+		fila.setHeightInPoints((float) 13.00);
 		/**
 		 * Fin de configuracion de filas
 		 */
 		
-		CellRangeAddress region = new CellRangeAddress(6, 6, 0, 1);
+		CellRangeAddress region = new CellRangeAddress(5, 5, 1, 3);
 		hoja1.addMergedRegion(region);
-		CellRangeAddress region2 = new CellRangeAddress(6, 6, 2, 5);
+		CellRangeAddress region2 = new CellRangeAddress(7, 7, 0, 4);
 		hoja1.addMergedRegion(region2);
-		CellRangeAddress region3 = new CellRangeAddress(7, 7, 2, 6);
+		CellRangeAddress region3 = new CellRangeAddress(9, 9, 6, 7);
 		hoja1.addMergedRegion(region3);
 		
-		for (int i=12; i<=18; i++){
-			hoja1.addMergedRegion(new CellRangeAddress(i, i, 1, 6));
+		for (int i=13; i<=18; i++){
+			hoja1.addMergedRegion(new CellRangeAddress(i, i, 2, 6));
 		}
-		hoja1.addMergedRegion(new CellRangeAddress(21, 21, 0, 6));
+		hoja1.addMergedRegion(new CellRangeAddress(19, 20, 1, 6));
+		
+		hoja1.addMergedRegion(new CellRangeAddress(22, 23, 1, 6));
+		
+		hoja1.addMergedRegion(new CellRangeAddress(21, 23, 7, 7));
 		
 		return hoja1;
+	}
+	
+	private void dataDocumentoCobranza(HSSFSheet hoja1, HSSFWorkbook archivoExcel) throws SQLException, Exception{
+		HSSFFont fuenteDefecto = archivoExcel.createFont();
+		fuenteDefecto.setFontName("Calibri");
+		fuenteDefecto.setFontHeightInPoints((short) 10);
+
+		/**
+		 * Creacion de estilos
+		 */
+		HSSFCellStyle estiloCalibri = archivoExcel.createCellStyle();
+		HSSFFont fuente = archivoExcel.createFont();
+		fuente.setFontName("Calibri");
+		fuente.setFontHeightInPoints((short) 10);
+		estiloCalibri.setFont(fuente);
+
+		HSSFCellStyle estiloCalibriNegrita = archivoExcel.createCellStyle();
+		fuente = archivoExcel.createFont();
+		fuente.setFontName("Calibri");
+		fuente.setFontHeightInPoints((short) 10);
+		fuente.setBold(true);
+		estiloCalibriNegrita.setFont(fuente);
+
+		HSSFCellStyle sCalibriNegrita12 = archivoExcel.createCellStyle();
+		fuente = archivoExcel.createFont();
+		fuente.setFontName("Calibri");
+		fuente.setFontHeightInPoints((short) 10);
+		fuente.setBold(true);
+		sCalibriNegrita12.setFont(fuente);
+
+		HSSFCellStyle estiloCalibriCentro = archivoExcel.createCellStyle();
+		fuente = archivoExcel.createFont();
+		fuente.setFontName("Calibri");
+		fuente.setFontHeightInPoints((short) 10);
+		estiloCalibriCentro.setFont(fuente);
+		estiloCalibriCentro.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+
+		HSSFCellStyle estiloCalibriDerecha = archivoExcel.createCellStyle();
+		fuente = archivoExcel.createFont();
+		fuente.setFontName("Calibri");
+		fuente.setFontHeightInPoints((short) 10);
+		estiloCalibriDerecha.setFont(fuente);
+		estiloCalibriDerecha.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+		
+		HSSFCellStyle estiloCalibriIzquierda = archivoExcel.createCellStyle();
+		fuente = archivoExcel.createFont();
+		fuente.setFontName("Calibri");
+		fuente.setFontHeightInPoints((short) 10);
+		estiloCalibriIzquierda.setFont(fuente);
+		estiloCalibriIzquierda.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+
+		/**
+		 * Fin de estilos
+		 */
+		
+		String linea1 = "Referencia: Pax PEÑA/OSCAR X 02";
+		String linea2 = "Por boleto aereo LIM/TBP/LIM";
+		String linea3 = "por cuenta de LAN PERU";
+		String linea4 = "544 9232559559/ 544 9232559560";
+		String linea5 = "";
+		String linea6 = "";
+		String linea7 = "";
+		String monto = "416.84";
+		String moneda = "DOLARES AMERICANOS";
+		String simboloMoneda = "$";
+		
+		HSSFRow fila = hoja1.getRow(6);
+		HSSFCell celda = fila.getCell(0);
+		celda.setCellStyle(estiloCalibriIzquierda);
+		String fechaHoy = "     "+UtilWeb.diaFechaHoy();
+		fechaHoy = fechaHoy + "   " + UtilWeb.mesHoyNumero();
+		fechaHoy = fechaHoy + "     " + UtilWeb.anioFechaHoyYY();
+		celda.setCellValue(fechaHoy);
+		
+		celda = fila.createCell(2);
+		celda.setCellStyle(estiloCalibriIzquierda);
+		Cliente cliente = this.consultaNegocioServicio.consultarCliente(this.getComprobanteDetalle().getTitular().getCodigoEntero());
+		celda.setCellValue(cliente.getNombreCompleto());
+		
+		fila = hoja1.getRow(7);
+		celda = fila.createCell(2);
+		celda.setCellValue(cliente.getDocumentoIdentidad().getNumeroDocumento());
+		celda.setCellStyle(estiloCalibriIzquierda);
+		
+		fila = hoja1.getRow(12);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		celda.setCellStyle(estiloCalibriIzquierda);
+		celda.setCellValue(linea1);
+		
+		celda = fila.createCell(7);
+		celda.setCellValue(simboloMoneda+" "+monto);
+		celda.setCellStyle(estiloCalibriDerecha);
+		
+		fila = hoja1.getRow(13);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		celda.setCellValue(linea2);
+		celda.setCellStyle(estiloCalibri);
+		
+		fila = hoja1.getRow(14);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		celda.setCellValue(linea3);
+		celda.setCellStyle(estiloCalibri);
+		
+		fila = hoja1.getRow(15);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		celda.setCellValue(linea4);
+		celda.setCellStyle(estiloCalibri);
+		
+		fila = hoja1.getRow(16);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		celda.setCellValue(linea5);
+		celda.setCellStyle(estiloCalibri);
+		
+		fila = hoja1.getRow(17);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		celda.setCellValue(linea6);
+		celda.setCellStyle(estiloCalibri);
+		
+		fila = hoja1.getRow(18);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		fila = hoja1.getRow(21);
+		celda = fila.getCell(0);
+		if (celda == null){
+			celda = fila.createCell(0);
+		}
+		String montoLetras = UtilConvertirNumeroLetras.convertNumberToLetter(monto);
+		celda.setCellValue("   SON: "+montoLetras+" "+moneda);
+		celda.setCellStyle(estiloCalibriIzquierda);
+		
+		fila = hoja1.getRow(22);
+		celda = fila.createCell(7);
+		celda.setCellValue(simboloMoneda+" "+monto);
+		celda.setCellStyle(estiloCalibriDerecha);
+	}
+	
+	private void dataBoletaVenta(HSSFSheet hoja1, HSSFWorkbook archivoExcel) throws SQLException, Exception{
+		HSSFFont fuenteDefecto = archivoExcel.createFont();
+		fuenteDefecto.setFontName("Calibri");
+		fuenteDefecto.setFontHeightInPoints((short) 10);
+
+		/**
+		 * Creacion de estilos
+		 */
+		HSSFCellStyle estiloCalibri = archivoExcel.createCellStyle();
+		HSSFFont fuente = archivoExcel.createFont();
+		fuente.setFontName("Calibri");
+		fuente.setFontHeightInPoints((short) 10);
+		estiloCalibri.setFont(fuente);
+
+		HSSFCellStyle estiloCalibriNegrita = archivoExcel.createCellStyle();
+		fuente = archivoExcel.createFont();
+		fuente.setFontName("Calibri");
+		fuente.setFontHeightInPoints((short) 10);
+		fuente.setBold(true);
+		estiloCalibriNegrita.setFont(fuente);
+
+		HSSFCellStyle sCalibriNegrita12 = archivoExcel.createCellStyle();
+		fuente = archivoExcel.createFont();
+		fuente.setFontName("Calibri");
+		fuente.setFontHeightInPoints((short) 10);
+		fuente.setBold(true);
+		sCalibriNegrita12.setFont(fuente);
+
+		HSSFCellStyle estiloCalibriCentro = archivoExcel.createCellStyle();
+		fuente = archivoExcel.createFont();
+		fuente.setFontName("Calibri");
+		fuente.setFontHeightInPoints((short) 10);
+		estiloCalibriCentro.setFont(fuente);
+		estiloCalibriCentro.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+
+		HSSFCellStyle estiloCalibriDerecha = archivoExcel.createCellStyle();
+		fuente = archivoExcel.createFont();
+		fuente.setFontName("Calibri");
+		fuente.setFontHeightInPoints((short) 10);
+		estiloCalibriDerecha.setFont(fuente);
+		estiloCalibriDerecha.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+		
+		HSSFCellStyle estiloCalibriIzquierda = archivoExcel.createCellStyle();
+		fuente = archivoExcel.createFont();
+		fuente.setFontName("Calibri");
+		fuente.setFontHeightInPoints((short) 10);
+		estiloCalibriIzquierda.setFont(fuente);
+		estiloCalibriIzquierda.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+
+		/**
+		 * Fin de estilos
+		 */
+		
+		String linea1 = "Referencia: Pax PEÑA/OSCAR X 02";
+		String linea2 = "Por boleto aereo LIM/TBP/LIM";
+		String linea3 = "por cuenta de LAN PERU";
+		String linea4 = "544 9232559559/ 544 9232559560";
+		String linea5 = "";
+		String linea6 = "";
+		String linea7 = "";
+		String monto = "416.84";
+		String moneda = "DOLARES AMERICANOS";
+		String simboloMoneda = "$";
+		
+		HSSFRow fila = hoja1.getRow(6);
+		HSSFCell celda = fila.getCell(0);
+		celda.setCellStyle(estiloCalibriIzquierda);
+		String fechaHoy = "     "+UtilWeb.diaFechaHoy();
+		fechaHoy = fechaHoy + "   " + UtilWeb.mesHoyNumero();
+		fechaHoy = fechaHoy + "     " + UtilWeb.anioFechaHoyYY();
+		celda.setCellValue(fechaHoy);
+		
+		celda = fila.createCell(2);
+		celda.setCellStyle(estiloCalibriIzquierda);
+		Cliente cliente = this.consultaNegocioServicio.consultarCliente(this.getComprobanteDetalle().getTitular().getCodigoEntero());
+		celda.setCellValue(cliente.getNombreCompleto());
+		
+		fila = hoja1.getRow(7);
+		celda = fila.createCell(2);
+		celda.setCellValue(cliente.getDocumentoIdentidad().getNumeroDocumento());
+		celda.setCellStyle(estiloCalibriIzquierda);
+		
+		fila = hoja1.getRow(12);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		celda.setCellStyle(estiloCalibriIzquierda);
+		celda.setCellValue(linea1);
+		
+		celda = fila.createCell(7);
+		celda.setCellValue(simboloMoneda+" "+monto);
+		celda.setCellStyle(estiloCalibriDerecha);
+		
+		fila = hoja1.getRow(13);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		celda.setCellValue(linea2);
+		celda.setCellStyle(estiloCalibri);
+		
+		fila = hoja1.getRow(14);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		celda.setCellValue(linea3);
+		celda.setCellStyle(estiloCalibri);
+		
+		fila = hoja1.getRow(15);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		celda.setCellValue(linea4);
+		celda.setCellStyle(estiloCalibri);
+		
+		fila = hoja1.getRow(16);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		celda.setCellValue(linea5);
+		celda.setCellStyle(estiloCalibri);
+		
+		fila = hoja1.getRow(17);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		celda.setCellValue(linea6);
+		celda.setCellStyle(estiloCalibri);
+		
+		fila = hoja1.getRow(18);
+		celda = fila.getCell(1);
+		if (celda == null){
+			celda = fila.createCell(1);
+		}
+		fila = hoja1.getRow(21);
+		celda = fila.getCell(0);
+		if (celda == null){
+			celda = fila.createCell(0);
+		}
+		String montoLetras = UtilConvertirNumeroLetras.convertNumberToLetter(monto);
+		celda.setCellValue("   SON: "+montoLetras+" "+moneda);
+		celda.setCellStyle(estiloCalibriIzquierda);
+		
+		fila = hoja1.getRow(22);
+		celda = fila.createCell(7);
+		celda.setCellValue(simboloMoneda+" "+monto);
+		celda.setCellStyle(estiloCalibriDerecha);
 	}
 	/**
 	 * ========================================================================
