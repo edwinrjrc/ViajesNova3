@@ -56,6 +56,7 @@ import pe.com.viajes.bean.negocio.EventoObsAnu;
 import pe.com.viajes.bean.negocio.MaestroServicio;
 import pe.com.viajes.bean.negocio.PagoServicio;
 import pe.com.viajes.bean.negocio.Parametro;
+import pe.com.viajes.bean.negocio.Pasajero;
 import pe.com.viajes.bean.negocio.Proveedor;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.bean.negocio.ServicioAgenciaBusqueda;
@@ -107,6 +108,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private BaseVO tipoServicio;
 	private Proveedor proveedorBusqueda;
 	private DocumentoAdicional documentoAdicional;
+	private Pasajero pasajero;
 
 	private BigDecimal saldoServicio;
 
@@ -2051,6 +2053,15 @@ public class ServicioAgenteMBean extends BaseMBean {
 		}
 
 	}
+	
+	public void agregarPasajero(){
+		System.out.println(" pasajero ");
+		this.getServicioAgencia().getListaPasajeros().add(this.getPasajero());
+	}
+	
+	public void eliminarPasajero(Pasajero pax){
+		this.getServicioAgencia().getListaPasajeros().remove(pax);
+	}
 
 	/**
 	 * ========================================================================
@@ -2947,5 +2958,22 @@ public class ServicioAgenteMBean extends BaseMBean {
 	 */
 	public void setAplicaIGV(boolean aplicaIGV) {
 		this.aplicaIGV = aplicaIGV;
+	}
+
+	/**
+	 * @return the pasajero
+	 */
+	public Pasajero getPasajero() {
+		if (pasajero == null){
+			pasajero = new Pasajero();
+		}
+		return pasajero;
+	}
+
+	/**
+	 * @param pasajero the pasajero to set
+	 */
+	public void setPasajero(Pasajero pasajero) {
+		this.pasajero = pasajero;
 	}
 }

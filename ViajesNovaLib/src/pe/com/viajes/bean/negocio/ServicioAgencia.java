@@ -43,6 +43,7 @@ public class ServicioAgencia extends BaseNegocio {
 
 	private List<DetalleServicioAgencia> listaDetalleServicio;
 	private List<DetalleServicioAgencia> listaDetalleServicioAgrupado;
+	private List<Pasajero> listaPasajeros;
 	private List<CuotaPago> cronogramaPago;
 
 	private BaseVO vendedor;
@@ -607,5 +608,22 @@ public class ServicioAgencia extends BaseNegocio {
 	 */
 	public void setIdReferencia(Integer idReferencia) {
 		this.idReferencia = idReferencia;
+	}
+
+	/**
+	 * @return the listaPasajeros
+	 */
+	public List<Pasajero> getListaPasajeros() {
+		if (listaPasajeros == null){
+			listaPasajeros = new ArrayList<Pasajero>();
+		}
+		return listaPasajeros;
+	}
+
+	/**
+	 * @param listaPasajeros the listaPasajeros to set
+	 */
+	public void setListaPasajeros(List<Pasajero> listaPasajeros) {
+		this.listaPasajeros = listaPasajeros;
 	}
 }

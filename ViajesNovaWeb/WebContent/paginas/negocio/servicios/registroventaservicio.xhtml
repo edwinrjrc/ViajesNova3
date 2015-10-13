@@ -183,6 +183,122 @@
 
 					<rich:tab>
 						<f:facet name="header">
+							<h:outputText value="Pasajeros" />
+						</f:facet>
+
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+							columns="1" style="width:100%;">
+
+							<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+								columns="2" style="width:100%;"
+								columnClasses="col1fil2formulario,col2fil2formulario">
+								<h:outputText value="Nombres" />
+								<h:inputText value="#{servicioAgenteMBean.pasajero.nombres}" />
+							</h:panelGrid>
+
+							<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+								columns="4" style="width:100%;"
+								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
+								<h:outputText value="Apellido Paterno" />
+								<h:inputText
+									value="#{servicioAgenteMBean.pasajero.apellidoPaterno}" />
+								<h:outputText value="Apellido Materno" />
+								<h:inputText
+									value="#{servicioAgenteMBean.pasajero.apellidoMaterno}" />
+							</h:panelGrid>
+
+							<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+								columns="4" style="width:100%;"
+								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
+								<h:outputText value="Teléfono 1" />
+								<h:inputText value="#{servicioAgenteMBean.pasajero.telefono1}" />
+								<h:outputText value="Teléfono 2" />
+								<h:inputText value="#{servicioAgenteMBean.pasajero.telefono2}" />
+							</h:panelGrid>
+
+							<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+								columns="4" style="width:100%;"
+								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
+								<h:outputText value="Correo Electronico" />
+								<h:inputText
+									value="#{servicioAgenteMBean.pasajero.correoElectronico}" />
+								<h:outputText value="Relación" />
+								<h:selectOneMenu value="#{pax.relacion.codigoEntero}">
+									<f:selectItem itemLabel="-Seleccione-" />
+								</h:selectOneMenu>
+							</h:panelGrid>
+
+							<f:facet name="footer">
+								<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+									columns="1" style="width:100%;text-align:center;">
+									<a4j:commandButton value="Agregar" styleClass="estiloBoton1"
+										render="idPnDatPax"
+										action="#{servicioAgenteMBean.agregarPasajero}"></a4j:commandButton>
+								</h:panelGrid>
+							</f:facet>
+						</h:panelGrid>
+
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+							columns="1" style="width:100%;" id="idPnDatPax">
+
+							<rich:dataTable style="width:100%;"
+								value="#{servicioAgenteMBean.servicioAgencia.listaPasajeros}"
+								var="pax">
+
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Nombres" />
+									</f:facet>
+									<h:outputText value="#{pax.nombres}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Apellido Paterno" />
+									</f:facet>
+									<h:outputText value="#{pax.apellidoPaterno}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Apellido Materno" />
+									</f:facet>
+									<h:outputText value="#{pax.apellidoMaterno}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Correo Electronico" />
+									</f:facet>
+									<h:outputText value="#{pax.correoElectronico}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Telefono 1" />
+									</f:facet>
+									<h:outputText value="#{pax.telefono1}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Telefono 2" />
+									</f:facet>
+									<h:outputText value="#{pax.telefono2}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Relación" />
+									</f:facet>
+									<h:outputText value="#{pax.relacion.nombre}" />
+								</rich:column>
+								<rich:column>
+									<a4j:commandLink render="idPnDatPax"
+										action="#{servicioAgenteMBean.eliminarPasajero(pax)}">
+										
+									</a4j:commandLink>
+								</rich:column>
+							</rich:dataTable>
+
+						</h:panelGrid>
+					</rich:tab>
+					<rich:tab>
+						<f:facet name="header">
 							<h:outputText value="Servicios" />
 						</f:facet>
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
@@ -418,7 +534,7 @@
 										<f:selectItems
 											value="#{servicioAgenteMBean.listadoServiciosPadre}"></f:selectItems>
 									</h:selectOneMenu>
-									
+
 									<h:outputText value=""
 										rendered="#{!servicioAgenteMBean.detalleServicio.tipoServicio.servicioPadre and servicioAgenteMBean.cargoConfiguracionTipoServicio}" />
 									<h:outputText value=""
@@ -472,12 +588,14 @@
 									</h:selectBooleanCheckbox>
 								</h:panelGrid>
 
-								<h:panelGrid columns="4" cellpadding="0" cellspacing="0" id="idPnIGV"
-									border="0" style="width:100%;" rendered="#{servicioAgenteMBean.aplicaIGV}"
+								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
+									id="idPnIGV" border="0" style="width:100%;"
+									rendered="#{servicioAgenteMBean.aplicaIGV}"
 									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
 									<h:outputText value="Aplica IGV" />
-									<h:selectBooleanCheckbox value="#{servicioAgenteMBean.detalleServicio.aplicaIGV}" />
-									
+									<h:selectBooleanCheckbox
+										value="#{servicioAgenteMBean.detalleServicio.aplicaIGV}" />
+
 									<h:outputText value="" />
 									<h:outputText value="" />
 								</h:panelGrid>
@@ -775,12 +893,12 @@
 						id="idBotVenServicio">
 
 						<a4j:commandButton value="Grabar"
-							rendered="#{!servicioAgenteMBean.transaccionExito}"
+							rendered="#{!servicioAgenteMBean.transaccionExito}" styleClass="estiloBoton1"
 							actionListener="#{servicioAgenteMBean.ejecutarMetodo()}"
 							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrRegisVenServicio"
 							oncomplete="mostrarModal('idformadmservicios')" />
 
-						<a4j:commandButton value="Salir"
+						<a4j:commandButton value="Salir" styleClass="estiloBoton1"
 							action="#{servicioAgenteMBean.buscarServicioRegistrado}"
 							rendered="#{servicioAgenteMBean.transaccionExito}"
 							render="idGrTabVenServicios"
@@ -797,7 +915,7 @@
 							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrRegisVenServicio"
 							oncomplete="mostrarModal('idformadmservicios')" />
 
-						<a4j:commandButton value="Imprimir Venta"
+						<a4j:commandButton value="Imprimir Venta" styleClass="estiloBoton1"
 							rendered="#{servicioAgenteMBean.transaccionExito}"
 							oncomplete="clicBoton('idformadmservicios:idbtnImprimirVenta')"></a4j:commandButton>
 					</h:panelGrid>
