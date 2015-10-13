@@ -17,8 +17,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang3.StringUtils;
+
 import pe.com.viajes.bean.base.BaseVO;
 import pe.com.viajes.bean.jasper.DetalleServicio;
+import pe.com.viajes.bean.negocio.DetalleServicioAgencia;
+import pe.com.viajes.bean.negocio.Pasajero;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.bean.negocio.ServicioProveedor;
 import pe.com.viajes.bean.reportes.CheckIn;
@@ -252,5 +256,83 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 				conn.close();
 			}
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see pe.com.viajes.negocio.dao.ServicioNegocioDao#ingresarPasajero(pe.com.viajes.bean.negocio.Pasajero)
+	 */
+	@Override
+	public Integer ingresarPasajero(Pasajero pasajero) throws SQLException {
+		Connection conn = null;
+		CallableStatement cs = null;
+		String sql = "";
+		
+		try{
+			sql = "{ ? = call negocio.fn_ingresarpasajero(?,?,?,?,?,?,?,?,?,?,?,?)}";
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(1, Types.INTEGER);
+			cs.setString(2, pasajero.getNombres());
+			cs.setString(3, pasajero.getApellidoPaterno());
+			if (StringUtils.isNotBlank(pasajero.getApellidoMaterno())){
+				cs.setString(4, pasajero.getApellidoMaterno());
+			}
+			else{
+				cs.setNull(4, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(pasajero.getCorreoElectronico())){
+				cs.setString(5, pasajero.getCorreoElectronico());
+			}
+			else{
+				cs.setNull(5, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(pasajero.getTelefono1())){
+				cs.setString(6, pasajero.getTelefono1());
+			}
+			else{
+				cs.setNull(6, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(pasajero.getTelefono2())){
+				cs.setString(7, pasajero.getTelefono2());
+			}
+			else{
+				cs.setNull(7, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(pasajero.getNumeroPasajeroFrecuente())){
+				cs.setString(8, pasajero.getNumeroPasajeroFrecuente());
+			}
+			else{
+				cs.setNull(8, Types.VARCHAR);
+			}
+			cs.setInt(9, pasajero.getRelacion().getCodigoEntero().intValue());
+			cs.setInt(10, pasajero.getIdServicioDetalle().intValue());
+			cs.setInt(11, pasajero.getIdServicio().intValue());
+			cs.execute();
+			
+			return cs.getInt(1);
+		}
+		catch (SQLException e){
+			throw new SQLException(e);
+		}
+		finally {
+			if (cs != null){
+				cs.close();
+			}
+			if (conn != null){
+				conn.close();
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see pe.com.viajes.negocio.dao.ServicioNegocioDao#consultarPasajeros(pe.com.viajes.bean.negocio.DetalleServicioAgencia)
+	 */
+	@Override
+	public List<Pasajero> consultarPasajeros(
+			DetalleServicioAgencia servicioDetalle) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
