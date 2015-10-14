@@ -48,6 +48,7 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private BaseVO hotel;
 
 	private List<DetalleServicioAgencia> serviciosHijos;
+	private List<Pasajero> listaPasajeros;
 
 	private ConfiguracionTipoServicio configuracionTipoServicio;
 
@@ -73,6 +74,8 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private String numeroBoleto;
 	
 	private boolean aplicaIGV;
+	
+	private String resumenPasajeros;
 
 	/**
 	 * @return the tipoServicio
@@ -755,6 +758,37 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setAplicaIGV(boolean aplicaIGV) {
 		this.aplicaIGV = aplicaIGV;
+	}
+
+	/**
+	 * @return the listaPasajeros
+	 */
+	public List<Pasajero> getListaPasajeros() {
+		if (listaPasajeros == null){
+			listaPasajeros = new ArrayList<Pasajero>();
+		}
+		return listaPasajeros;
+	}
+
+	/**
+	 * @param listaPasajeros the listaPasajeros to set
+	 */
+	public void setListaPasajeros(List<Pasajero> listaPasajeros) {
+		this.listaPasajeros = listaPasajeros;
+	}
+
+	/**
+	 * @return the resumenPasajeros
+	 */
+	public String getResumenPasajeros() {
+		return resumenPasajeros;
+	}
+
+	/**
+	 * @param resumenPasajeros the resumenPasajeros to set
+	 */
+	public void setResumenPasajeros(String resumenPasajeros) {
+		this.resumenPasajeros = resumenPasajeros;
 	}
 
 }

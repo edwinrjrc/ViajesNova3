@@ -17,6 +17,7 @@ import pe.com.viajes.bean.jasper.DetalleServicio;
 import pe.com.viajes.bean.negocio.Contacto;
 import pe.com.viajes.bean.negocio.DetalleServicioAgencia;
 import pe.com.viajes.bean.negocio.Direccion;
+import pe.com.viajes.bean.negocio.Pasajero;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.bean.negocio.ServicioNovios;
 import pe.com.viajes.negocio.ejb.UtilNegocioSessionRemote;
@@ -128,5 +129,11 @@ public class UtilNegocioServicioImpl implements UtilNegocioServicio {
 	public BigDecimal calcularValorCuota(ServicioAgencia servicioAgencia)
 			throws SQLException, Exception {
 		return ejbSession.calcularValorCuota(servicioAgencia);
+	}
+
+	@Override
+	public Pasajero agregarPasajero(Pasajero pasajero)
+			throws ErrorRegistroDataException {
+		return ejbSession.agregarPasajero(pasajero);
 	}
 }

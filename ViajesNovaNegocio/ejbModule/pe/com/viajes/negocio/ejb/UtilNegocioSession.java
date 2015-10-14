@@ -24,6 +24,7 @@ import pe.com.viajes.bean.negocio.Direccion;
 import pe.com.viajes.bean.negocio.Maestro;
 import pe.com.viajes.bean.negocio.MaestroServicio;
 import pe.com.viajes.bean.negocio.Parametro;
+import pe.com.viajes.bean.negocio.Pasajero;
 import pe.com.viajes.bean.negocio.Proveedor;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.bean.negocio.ServicioNovios;
@@ -1077,9 +1078,25 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 		BigDecimal valorCuota = BigDecimal.ZERO;
 
 		ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
-
 		valorCuota = servicioNegocioDao.calcularCuota(servicioAgencia);
 
 		return valorCuota;
+	}
+	
+	@Override
+	public Pasajero agregarPasajero(Pasajero pasajero) throws ErrorRegistroDataException{
+		try {
+			MaestroDao maestroDao = new MaestroDaoImpl();
+			Maestro hijoMaestro = new Maestro();
+			hijoMaestro.setCodigoMaestro(23);
+			hijoMaestro.setCodigoEntero(pasajero.getRelacion().getCodigoEntero());
+			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
+			
+			pasajero.getRelacion().setNombre(hijoMaestro.getNombre());
+			
+			return pasajero;
+		} catch (SQLException e) {
+			throw new ErrorRegistroDataException("No se agrego el pasajero");
+		}
 	}
 }

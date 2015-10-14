@@ -2055,12 +2055,67 @@ public class ServicioAgenteMBean extends BaseMBean {
 	}
 	
 	public void agregarPasajero(){
-		System.out.println(" pasajero ");
-		this.getServicioAgencia().getListaPasajeros().add(this.getPasajero());
+		try {
+			if (validarPasajero()){
+				this.getDetalleServicio().getListaPasajeros().add(this.utilNegocioServicio.agregarPasajero(this.getPasajero()));
+			}
+		} catch (ErrorRegistroDataException e) {
+			logger.error(e.getMessage(), e);
+			this.mostrarMensajeError(e.getMessage());
+		}
 	}
 	
 	public void eliminarPasajero(Pasajero pax){
 		this.getServicioAgencia().getListaPasajeros().remove(pax);
+	}
+	
+	private boolean validarPasajero() {
+		boolean resultado = true;
+		String idFormulario = "idFrPasajeros";
+		
+		if (StringUtils.isBlank(this.getPasajero().getNombres())){
+			this.agregarMensaje(idFormulario + ":idTxtNombres",
+					"Ingrese los nombres del pasajero", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (StringUtils.isBlank(this.getPasajero().getApellidoPaterno())){
+			this.agregarMensaje(idFormulario + ":idTxtApPaterno",
+					"Ingrese el apellido paterno del pasajero", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (StringUtils.isBlank(this.getPasajero().getApellidoMaterno())){
+			this.agregarMensaje(idFormulario + ":idTxtApMaterno",
+					"Ingrese el apellido materno del pasajero", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (StringUtils.isBlank(this.getPasajero().getTelefono1())){
+			this.agregarMensaje(idFormulario + ":idTxtTelefono1",
+					"Ingrese el telefono 1", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (StringUtils.isBlank(this.getPasajero().getTelefono2())){
+			this.agregarMensaje(idFormulario + ":idTxtTelefono2",
+					"Ingrese el telefono 2", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (StringUtils.isBlank(this.getPasajero().getCorreoElectronico())){
+			this.agregarMensaje(idFormulario + ":idTxtCorreoElectronico",
+					"Ingrese el Correo electronico", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (this.getPasajero().getRelacion().getCodigoEntero() == null || this.getPasajero().getRelacion().getCodigoEntero().intValue() == 0){
+			this.agregarMensaje(idFormulario + ":idSelRelacion",
+					"Seleccione la relacion del pasajero", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		return resultado;
 	}
 
 	/**
