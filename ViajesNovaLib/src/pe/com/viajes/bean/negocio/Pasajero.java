@@ -18,6 +18,7 @@ public class Pasajero extends Persona {
 	private String telefono1;
 	private String telefono2;
 	private String numeroPasajeroFrecuente;
+	private BaseVO aerolinea;
 	private BaseVO relacion;
 	private Integer idServicioDetalle;
 	private Integer idServicio;
@@ -139,6 +140,23 @@ public class Pasajero extends Persona {
 	 */
 	public void setIdServicio(Integer idServicio) {
 		this.idServicio = idServicio;
+	}
+
+	/**
+	 * @return the aerolinea
+	 */
+	public BaseVO getAerolinea() {
+		if (aerolinea == null){
+			aerolinea = new BaseVO();
+		}
+		return aerolinea;
+	}
+
+	/**
+	 * @param aerolinea the aerolinea to set
+	 */
+	public void setAerolinea(BaseVO aerolinea) {
+		this.aerolinea = aerolinea;
 	}
 
 }

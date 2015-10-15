@@ -1,3 +1,7 @@
+-- Table: negocio."PasajeroServicio"
+
+-- DROP TABLE negocio."PasajeroServicio";
+
 CREATE TABLE negocio."PasajeroServicio"
 (
   id bigint NOT NULL,
@@ -9,6 +13,7 @@ CREATE TABLE negocio."PasajeroServicio"
   telefono2 character varying(10),
   nropaxfrecuente character varying(20),
   idrelacion integer NOT NULL,
+  idserviciodetalle integer not null,
   idservicio integer NOT NULL,
   usuariocreacion character varying(20) NOT NULL,
   fechacreacion timestamp with time zone NOT NULL,

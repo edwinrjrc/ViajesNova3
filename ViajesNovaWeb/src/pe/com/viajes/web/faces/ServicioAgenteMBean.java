@@ -658,6 +658,21 @@ public class ServicioAgenteMBean extends BaseMBean {
 				throw new ValidacionException(
 						"No puede agregar este servicio hasta que no haya agregado un servicio padre o principal");
 			}
+			
+			if (configuracionTipoServicio.isMuestraRuta()){
+				if (this.getDetalleServicio().getRuta().getTramos().isEmpty()){
+					throw new ValidacionException(
+							"No se agrego la ruta al servicio");
+				}
+			}
+			
+			if (this.getDetalleServicio().getTipoServicio()
+					.isServicioPadre()){
+				if (this.getDetalleServicio().getListaPasajeros().isEmpty()){
+					throw new ValidacionException(
+							"No se han agregado los pasajeros del servicio");
+				}
+			}
 		}
 
 		return resultado;
@@ -1958,55 +1973,86 @@ public class ServicioAgenteMBean extends BaseMBean {
 	public void aceptarRuta() {
 		String descripcion = "";
 		try {
-			BigDecimal precioRuta = BigDecimal.ZERO;
-			for (Tramo tramo : this.getListaTramos()) {
+			if (validarRuta()){
+				BigDecimal precioRuta = BigDecimal.ZERO;
+				for (Tramo tramo : this.getListaTramos()) {
 
-				String origen = StringUtils.trim(tramo.getOrigen()
-						.getCodigoCadena());
-				origen = StringUtils.substring(origen,
-						StringUtils.indexOf(origen, "(") + 1,
-						StringUtils.indexOf(origen, ")"));
-				tramo.setOrigen(this.soporteServicio
-						.consultaDestinoIATA(origen));
-				tramo.getOrigen().setCodigoCadena(
-						tramo.getOrigen().getDescripcion() + "("
-								+ tramo.getOrigen().getCodigoIATA() + ")");
+					String origen = StringUtils.trim(tramo.getOrigen()
+							.getCodigoCadena());
+					origen = StringUtils.substring(origen,
+							StringUtils.indexOf(origen, "(") + 1,
+							StringUtils.indexOf(origen, ")"));
+					tramo.setOrigen(this.soporteServicio
+							.consultaDestinoIATA(origen));
+					tramo.getOrigen().setCodigoCadena(
+							tramo.getOrigen().getDescripcion() + "("
+									+ tramo.getOrigen().getCodigoIATA() + ")");
 
-				String destino = StringUtils.trim(tramo.getDestino()
-						.getCodigoCadena());
-				destino = StringUtils.substring(destino,
-						StringUtils.indexOf(destino, "(") + 1,
-						StringUtils.indexOf(destino, ")"));
-				tramo.setDestino(this.soporteServicio
-						.consultaDestinoIATA(destino));
-				tramo.getDestino().setCodigoCadena(
-						tramo.getDestino().getDescripcion() + "("
-								+ tramo.getDestino().getCodigoIATA() + ")");
+					String destino = StringUtils.trim(tramo.getDestino()
+							.getCodigoCadena());
+					destino = StringUtils.substring(destino,
+							StringUtils.indexOf(destino, "(") + 1,
+							StringUtils.indexOf(destino, ")"));
+					tramo.setDestino(this.soporteServicio
+							.consultaDestinoIATA(destino));
+					tramo.getDestino().setCodigoCadena(
+							tramo.getDestino().getDescripcion() + "("
+									+ tramo.getDestino().getCodigoIATA() + ")");
 
-				descripcion = descripcion + tramo.getOrigen().getDescripcion()
-						+ " >> " + tramo.getDestino().getDescripcion() + " / ";
+					descripcion = descripcion + tramo.getOrigen().getDescripcion()
+							+ " >> " + tramo.getDestino().getDescripcion() + " / ";
 
-				precioRuta = precioRuta.add(tramo.getPrecio());
+					precioRuta = precioRuta.add(tramo.getPrecio());
+				}
+
+				this.getDetalleServicio().setFechaIda(
+						getListaTramos().get(0).getFechaSalida());
+				getDetalleServicio().getRuta().setTramos(getListaTramos());
+				HttpSession session = obtenerSession(false);
+				Usuario usuario = (Usuario) session.getAttribute("usuarioSession");
+				getDetalleServicio().getRuta().setUsuarioCreacion(
+						usuario.getUsuario());
+				getDetalleServicio().getRuta().setIpCreacion(
+						obtenerRequest().getRemoteAddr());
+
+				getDetalleServicio().setPrecioUnitarioAnterior(precioRuta);
+				
+				descripcion = descripcion.substring(0, (descripcion.length() - 2));
+				this.getDetalleServicio().getRuta().setDescripcionRuta(descripcion);
 			}
-
-			this.getDetalleServicio().setFechaIda(
-					getListaTramos().get(0).getFechaSalida());
-			getDetalleServicio().getRuta().setTramos(getListaTramos());
-			HttpSession session = obtenerSession(false);
-			Usuario usuario = (Usuario) session.getAttribute("usuarioSession");
-			getDetalleServicio().getRuta().setUsuarioCreacion(
-					usuario.getUsuario());
-			getDetalleServicio().getRuta().setIpCreacion(
-					obtenerRequest().getRemoteAddr());
-
-			getDetalleServicio().setPrecioUnitarioAnterior(precioRuta);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			mostrarMensajeError(e.getMessage());
+		} catch (ValidacionException e) {
+			mostrarMensajeError(e.getMensajeError());
+			logger.error(e.getMessage(), e);
 		}
+	}
 
-		descripcion = descripcion.substring(0, (descripcion.length() - 2));
-
-		this.getDetalleServicio().getRuta().setDescripcionRuta(descripcion);
+	private boolean validarRuta() throws ValidacionException {
+		if (this.getListaTramos().isEmpty()){
+			throw new ValidacionException("No se agrego la ruta al servicio");
+		}
+		else{
+			for (Tramo tramo : this.getListaTramos()){
+				if (StringUtils.isBlank(tramo.getOrigen().getCodigoCadena())){
+					throw new ValidacionException("No se selecciono el origen de la ruta");
+				}
+				if (tramo.getFechaSalida() == null){
+					throw new ValidacionException("No se selecciono la fecha de salida");
+				}
+				if (StringUtils.isBlank(tramo.getDestino().getCodigoCadena())){
+					throw new ValidacionException("No se selecciono el destino de la ruta");
+				}
+				if (tramo.getFechaLlegada() == null){
+					throw new ValidacionException("No se selecciono la fecha de llegada");
+				}
+				if (tramo.getAerolinea().getCodigoEntero() == null || tramo.getAerolinea().getCodigoEntero().intValue() == 0){
+					throw new ValidacionException("No se selecciono la aerolinea");
+				}
+			}
+		}
+		return false;
 	}
 
 	public void cambiarFormaPago(ValueChangeEvent e) {
@@ -2058,6 +2104,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 		try {
 			if (validarPasajero()){
 				this.getDetalleServicio().getListaPasajeros().add(this.utilNegocioServicio.agregarPasajero(this.getPasajero()));
+				
+				this.setPasajero(null);
 			}
 		} catch (ErrorRegistroDataException e) {
 			logger.error(e.getMessage(), e);
@@ -2066,7 +2114,25 @@ public class ServicioAgenteMBean extends BaseMBean {
 	}
 	
 	public void eliminarPasajero(Pasajero pax){
-		this.getServicioAgencia().getListaPasajeros().remove(pax);
+		this.getDetalleServicio().getListaPasajeros().remove(pax);
+	}
+	
+	public void aceptarPasajeros(){
+		if (this.getDetalleServicio().getListaPasajeros() != null){
+			String resumenPasajeros = "";
+			for (Pasajero pasajero : this.getDetalleServicio().getListaPasajeros()) {
+				String nombres = StringUtils.normalizeSpace(StringUtils.trimToEmpty(pasajero.getNombres()));
+				nombres = nombres.replaceAll(" ", "#");
+				resumenPasajeros = resumenPasajeros + nombres.split("#")[0];
+				resumenPasajeros = resumenPasajeros + " " + StringUtils.trimToEmpty(pasajero.getApellidoPaterno());
+				resumenPasajeros = resumenPasajeros + " " + StringUtils.trimToEmpty(pasajero.getApellidoMaterno()).charAt(0)+".";
+				
+				resumenPasajeros = resumenPasajeros + "/";
+			}
+			resumenPasajeros = StringUtils.substring(resumenPasajeros, 0, (StringUtils.length(resumenPasajeros)-1));
+			this.getDetalleServicio().setResumenPasajeros(resumenPasajeros);
+			this.getDetalleServicio().setCantidad(this.getDetalleServicio().getListaPasajeros().size());
+		}
 	}
 	
 	private boolean validarPasajero() {
@@ -2091,7 +2157,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
-		if (StringUtils.isBlank(this.getPasajero().getTelefono1())){
+		/*if (StringUtils.isBlank(this.getPasajero().getTelefono1())){
 			this.agregarMensaje(idFormulario + ":idTxtTelefono1",
 					"Ingrese el telefono 1", "",
 					FacesMessage.SEVERITY_ERROR);
@@ -2106,6 +2172,12 @@ public class ServicioAgenteMBean extends BaseMBean {
 		if (StringUtils.isBlank(this.getPasajero().getCorreoElectronico())){
 			this.agregarMensaje(idFormulario + ":idTxtCorreoElectronico",
 					"Ingrese el Correo electronico", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}*/
+		if (StringUtils.isNotBlank(this.getPasajero().getCorreoElectronico()) && !UtilWeb.validarCorreo(this.getPasajero().getCorreoElectronico())){
+			this.agregarMensaje(idFormulario + ":idTxtCorreoElectronico",
+					"Ingrese el correo electronico correcto", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}

@@ -249,7 +249,7 @@
 									border="0" style="width:100%;text_align:center;"
 									id="idPnPasajeros"
 									columnClasses="col1fil2formulario,col2fil2formulario"
-									rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraRuta}">
+									rendered="#{servicioAgenteMBean.detalleServicio.tipoServicio.servicioPadre}">
 
 									<h:outputText value="Pasajeros" />
 
@@ -371,7 +371,7 @@
 									<h:outputText value="Cantidad"
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraCantidad}" />
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
-										border="0"
+										border="0" id="idPnCantidad"
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraCantidad}">
 										<h:inputText id="idCantidad"
 											value="#{servicioAgenteMBean.detalleServicio.cantidad}"

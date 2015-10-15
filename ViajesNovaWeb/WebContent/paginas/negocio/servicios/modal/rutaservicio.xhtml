@@ -97,9 +97,10 @@
 
 				<f:facet name="footer">
 					<h:panelGrid style="width:100%;text-align:center;">
-						<a4j:commandButton value="Aceptar" render="idPnRutaServicioTexto, idPnPrecio"
+						<a4j:commandButton value="Aceptar"
 							action="#{servicioAgenteMBean.aceptarRuta()}"
-							oncomplete="#{rich:component('idModalrutaservicio')}.hide(); return false;"></a4j:commandButton>
+							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrRegisVenServicio,idPnRutaServicioTexto,idPnPrecio"
+							oncomplete="mostrarModal('idformadmservicios')"></a4j:commandButton>
 					</h:panelGrid>
 				</f:facet>
 			</h:panelGrid>
