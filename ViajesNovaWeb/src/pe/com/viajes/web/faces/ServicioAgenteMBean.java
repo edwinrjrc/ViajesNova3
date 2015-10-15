@@ -2052,7 +2052,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 
 	public void cambiarFormaPago(ValueChangeEvent e) {
