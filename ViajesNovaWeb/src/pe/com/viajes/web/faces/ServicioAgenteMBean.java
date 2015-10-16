@@ -363,6 +363,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 		this.getServicioAgencia().setFechaServicio(new Date());
 		this.setListaDocumentosAdicionales(null);
 		this.getServicioAgencia().getMoneda().setCodigoEntero(2);
+		
+		this.inicializaTipoServicio();
 	}
 
 	public void agregarServicio() {
@@ -404,6 +406,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 					}
 
 				}
+				
+				inicializaTipoServicio();
 			}
 			
 		} catch (ErrorRegistroDataException e) {
@@ -417,7 +421,6 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.mostrarMensajeError(e.getMessage());
 		}
 
-		inicializaTipoServicio();
 	}
 
 	private void inicializaTipoServicio() {
@@ -426,6 +429,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 		this.setEditarComision(false);
 		this.setEditarVenta(false);
 		this.setAplicaIGV(false);
+		this.setCalculadorIGV(false);
 	}
 
 	public void actualizarServicio() {
@@ -449,6 +453,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 				this.setListadoEmpresas(null);
 				this.setEditaServicioAgregado(false);
 				this.setCargoConfiguracionTipoServicio(false);
+				
+				this.inicializaTipoServicio();
 			}
 
 		} catch (Exception e) {
@@ -661,16 +667,20 @@ public class ServicioAgenteMBean extends BaseMBean {
 			
 			if (configuracionTipoServicio.isMuestraRuta()){
 				if (this.getDetalleServicio().getRuta().getTramos().isEmpty()){
-					throw new ValidacionException(
-							"No se agrego la ruta al servicio");
+					this.agregarMensaje(idFormulario + ":idTextRuta",
+							"Ingrese la ruta del servicio", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
 				}
 			}
 			
 			if (this.getDetalleServicio().getTipoServicio()
-					.isServicioPadre()){
+					.isServicioPadre() && !this.getDetalleServicio().getTipoServicio().isEsFee()){
 				if (this.getDetalleServicio().getListaPasajeros().isEmpty()){
-					throw new ValidacionException(
-							"No se han agregado los pasajeros del servicio");
+					this.agregarMensaje(idFormulario + ":idTextResumenPasajeros",
+							"Ingrese los pasajeros", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
 				}
 			}
 		}
@@ -1137,6 +1147,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 				detalleServicio.setPrecioUnitario(detalleServicio
 						.getPrecioUnitarioConIgv());
 			}
+			this.setCalculadorIGV(true);
 
 			this.setDetalleServicio(detalleServicio);
 
@@ -2038,16 +2049,16 @@ public class ServicioAgenteMBean extends BaseMBean {
 				if (StringUtils.isBlank(tramo.getOrigen().getCodigoCadena())){
 					throw new ValidacionException("No se selecciono el origen de la ruta");
 				}
-				if (tramo.getFechaSalida() == null){
+				else if (tramo.getFechaSalida() == null){
 					throw new ValidacionException("No se selecciono la fecha de salida");
 				}
-				if (StringUtils.isBlank(tramo.getDestino().getCodigoCadena())){
+				else if (StringUtils.isBlank(tramo.getDestino().getCodigoCadena())){
 					throw new ValidacionException("No se selecciono el destino de la ruta");
 				}
-				if (tramo.getFechaLlegada() == null){
+				else if (tramo.getFechaLlegada() == null){
 					throw new ValidacionException("No se selecciono la fecha de llegada");
 				}
-				if (tramo.getAerolinea().getCodigoEntero() == null || tramo.getAerolinea().getCodigoEntero().intValue() == 0){
+				else if (tramo.getAerolinea().getCodigoEntero() == null || tramo.getAerolinea().getCodigoEntero().intValue() == 0){
 					throw new ValidacionException("No se selecciono la aerolinea");
 				}
 			}
@@ -2103,6 +2114,12 @@ public class ServicioAgenteMBean extends BaseMBean {
 	public void agregarPasajero(){
 		try {
 			if (validarPasajero()){
+				
+				HttpSession session = obtenerSession(false);
+				Usuario usuario = (Usuario)session.getAttribute(USUARIO_SESSION);
+				this.getPasajero().setIpCreacion(obtenerRequest().getRemoteAddr());
+				this.getPasajero().setUsuarioCreacion(usuario.getUsuario());
+				
 				this.getDetalleServicio().getListaPasajeros().add(this.utilNegocioServicio.agregarPasajero(this.getPasajero()));
 				
 				this.setPasajero(null);

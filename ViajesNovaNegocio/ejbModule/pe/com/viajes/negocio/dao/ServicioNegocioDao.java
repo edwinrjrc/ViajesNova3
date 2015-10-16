@@ -4,6 +4,7 @@
 package pe.com.viajes.negocio.dao;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +35,7 @@ public interface ServicioNegocioDao {
 	List<CheckIn> consultarcheckinpendientes(Date fechaHasta)
 			throws SQLException;
 	
-	public Integer ingresarPasajero(Pasajero pasajero) throws SQLException;
+	public Integer ingresarPasajero(Pasajero pasajero, Connection conn) throws SQLException;
 	
 	public List<Pasajero> consultarPasajeros(DetalleServicioAgencia servicioDetalle) throws SQLException;
 }

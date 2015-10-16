@@ -236,30 +236,34 @@
 
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0" style="width:100%;text_align:center;">
-										<h:outputText
+										<h:outputText id="idTextRuta"
 											value="#{servicioAgenteMBean.detalleServicio.ruta.descripcionRuta}" />
 										<a4j:commandButton value="Ingresar Ruta"
 											oncomplete="mostrarModal3('idModalrutaservicio')"
 											render="idPnRutaServicio"></a4j:commandButton>
+										<rich:message for="idTextRuta" showSummary="true"
+											showDetail="false" ajaxRendered="true"></rich:message>
 									</h:panelGrid>
 
 								</h:panelGrid>
-								
+
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;text_align:center;"
 									id="idPnPasajeros"
 									columnClasses="col1fil2formulario,col2fil2formulario"
-									rendered="#{servicioAgenteMBean.detalleServicio.tipoServicio.servicioPadre}">
+									rendered="#{servicioAgenteMBean.detalleServicio.tipoServicio.servicioPadre and !servicioAgenteMBean.detalleServicio.tipoServicio.esFee}">
 
 									<h:outputText value="Pasajeros" />
 
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0" style="width:100%;text_align:center;">
-										<h:outputText
+										<h:outputText id="idTextResumenPasajeros"
 											value="#{servicioAgenteMBean.detalleServicio.resumenPasajeros}" />
 										<a4j:commandButton value="Ingresar Pasajeros"
 											oncomplete="mostrarModal3('idModalpasajeros')"
 											render="idPnFrPasajeros"></a4j:commandButton>
+										<rich:message for="idTextResumenPasajeros" showSummary="true"
+											showDetail="false" ajaxRendered="true"></rich:message>
 									</h:panelGrid>
 
 								</h:panelGrid>
@@ -270,17 +274,28 @@
 
 									<h:outputText value="Codigo Reserva"
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraCodigoReserva}" />
-									<h:inputText
-										value="#{servicioAgenteMBean.detalleServicio.codigoReserva}"
-										maxlength="10" size="15" styleClass="estilocampo1"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraCodigoReserva}" />
+									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
+										border="0">
+										<h:inputText id="idTxtCodigoReserva"
+											value="#{servicioAgenteMBean.detalleServicio.codigoReserva}"
+											maxlength="10" size="15" styleClass="estilocampo1"
+											rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraCodigoReserva}" />
+										<rich:message for="idTxtCodigoReserva" showSummary="true"
+											showDetail="false" ajaxRendered="true"></rich:message>
+									</h:panelGrid>
 
 									<h:outputText value="Numero Boleto"
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraNumeroBoleto}" />
-									<h:inputText maxlength="10" size="15"
-										onkeypress="return js_soloEntero(event)"
-										value="#{servicioAgenteMBean.detalleServicio.numeroBoleto}"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraNumeroBoleto}" />
+									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
+										border="0">
+										<h:inputText maxlength="10" size="15" id="idTxtNumeroBoleto"
+											onkeypress="return js_soloEntero(event)"
+											value="#{servicioAgenteMBean.detalleServicio.numeroBoleto}"
+											rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraNumeroBoleto}" />
+										<rich:message for="idTxtNumeroBoleto" showSummary="true"
+											showDetail="false" ajaxRendered="true"></rich:message>
+									</h:panelGrid>
+
 									<h:outputText value=""
 										rendered="#{!servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraNumeroBoleto}" />
 									<h:outputText value=""
@@ -330,7 +345,7 @@
 											showDetail="false" ajaxRendered="true" />
 									</h:panelGrid>
 
-									<h:outputText value="Operadora"
+									<h:outputText value="Operador"
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraOperadora}" />
 									<h:panelGrid columns="1" border="0" cellpadding="0"
 										cellspacing="0"
@@ -492,7 +507,7 @@
 
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
 									id="idPnIGV" border="0" style="width:100%;"
-									rendered="#{servicioAgenteMBean.aplicaIGV}"
+									rendered="#{servicioAgenteMBean.calculadorIGV}"
 									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
 									<h:outputText value="Aplica IGV" />
 									<h:selectBooleanCheckbox
@@ -795,7 +810,8 @@
 						id="idBotVenServicio">
 
 						<a4j:commandButton value="Grabar"
-							rendered="#{!servicioAgenteMBean.transaccionExito}" styleClass="estiloBoton1"
+							rendered="#{!servicioAgenteMBean.transaccionExito}"
+							styleClass="estiloBoton1"
 							actionListener="#{servicioAgenteMBean.ejecutarMetodo()}"
 							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrRegisVenServicio"
 							oncomplete="mostrarModal('idformadmservicios')" />
@@ -817,7 +833,8 @@
 							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrRegisVenServicio"
 							oncomplete="mostrarModal('idformadmservicios')" />
 
-						<a4j:commandButton value="Imprimir Venta" styleClass="estiloBoton1"
+						<a4j:commandButton value="Imprimir Venta"
+							styleClass="estiloBoton1"
 							rendered="#{servicioAgenteMBean.transaccionExito}"
 							oncomplete="clicBoton('idformadmservicios:idbtnImprimirVenta')"></a4j:commandButton>
 					</h:panelGrid>

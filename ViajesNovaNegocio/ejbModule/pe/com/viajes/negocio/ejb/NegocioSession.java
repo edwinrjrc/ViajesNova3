@@ -38,6 +38,7 @@ import pe.com.viajes.bean.negocio.EventoObsAnu;
 import pe.com.viajes.bean.negocio.MaestroServicio;
 import pe.com.viajes.bean.negocio.PagoServicio;
 import pe.com.viajes.bean.negocio.Parametro;
+import pe.com.viajes.bean.negocio.Pasajero;
 import pe.com.viajes.bean.negocio.ProgramaNovios;
 import pe.com.viajes.bean.negocio.Proveedor;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
@@ -678,6 +679,8 @@ public class NegocioSession implements NegocioSessionRemote,
 	public Integer registrarVentaServicio(ServicioAgencia servicioAgencia)
 			throws ErrorRegistroDataException, SQLException, Exception {
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
+		
 		userTransaction.begin();
 		Connection conexion = null;
 		Integer idServicio = 0;
@@ -734,10 +737,12 @@ public class NegocioSession implements NegocioSessionRemote,
 										"No se pudo registrar los servicios de la venta");
 							}
 						}
-
+						
+						// INGRESO DE DETALLE DE SERVICIO PADRE
 						Integer idSerDetaPadre = servicioNovaViajesDao
 								.ingresarDetalleServicio(detalleServicio,
 										idServicio, conexion);
+						// INGRESO DE DETALLE DE SERVICIO HIJOS DEL PADRE
 						if (idSerDetaPadre == null
 								|| idSerDetaPadre.intValue() == 0) {
 							throw new ErrorRegistroDataException(
@@ -765,6 +770,13 @@ public class NegocioSession implements NegocioSessionRemote,
 									}
 								}
 							}
+						}
+						
+						// INGRESO DE LOS PASAJEROS DEL SERVICIO
+						for (Pasajero pasajero : detalleServicio.getListaPasajeros()){
+							pasajero.setIdServicio(idServicio);
+							pasajero.setIdServicioDetalle(idSerDetaPadre);
+							servicioNegocioDao.ingresarPasajero(pasajero, conexion);
 						}
 					}
 				}

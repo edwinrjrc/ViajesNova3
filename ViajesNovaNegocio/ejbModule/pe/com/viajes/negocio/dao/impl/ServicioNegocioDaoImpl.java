@@ -263,14 +263,12 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 	 * @see pe.com.viajes.negocio.dao.ServicioNegocioDao#ingresarPasajero(pe.com.viajes.bean.negocio.Pasajero)
 	 */
 	@Override
-	public Integer ingresarPasajero(Pasajero pasajero) throws SQLException {
-		Connection conn = null;
+	public Integer ingresarPasajero(Pasajero pasajero, Connection conn) throws SQLException {
 		CallableStatement cs = null;
 		String sql = "";
 		
 		try{
 			sql = "{ ? = call negocio.fn_ingresarpasajero(?,?,?,?,?,?,?,?,?,?,?,?)}";
-			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, pasajero.getNombres());
@@ -308,6 +306,8 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 			cs.setInt(9, pasajero.getRelacion().getCodigoEntero().intValue());
 			cs.setInt(10, pasajero.getIdServicioDetalle().intValue());
 			cs.setInt(11, pasajero.getIdServicio().intValue());
+			cs.setString(12, pasajero.getUsuarioCreacion());
+			cs.setString(13, pasajero.getIpCreacion());
 			cs.execute();
 			
 			return cs.getInt(1);
@@ -318,9 +318,6 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 		finally {
 			if (cs != null){
 				cs.close();
-			}
-			if (conn != null){
-				conn.close();
 			}
 		}
 	}

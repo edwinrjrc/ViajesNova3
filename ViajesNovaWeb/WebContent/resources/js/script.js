@@ -2,11 +2,11 @@ function clicBoton(idBoton) {
 	document.getElementById(idBoton).click();
 }
 
-function prueba(tttt){
+function prueba(tttt) {
 	alert(tttt);
 }
 function mostrarModal(idform) {
-	try{
+	try {
 		var mostrarModal = document.getElementById('idFormHidden:idShowModal').value;
 		var tipoModal = document.getElementById('idFormHidden:idTipoModal').value;
 
@@ -15,16 +15,15 @@ function mostrarModal(idform) {
 		} else if (tipoModal == "2" && eval(mostrarModal)) {
 			document.getElementById(idform + ':idBotonModalError').click();
 		}
-	}
-	catch (e){
-		//alert("ERROR JS::"+e);
+	} catch (e) {
+		// alert("ERROR JS::"+e);
 	}
 }
 
-function mostrarModalP(idform, boton){
+function mostrarModalP(idform, boton) {
 	document.getElementById(boton).click();
 	mostrarModal(idform);
-	
+
 }
 
 function mostrarModalCC(idform) {
@@ -63,7 +62,7 @@ function cerrarModalBoton(idform, idBoton, idHid) {
 function dataTableSelectOneRadio(radio) {
 	var id = radio.name.substring(radio.name.lastIndexOf(':'));
 	var el = radio.form.elements;
-	for ( var i = 0; i < el.length; i++) {
+	for (var i = 0; i < el.length; i++) {
 		if (el[i].name.substring(el[i].name.lastIndexOf(':')) == id) {
 			el[i].checked = false;
 		}
@@ -105,17 +104,18 @@ function mostrarModal3(idmodal) {
 	}
 }
 
-function mostrarModalCredencial(idmodal){
-	var credencialvendida = document.getElementById('idFrInicio:idTxtHidCredvencida').value;
-	
-	if (eval(credencialvendida)){
+function mostrarModalCredencial(idmodal) {
+	var credencialvendida = document
+			.getElementById('idFrInicio:idTxtHidCredvencida').value;
+
+	if (eval(credencialvendida)) {
 		mostrarModal3(idmodal);
 	}
 
 }
 
 function mostrarMensajeModal(idModalCerrar) {
-	try{
+	try {
 		var mostrarModal = document.getElementById('idFormHidden:idShowModal').value;
 		var tipoModal = document.getElementById('idFormHidden:idTipoModal').value;
 
@@ -123,13 +123,13 @@ function mostrarMensajeModal(idModalCerrar) {
 			mostrarModal3('idModalcorrecto');
 		} else if (tipoModal == "2" && eval(mostrarModal)) {
 			mostrarModal3('idModalError');
+		} else {
+			if (idModalCerrar != "") {
+				cerrarModal(idModalCerrar);
+			}
 		}
-		
-		if (idModalCerrar != ""){
-			cerrarModal(idModalCerrar);
-		}
-	}
-	catch (e){
-		//alert("ERROR JS::"+e);
+
+	} catch (e) {
+		// alert("ERROR JS::"+e);
 	}
 }
