@@ -96,6 +96,7 @@ public class UtilEjb {
 				.get(0).isTieneDetraccion());
 		comprobante.setTieneRetencion(listaDetalle.get(0).getServiciosHijos()
 				.get(0).isTieneRetencion());
+		comprobante.setMoneda(listaDetalle.get(0).getMoneda());
 		lista.add(comprobante);
 		for (int s = 0; s < listaDetalle.size(); s++) {
 			for (int i = 0; i < listaDetalle.get(s).getServiciosHijos().size(); i++) {
@@ -119,6 +120,7 @@ public class UtilEjb {
 									.isTieneDetraccion());
 							comprobante.setTieneRetencion(bean2
 									.isTieneRetencion());
+							comprobante.setMoneda(bean2.getMoneda());
 							lista.add(comprobante);
 							comprobante = null;
 						}

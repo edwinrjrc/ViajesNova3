@@ -2289,6 +2289,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.setBigDecimal(i++, comprobante.getTotalComprobante());
 			cs.setBoolean(i++, comprobante.isTieneDetraccion());
 			cs.setBoolean(i++, comprobante.isTieneRetencion());
+			//TODO COLOCAR LA MONEDA EN LA BASE DE DATOS EN LA TABLA DE COMPROBANTES GENERADOS
+			cs.setInt(i++, comprobante.getMoneda().getCodigoEntero().intValue());
 
 			cs.setString(i++, comprobante.getUsuarioCreacion());
 			cs.setString(i++, comprobante.getIpCreacion());

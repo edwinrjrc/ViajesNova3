@@ -30,7 +30,11 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import pe.com.viajes.bean.negocio.Cliente;
 import pe.com.viajes.bean.negocio.Comprobante;
 import pe.com.viajes.bean.negocio.ComprobanteBusqueda;
+import pe.com.viajes.bean.negocio.DetalleComprobante;
+import pe.com.viajes.bean.negocio.DetalleServicioAgencia;
+import pe.com.viajes.bean.negocio.Pasajero;
 import pe.com.viajes.bean.negocio.Proveedor;
+import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.negocio.exception.ErrorConsultaDataException;
 import pe.com.viajes.web.servicio.ConsultaNegocioServicio;
 import pe.com.viajes.web.servicio.impl.ConsultaNegocioServicioImpl;
@@ -516,17 +520,48 @@ public class ComprobanteMBean extends BaseMBean {
 		 * Fin de estilos
 		 */
 		
-		String linea1 = "Referencia: Pax PEÑA/OSCAR X 02";
-		String linea2 = "Por boleto aereo LIM/TBP/LIM";
-		String linea3 = "por cuenta de LAN PERU";
-		String linea4 = "544 9232559559/ 544 9232559560";
+		Pasajero pasajero = null;
+		ServicioAgencia servicio = this.consultaNegocioServicio.consultarVentaServicio(this.getComprobanteDetalle().getIdServicio());
+		for (DetalleServicioAgencia detalleServicio : servicio.getListaDetalleServicio()){
+			if (!detalleServicio.getListaPasajeros().isEmpty()){
+				pasajero = detalleServicio.getListaPasajeros().get(0);
+				break;
+			}
+		}
+		
+		String linea1 = "Referencia: Pax "+pasajero.getApellidoPaterno()+" "+pasajero.getApellidoMaterno()+" "+pasajero.getNombres();
+		String linea2 = "Fee por emision de boleto aereo";
+		String linea3 = "LIM/LAX/SFO/LAX/LIM";
+		String linea4 = "";
 		String linea5 = "";
 		String linea6 = "";
 		String linea7 = "";
-		String monto = "416.84";
-		String moneda = "DOLARES AMERICANOS";
-		String simboloMoneda = "$";
+		for (int i=0; i<this.getComprobanteDetalle().getDetalleComprobante().size(); i++){
+			DetalleComprobante detaComprobante = this.getComprobanteDetalle().getDetalleComprobante().get(i);
+			if (i==0){
+				linea2 = detaComprobante.getConcepto();
+			}
+			else if (i==1){
+				linea3 = detaComprobante.getConcepto();
+			}
+			else if (i==2){
+				linea4 = detaComprobante.getConcepto();
+			}
+			else if (i==3){
+				linea5 = detaComprobante.getConcepto();
+			}
+			else if (i==4){
+				linea6 = detaComprobante.getConcepto();
+			}
+			else if (i==5){
+				linea7 = detaComprobante.getConcepto();
+			}
+		}
 		
+		String monto = this.getComprobanteDetalle().getTotalComprobante().toEngineeringString();
+		String moneda = this.getComprobanteDetalle().getMoneda().getNombre();
+		String simboloMoneda = this.getComprobanteDetalle().getMoneda().getAbreviatura();
+				
 		HSSFRow fila = hoja1.getRow(6);
 		HSSFCell celda = fila.getCell(0);
 		celda.setCellStyle(estiloCalibriIzquierda);
@@ -678,17 +713,48 @@ public class ComprobanteMBean extends BaseMBean {
 		 * Fin de estilos
 		 */
 		
-		String linea1 = "Referencia: Pax CALVO PEREZ/JAVIER X 02";
+		Pasajero pasajero = null;
+		ServicioAgencia servicio = this.consultaNegocioServicio.consultarVentaServicio(this.getComprobanteDetalle().getIdServicio());
+		for (DetalleServicioAgencia detalleServicio : servicio.getListaDetalleServicio()){
+			if (!detalleServicio.getListaPasajeros().isEmpty()){
+				pasajero = detalleServicio.getListaPasajeros().get(0);
+				break;
+			}
+		}
+		
+		String linea1 = "Referencia: Pax "+pasajero.getApellidoPaterno()+" "+pasajero.getApellidoMaterno()+" "+pasajero.getNombres();
 		String linea2 = "Fee por emision de boleto aereo";
 		String linea3 = "LIM/LAX/SFO/LAX/LIM";
 		String linea4 = "";
 		String linea5 = "";
 		String linea6 = "";
 		String linea7 = "";
-		String monto = "50.00";
-		String moneda = "DOLARES AMERICANOS";
-		String simboloMoneda = "$";
+		for (int i=0; i<this.getComprobanteDetalle().getDetalleComprobante().size(); i++){
+			DetalleComprobante detaComprobante = this.getComprobanteDetalle().getDetalleComprobante().get(i);
+			if (i==0){
+				linea2 = detaComprobante.getConcepto();
+			}
+			else if (i==1){
+				linea3 = detaComprobante.getConcepto();
+			}
+			else if (i==2){
+				linea4 = detaComprobante.getConcepto();
+			}
+			else if (i==3){
+				linea5 = detaComprobante.getConcepto();
+			}
+			else if (i==4){
+				linea6 = detaComprobante.getConcepto();
+			}
+			else if (i==5){
+				linea7 = detaComprobante.getConcepto();
+			}
+		}
 		
+		String monto = this.getComprobanteDetalle().getTotalComprobante().toEngineeringString();
+		String moneda = this.getComprobanteDetalle().getMoneda().getNombre();
+		String simboloMoneda = this.getComprobanteDetalle().getMoneda().getAbreviatura();
+				
 		HSSFRow fila = hoja1.getRow(5);
 		HSSFCell celda = fila.createCell(1);
 		celda.setCellStyle(estiloCalibriIzquierda);
@@ -840,19 +906,49 @@ public class ComprobanteMBean extends BaseMBean {
 		/**
 		 * Fin de estilos
 		 */
+		Pasajero pasajero = null;
+		ServicioAgencia servicio = this.consultaNegocioServicio.consultarVentaServicio(this.getComprobanteDetalle().getIdServicio());
+		for (DetalleServicioAgencia detalleServicio : servicio.getListaDetalleServicio()){
+			if (!detalleServicio.getListaPasajeros().isEmpty()){
+				pasajero = detalleServicio.getListaPasajeros().get(0);
+				break;
+			}
+		}
 		
-		String linea1 = "Referencia: Pax CALVO PEREZ/JAVIER X 02";
+		String linea1 = "Referencia: Pax "+pasajero.getApellidoPaterno()+" "+pasajero.getApellidoMaterno()+" "+pasajero.getNombres();
 		String linea2 = "Fee por emision de boleto aereo";
 		String linea3 = "LIM/LAX/SFO/LAX/LIM";
 		String linea4 = "";
 		String linea5 = "";
 		String linea6 = "";
 		String linea7 = "";
-		String montoSinIGV = "15.20";
-		String montoIGV = "5.20";
-		String monto = "50.00";
-		String moneda = "DOLARES AMERICANOS";
-		String simboloMoneda = "$";
+		for (int i=0; i<this.getComprobanteDetalle().getDetalleComprobante().size(); i++){
+			DetalleComprobante detaComprobante = this.getComprobanteDetalle().getDetalleComprobante().get(i);
+			if (i==0){
+				linea2 = detaComprobante.getConcepto();
+			}
+			else if (i==1){
+				linea3 = detaComprobante.getConcepto();
+			}
+			else if (i==2){
+				linea4 = detaComprobante.getConcepto();
+			}
+			else if (i==3){
+				linea5 = detaComprobante.getConcepto();
+			}
+			else if (i==4){
+				linea6 = detaComprobante.getConcepto();
+			}
+			else if (i==5){
+				linea7 = detaComprobante.getConcepto();
+			}
+		}
+		
+		String montoSinIGV = this.getComprobanteDetalle().getSubTotal().toEngineeringString();
+		String montoIGV = this.getComprobanteDetalle().getTotalIGV().toEngineeringString();
+		String monto = this.getComprobanteDetalle().getTotalComprobante().toEngineeringString();
+		String moneda = this.getComprobanteDetalle().getMoneda().getNombre();
+		String simboloMoneda = this.getComprobanteDetalle().getMoneda().getAbreviatura();
 		
 		HSSFRow fila = hoja1.getRow(5);
 		HSSFCell celda = fila.createCell(1);
@@ -964,21 +1060,21 @@ public class ComprobanteMBean extends BaseMBean {
 		if (celda == null){
 			celda = fila.createCell(5);
 		}
-		celda.setCellValue(montoSinIGV);
+		celda.setCellValue(simboloMoneda+" "+montoSinIGV);
 		celda.setCellStyle(estiloCalibriNegrita);
 		
 		celda = fila.getCell(6);
 		if (celda == null){
 			celda = fila.createCell(6);
 		}
-		celda.setCellValue(montoIGV);
+		celda.setCellValue(simboloMoneda+" "+montoIGV);
 		celda.setCellStyle(estiloCalibriNegrita);
 		
 		celda = fila.getCell(7);
 		if (celda == null){
 			celda = fila.createCell(7);
 		}
-		celda.setCellValue(monto);
+		celda.setCellValue(simboloMoneda+" "+monto);
 		celda.setCellStyle(estiloCalibriNegrita);
 	}
 	/**

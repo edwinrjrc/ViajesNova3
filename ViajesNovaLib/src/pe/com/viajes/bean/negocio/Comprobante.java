@@ -26,6 +26,8 @@ public class Comprobante extends BaseNegocio {
 	private Cliente titular;
 	private Proveedor proveedor;
 	private Date fechaComprobante;
+	private BaseVO moneda;
+	private BigDecimal subTotal;
 	private BigDecimal totalIGV;
 	private BigDecimal totalComprobante;
 	private BigDecimal saldoComprobante;
@@ -276,6 +278,37 @@ public class Comprobante extends BaseNegocio {
 	 */
 	public void setSaldoComprobante(BigDecimal saldoComprobante) {
 		this.saldoComprobante = saldoComprobante;
+	}
+
+	/**
+	 * @return the moneda
+	 */
+	public BaseVO getMoneda() {
+		if (moneda == null){
+			moneda = new BaseVO();
+		}
+		return moneda;
+	}
+
+	/**
+	 * @param moneda the moneda to set
+	 */
+	public void setMoneda(BaseVO moneda) {
+		this.moneda = moneda;
+	}
+
+	/**
+	 * @return the subTotal
+	 */
+	public BigDecimal getSubTotal() {
+		return subTotal;
+	}
+
+	/**
+	 * @param subTotal the subTotal to set
+	 */
+	public void setSubTotal(BigDecimal subTotal) {
+		this.subTotal = subTotal;
 	}
 
 }

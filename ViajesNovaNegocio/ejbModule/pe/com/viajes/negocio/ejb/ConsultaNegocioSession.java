@@ -263,6 +263,7 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 	public ServicioAgencia consultarServicioVenta(int idServicio)
 			throws SQLException, Exception {
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
 
 		Connection conn = null;
 
@@ -296,6 +297,9 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 												.getCodigoEntero(), conn));
 				detalleServicioAgencia.setServiciosHijos(listaHijos);
 				listaHijos = null;
+				
+				detalleServicioAgencia.setListaPasajeros(servicioNegocioDao.consultarPasajeros(detalleServicioAgencia.getCodigoEntero(), conn));
+				
 				listaServiciosPadreNueva.add(detalleServicioAgencia);
 			}
 			servicioAgencia.setListaDetalleServicio(listaServiciosPadreNueva);
