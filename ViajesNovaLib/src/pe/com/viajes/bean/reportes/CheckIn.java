@@ -25,7 +25,11 @@ public class CheckIn extends Base {
 	private BaseVO aerolinea;
 	private String codigoReserva;
 	private String numeroBoleto;
+	private String numeroPasajeroFrecuente;
 	
+	private Integer idRuta;
+	private Integer idServicioDetalle;
+	private Integer idTramo;
 	
 	/**
 	 * @return the idServicio
@@ -146,6 +150,54 @@ public class CheckIn extends Base {
 	 */
 	public void setNumeroBoleto(String numeroBoleto) {
 		this.numeroBoleto = numeroBoleto;
+	}
+	/**
+	 * @return the numeroPasajeroFrecuente
+	 */
+	public String getNumeroPasajeroFrecuente() {
+		return numeroPasajeroFrecuente;
+	}
+	/**
+	 * @param numeroPasajeroFrecuente the numeroPasajeroFrecuente to set
+	 */
+	public void setNumeroPasajeroFrecuente(String numeroPasajeroFrecuente) {
+		this.numeroPasajeroFrecuente = numeroPasajeroFrecuente;
+	}
+	/**
+	 * @return the idRuta
+	 */
+	public Integer getIdRuta() {
+		return idRuta;
+	}
+	/**
+	 * @param idRuta the idRuta to set
+	 */
+	public void setIdRuta(Integer idRuta) {
+		this.idRuta = idRuta;
+	}
+	/**
+	 * @return the idServicioDetalle
+	 */
+	public Integer getIdServicioDetalle() {
+		return idServicioDetalle;
+	}
+	/**
+	 * @param idServicioDetalle the idServicioDetalle to set
+	 */
+	public void setIdServicioDetalle(Integer idServicioDetalle) {
+		this.idServicioDetalle = idServicioDetalle;
+	}
+	/**
+	 * @return the idTramo
+	 */
+	public Integer getIdTramo() {
+		return idTramo;
+	}
+	/**
+	 * @param idTramo the idTramo to set
+	 */
+	public void setIdTramo(Integer idTramo) {
+		this.idTramo = idTramo;
 	}
 	
 }

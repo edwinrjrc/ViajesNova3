@@ -3342,15 +3342,13 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 
 	@Override
 	public DetalleServicioAgencia consultaDetalleServicioDetalle(
-			int idServicio, int idDetServicio) throws SQLException {
-		Connection conn = null;
+			int idServicio, int idDetServicio, Connection conn) throws SQLException {
 		DetalleServicioAgencia detalleServicio = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
 		String sql = "{ ? = call negocio.fn_consultardetalleservicioventadetalle(?,?)}";
 
 		try {
-			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			int i = 1;
 			cs.registerOutParameter(i++, Types.OTHER);
@@ -3426,6 +3424,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						.getProveedor()
 						.setApellidoMaterno(
 								UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
+				detalleServicio.getServicioProveedor().setNombreProveedor(detalleServicio.getServicioProveedor().getProveedor().getNombreCompleto());
 				detalleServicio.setCodigoReserva(UtilJdbc.obtenerCadena(rs,
 						"codigoreserva"));
 				detalleServicio.setNumeroBoleto(UtilJdbc.obtenerCadena(rs,
@@ -3441,9 +3440,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				}
 				if (cs != null) {
 					cs.close();
-				}
-				if (conn != null) {
-					conn.close();
 				}
 
 			} catch (SQLException e) {
@@ -3565,7 +3561,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			Tramo tramo = null;
 			while (rs.next()) {
 				tramo = new Tramo();
-
+				tramo.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtramo"));
 				tramo.getOrigen().setDescripcion(
 						UtilJdbc.obtenerCadena(rs, "descripcionorigen"));
 				tramo.setFechaSalida(UtilJdbc.obtenerFechaTimestamp(rs,

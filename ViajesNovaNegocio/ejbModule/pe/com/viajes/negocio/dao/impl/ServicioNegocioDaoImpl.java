@@ -232,11 +232,14 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 				checkIn.getCliente().setNombre(UtilJdbc.obtenerCadena(rs, "nombrecliente"));
 				checkIn.getOrigen().setNombre(UtilJdbc.obtenerCadena(rs, "descripcionorigen"));
 				checkIn.getDestino().setNombre(UtilJdbc.obtenerCadena(rs, "descripciondestino"));
-				checkIn.setFechaSalida(UtilJdbc.obtenerFecha(rs, "fechasalida"));
-				checkIn.setFechaLlegada(UtilJdbc.obtenerFecha(rs, "fechallegada"));
+				checkIn.setFechaSalida(UtilJdbc.obtenerFechaTimestamp(rs, "fechasalida"));
+				checkIn.setFechaLlegada(UtilJdbc.obtenerFechaTimestamp(rs, "fechallegada"));
 				checkIn.getAerolinea().setNombre(UtilJdbc.obtenerCadena(rs, "nombreaerolinea"));
 				checkIn.setCodigoReserva(UtilJdbc.obtenerCadena(rs, "codigoreserva"));
 				checkIn.setNumeroBoleto(UtilJdbc.obtenerCadena(rs, "numeroboleto"));
+				checkIn.setIdServicioDetalle(UtilJdbc.obtenerNumero(rs, "iddetalle"));
+				checkIn.setIdTramo(UtilJdbc.obtenerNumero(rs, "idtramo"));
+				checkIn.setIdRuta(UtilJdbc.obtenerNumero(rs, "idruta"));
 				
 				resultado.add(checkIn);
 			}
@@ -268,7 +271,7 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 		String sql = "";
 		
 		try{
-			sql = "{ ? = call negocio.fn_ingresarpasajero(?,?,?,?,?,?,?,?,?,?,?,?)}";
+			sql = "{ ? = call negocio.fn_ingresarpasajero(?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 			cs = conn.prepareCall(sql);
 			cs.registerOutParameter(1, Types.INTEGER);
 			cs.setString(2, pasajero.getNombres());
@@ -304,10 +307,16 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 				cs.setNull(8, Types.VARCHAR);
 			}
 			cs.setInt(9, pasajero.getRelacion().getCodigoEntero().intValue());
-			cs.setInt(10, pasajero.getIdServicioDetalle().intValue());
-			cs.setInt(11, pasajero.getIdServicio().intValue());
-			cs.setString(12, pasajero.getUsuarioCreacion());
-			cs.setString(13, pasajero.getIpCreacion());
+			if (pasajero.getAerolinea().getCodigoEntero() != null && pasajero.getAerolinea().getCodigoEntero().intValue() != 0){
+				cs.setInt(10, pasajero.getAerolinea().getCodigoEntero().intValue());
+			}
+			else {
+				cs.setNull(10, Types.INTEGER);
+			}
+			cs.setInt(11, pasajero.getIdServicioDetalle().intValue());
+			cs.setInt(12, pasajero.getIdServicio().intValue());
+			cs.setString(13, pasajero.getUsuarioCreacion());
+			cs.setString(14, pasajero.getIpCreacion());
 			cs.execute();
 			
 			return cs.getInt(1);
@@ -328,8 +337,53 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 	 */
 	@Override
 	public List<Pasajero> consultarPasajeros(
-			DetalleServicioAgencia servicioDetalle) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+			Integer idServicioDetalle, Connection conn) throws SQLException {
+		List<Pasajero> resultado = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "";
+		
+		try{
+			sql = "{ ? = call negocio.fn_consultarpasajeros(?)}";
+			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(1, Types.OTHER);
+			cs.setInt(2, idServicioDetalle.intValue());
+			cs.execute();
+			
+			rs = (ResultSet) cs.getObject(1);
+			resultado = new ArrayList<Pasajero>();
+			Pasajero pasajero = null;
+			while (rs.next()){
+				pasajero = new Pasajero();
+				pasajero.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				pasajero.setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
+				pasajero.setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
+				pasajero.setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
+				pasajero.setTelefono1(UtilJdbc.obtenerCadena(rs, "telefono1"));
+				pasajero.setTelefono2(UtilJdbc.obtenerCadena(rs, "telefono2"));
+				pasajero.setCorreoElectronico(UtilJdbc.obtenerCadena(rs, "correoelectronico"));
+				pasajero.setNumeroPasajeroFrecuente(UtilJdbc.obtenerCadena(rs, "nropaxfrecuente"));
+				pasajero.getAerolinea().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idaerolinea"));
+				pasajero.getAerolinea().setNombre(UtilJdbc.obtenerCadena(rs, "nombreaerolina"));
+				pasajero.getRelacion().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idrelacion"));
+				pasajero.getRelacion().setNombre(UtilJdbc.obtenerCadena(rs, "nombrerelacion"));
+				
+				resultado.add(pasajero);
+			}
+			
+			return resultado;
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new SQLException (e);
+		}
+		finally{
+			if (rs != null){
+				rs.close();
+			}
+			if (cs != null){
+				cs.close();
+			}
+		}
 	}
 }

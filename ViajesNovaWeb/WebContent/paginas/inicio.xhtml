@@ -58,7 +58,7 @@
 				</table>
 			</h:panelGrid>
 			<h:panelGrid border="0" cellpadding="0" cellspacing="0"
-				style="display:none;" >
+				style="display:none;">
 				<a4j:commandButton id="idBotonModalCorrecto" style="display:none;"
 					type="button"
 					oncomplete="#{rich:component('idModalcorrecto')}.show();" />
@@ -67,10 +67,77 @@
 					oncomplete="#{rich:component('idModalError')}.show();" />
 			</h:panelGrid>
 
+			<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+				style="width:100%;text-align:center;">
+				<table style="width: 70%;" align="center" border="0">
+					<tr>
+						<td align="center"><rich:dataTable id="idTablaCheckIn"
+								value="#{inicioMBean.checkInPendientes}" var="fila"
+								style="width:100%;" rows="5">
+								<f:facet name="noData">
+									<h:outputText value="No hay clientes cumpleañeros" />
+								</f:facet>
+								<f:facet name="header">
+									<h:outputText value="CheckIn Pendientes" />
+								</f:facet>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Cliente" />
+									</f:facet>
+									<h:outputText value="#{fila.cliente.nombre}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Origen" />
+									</f:facet>
+									<h:outputText value="#{fila.origen.nombre}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Destino" />
+									</f:facet>
+									<h:outputText value="#{fila.destino.nombre}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Fecha Salida" />
+									</f:facet>
+									<h:outputText value="#{fila.fechaSalida}">
+										<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+											timeZone="GMT-05" />
+									</h:outputText>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Fecha Llegada" />
+									</f:facet>
+									<h:outputText value="#{fila.fechaLlegada}">
+										<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+											timeZone="GMT-05" />
+									</h:outputText>
+								</rich:column>
+								<rich:column>
+									<a4j:commandLink action="#{inicioMBean.verDetalle(fila)}"
+										oncomplete="mostrarModal3('idModaldetallecheckin')"
+										render="idPnDetalleCheckin">
+										<h:graphicImage library="img" name="vericono.gif"
+											style="border:0;height:15px;width:15px;">
+										</h:graphicImage>
+									</a4j:commandLink>
+								</rich:column>
+								<f:facet name="footer">
+									<rich:dataScroller for="idTablaCheckIn"></rich:dataScroller>
+								</f:facet>
+							</rich:dataTable></td>
+					</tr>
+				</table>
+			</h:panelGrid>
+
 			<h:inputHidden id="idTxtHidCredvencida"
 				value="#{usuarioMBean.usuario.credencialVencida}" />
 		</h:form>
 
+		<ui:include src="/resources/modal/detallecheckin.xhtml" />
 		<ui:include src="/paginas/seguridad/inicio/credencialvencida.xhtml" />
 		<ui:include src="/resources/includes/includemensaje.xhtml">
 			<ui:param name="backBean" value="#{usuarioMBean}" />

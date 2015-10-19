@@ -88,9 +88,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 	private final static Logger logger = Logger
 			.getLogger(ServicioAgenteMBean.class);
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 3451688997471435575L;
 
 	private ServicioAgencia servicioAgencia;

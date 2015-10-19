@@ -37,5 +37,6 @@ public interface ServicioNegocioDao {
 	
 	public Integer ingresarPasajero(Pasajero pasajero, Connection conn) throws SQLException;
 	
-	public List<Pasajero> consultarPasajeros(DetalleServicioAgencia servicioDetalle) throws SQLException;
+	List<Pasajero> consultarPasajeros(Integer idServicioDetalle, Connection conn)
+			throws SQLException;
 }

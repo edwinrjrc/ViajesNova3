@@ -29,6 +29,7 @@ import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.viajes.bean.negocio.ServicioProveedor;
 import pe.com.viajes.bean.negocio.TipoCambio;
+import pe.com.viajes.bean.reportes.CheckIn;
 import pe.com.viajes.negocio.exception.ErrorConsultaDataException;
 
 /**
@@ -164,4 +165,6 @@ public interface ConsultaNegocioServicio {
 
 	List<ImpresionArchivoCargado> consultaImpresionArchivoCargado(
 			Integer idArchivoCargado) throws SQLException;
+
+	List<CheckIn> consultarCheckInPendiente() throws SQLException;
 }

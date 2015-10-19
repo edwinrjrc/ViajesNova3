@@ -29,6 +29,7 @@ import pe.com.viajes.bean.negocio.Maestro;
 import pe.com.viajes.bean.negocio.MaestroServicio;
 import pe.com.viajes.bean.negocio.MovimientoCuenta;
 import pe.com.viajes.bean.negocio.PagoServicio;
+import pe.com.viajes.bean.negocio.Pasajero;
 import pe.com.viajes.bean.negocio.ProgramaNovios;
 import pe.com.viajes.bean.negocio.Proveedor;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
@@ -689,23 +690,42 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 
 	@Override
 	public DetalleServicioAgencia consultaDetalleServicioDetalle(
-			int idServicio, int idDetServicio) throws SQLException {
+			int idServicio, int idDetServicio)  throws SQLException {
+		Connection conn = null;
+		try{
+			conn = UtilConexion.obtenerConexion();
+			
+			ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 
-		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+			DetalleServicioAgencia detalle = servicioNovaViajesDao
+					.consultaDetalleServicioDetalle(idServicio, idDetServicio, conn);
+			ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
+			
+			List<Pasajero> pasajeros = servicioNegocioDao.consultarPasajeros(idDetServicio, conn);
+			
+			detalle.setListaPasajeros(pasajeros);
 
-		DetalleServicioAgencia detalle = servicioNovaViajesDao
-				.consultaDetalleServicioDetalle(idServicio, idDetServicio);
+			switch (detalle.getTipoServicio().getCodigoEntero().intValue()) {
+			case 11:// BOLETO DE VIAJE
+				detalle.getRuta().setTramos(
+						servicioNovaViajesDao.consultarTramos(detalle.getRuta()
+								.getCodigoEntero()));
+				
+				detalle.setAerolinea(detalle.getRuta().getTramos().get(0).getAerolinea());
+				break;
+			}
 
-		switch (detalle.getTipoServicio().getCodigoEntero().intValue()) {
-		case 11:// BOLETO DE VIAJE
-			detalle.getRuta().setTramos(
-					servicioNovaViajesDao.consultarTramos(detalle.getRuta()
-							.getCodigoEntero()));
-			break;
+			return detalle;
 		}
-		;
+		catch (SQLException e){
+			throw new SQLException(e);
+		}
+		finally{
+			if ( conn != null){
+				conn.close();
+			}
+		}
 
-		return detalle;
 	}
 
 	@Override
@@ -767,7 +787,7 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 		ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
 		
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.HOUR, 48);
+		cal.add(Calendar.HOUR, 1500);
 				
 		return servicioNegocioDao.consultarcheckinpendientes(cal.getTime());
 	}

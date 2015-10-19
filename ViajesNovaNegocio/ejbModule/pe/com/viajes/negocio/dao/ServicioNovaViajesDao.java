@@ -151,7 +151,7 @@ public interface ServicioNovaViajesDao {
 			throws SQLException;
 
 	DetalleServicioAgencia consultaDetalleServicioDetalle(int idServicio,
-			int idDetServicio) throws SQLException;
+			int idDetServicio, Connection conn) throws SQLException;
 
 	Tramo registrarTramo(Tramo tramo, Connection conn) throws SQLException;
 

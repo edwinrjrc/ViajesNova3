@@ -34,7 +34,7 @@
 						<h:outputText value="Nombres" />
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							columns="1" style="width:100%;">
-							<h:inputText id="idTxtNombres" styleClass="estilocampo1"
+							<h:inputText id="idTxtNombres" styleClass="estilocampo1" maxlength="100"
 								value="#{servicioAgenteMBean.pasajero.nombres}" />
 							<rich:message for="idTxtNombres" showDetail="false"
 								showSummary="true" ajaxRendered="true"></rich:message>
@@ -47,7 +47,7 @@
 						<h:outputText value="Apellido Paterno" />
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							columns="1" style="width:100%;">
-							<h:inputText id="idTxtApPaterno" styleClass="estilocampo1"
+							<h:inputText id="idTxtApPaterno" styleClass="estilocampo1" maxlength="50"
 								value="#{servicioAgenteMBean.pasajero.apellidoPaterno}" />
 							<rich:message for="idTxtApPaterno" showDetail="false"
 								showSummary="true" ajaxRendered="true"></rich:message>
@@ -55,7 +55,7 @@
 						<h:outputText value="Apellido Materno" />
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							columns="1" style="width:100%;">
-							<h:inputText id="idTxtApMaterno" styleClass="estilocampo1"
+							<h:inputText id="idTxtApMaterno" styleClass="estilocampo1" maxlength="50"
 								value="#{servicioAgenteMBean.pasajero.apellidoMaterno}" />
 							<rich:message for="idTxtApMaterno" showDetail="false"
 								showSummary="true" ajaxRendered="true"></rich:message>
@@ -69,7 +69,7 @@
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							columns="1" style="width:100%;">
 							<h:inputText id="idTxtTelefono1" onkeypress="return js_soloEntero(event)"
-								value="#{servicioAgenteMBean.pasajero.telefono1}" />
+								value="#{servicioAgenteMBean.pasajero.telefono1}" maxlength="10" />
 							<rich:message for="idTxtApMaterno" showDetail="false"
 								showSummary="true" ajaxRendered="true"></rich:message>
 						</h:panelGrid>
@@ -77,7 +77,7 @@
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							columns="1" style="width:100%;">
 							<h:inputText id="idTxtTelefono2" onkeypress="return js_soloEntero(event)"
-								value="#{servicioAgenteMBean.pasajero.telefono2}" />
+								value="#{servicioAgenteMBean.pasajero.telefono2}" maxlength="10" />
 							<rich:message for="idTxtTelefono2" showDetail="false"
 								showSummary="true" ajaxRendered="true"></rich:message>
 						</h:panelGrid>
@@ -90,7 +90,7 @@
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							columns="1" style="width:100%;">
 							<h:inputText id="idTxtCorreoElectronico" styleClass="estilocampo1"
-								value="#{servicioAgenteMBean.pasajero.correoElectronico}" />
+								value="#{servicioAgenteMBean.pasajero.correoElectronico}" maxlength="100" />
 							<rich:message for="idTxtCorreoElectronico" showDetail="false"
 								showSummary="true" ajaxRendered="true"></rich:message>
 						</h:panelGrid>
@@ -113,7 +113,7 @@
 						<h:outputText value="Numero pasajero frecuente" />
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							columns="1" style="width:100%;">
-							<h:inputText id="idTxtNropaxfrecuente"
+							<h:inputText id="idTxtNropaxfrecuente" maxlength="20"
 								value="#{servicioAgenteMBean.pasajero.numeroPasajeroFrecuente}" />
 							<rich:message for="idTxtNropaxfrecuente" showDetail="false"
 								showSummary="true" ajaxRendered="true"></rich:message>

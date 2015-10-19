@@ -388,7 +388,7 @@ public class ConsultaNegocioServicioImpl implements ConsultaNegocioServicio {
 	public List<TipoCambio> listarTipoCambio(Date fecha) throws SQLException {
 		return ejbSession.listarTipoCambio(fecha);
 	}
-
+	@Override
 	public List<CheckIn> consultarCheckInPendiente() throws SQLException {
 		return ejbSession.consultarCheckInPendientes();
 	}
