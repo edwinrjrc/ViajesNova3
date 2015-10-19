@@ -28,6 +28,7 @@ import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.viajes.bean.negocio.ServicioProveedor;
 import pe.com.viajes.bean.negocio.TipoCambio;
+import pe.com.viajes.bean.negocio.Usuario;
 import pe.com.viajes.bean.reportes.CheckIn;
 import pe.com.viajes.negocio.exception.ErrorConsultaDataException;
 import pe.com.viajes.negocio.exception.ValidacionException;
@@ -160,7 +161,7 @@ public interface ConsultaNegocioSessionRemote {
 
 	List<Cliente> listarClientesCumples() throws SQLException, Exception;
 
-	List<CheckIn> consultarCheckInPendientes() throws SQLException;
+	List<CheckIn> consultarCheckInPendientes(Usuario usuario) throws SQLException;
 
 	List<ImpresionArchivoCargado> consultaImpresionArchivoCargado(
 			Integer idArchivoCargado) throws SQLException;

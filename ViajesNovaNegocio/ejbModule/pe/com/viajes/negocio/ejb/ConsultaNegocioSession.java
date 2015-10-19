@@ -37,6 +37,7 @@ import pe.com.viajes.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.viajes.bean.negocio.ServicioProveedor;
 import pe.com.viajes.bean.negocio.Telefono;
 import pe.com.viajes.bean.negocio.TipoCambio;
+import pe.com.viajes.bean.negocio.Usuario;
 import pe.com.viajes.bean.reportes.CheckIn;
 import pe.com.viajes.negocio.dao.ArchivoReporteDao;
 import pe.com.viajes.negocio.dao.ClienteDao;
@@ -783,13 +784,19 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 	}
 	
 	@Override
-	public List<CheckIn> consultarCheckInPendientes() throws SQLException{
+	public List<CheckIn> consultarCheckInPendientes(Usuario usuario) throws SQLException{
 		ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
 		
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.HOUR, 1500);
-				
-		return servicioNegocioDao.consultarcheckinpendientes(cal.getTime());
+		
+		if (usuario.getRol().getCodigoEntero().intValue() == 4){
+			return servicioNegocioDao.consultarcheckinpendientes(cal.getTime(), null);
+		}
+		else{
+			return servicioNegocioDao.consultarcheckinpendientes(cal.getTime(), usuario.getCodigoEntero());
+		}
+		
 	}
 	
 	@Override

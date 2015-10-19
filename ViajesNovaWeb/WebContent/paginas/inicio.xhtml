@@ -18,44 +18,48 @@
 					<h:panelGrid style="width:100%;text-align:left;" cellpadding="0"
 						cellspacing="0" border="0" columns="1">
 						<h:outputText styleClass="subtitulo"
-							value="Bienvenido #{sessionScope.usuarioSession.nombres} #{sessionScope.usuarioSession.apellidoPaterno} #{sessionScope.usuarioSession.apellidoMaterno}" />
+							value="Bienvenido #{sessionScope.usuarioSession.nombres} #{sessionScope.usuarioSession.apellidoPaterno}" />
 						<hr />
 					</h:panelGrid>
 				</f:facet>
 
-				<h:outputText
-					value="Clientes que cumplen años hoy #{clienteMBean.fechaHoy}"
-					styleClass="textNegrita" />
-				<table style="width: 70%;" align="center" border="0">
-					<tr>
-						<td align="center"><rich:dataTable
-								value="#{clienteMBean.listaClientesCumples}" var="fila"
-								style="width:100%;">
-								<f:facet name="noData">
-									<h:outputText value="No hay clientes cumpleañeros" />
-								</f:facet>
-								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Nombres" />
+				<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+					style="width:100%;" columns="1"
+					rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 2 or sessionScope.usuarioSession.rol.codigoEntero == 4}">
+					<h:outputText
+						value="Clientes que cumplen años hoy #{clienteMBean.fechaHoy}"
+						styleClass="textNegrita" />
+					<table style="width: 70%;" align="center" border="0">
+						<tr>
+							<td align="center"><rich:dataTable
+									value="#{clienteMBean.listaClientesCumples}" var="fila"
+									style="width:100%;">
+									<f:facet name="noData">
+										<h:outputText value="No hay clientes cumpleañeros" />
 									</f:facet>
-									<h:outputText value="#{fila.nombres}" />
-								</rich:column>
-								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Apellido Paterno" />
-									</f:facet>
-									<h:outputText value="#{fila.apellidoPaterno}" />
-								</rich:column>
-								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Apellido Materno" />
-									</f:facet>
-									<h:outputText value="#{fila.apellidoMaterno}" />
-								</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Nombres" />
+										</f:facet>
+										<h:outputText value="#{fila.nombres}" />
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Apellido Paterno" />
+										</f:facet>
+										<h:outputText value="#{fila.apellidoPaterno}" />
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Apellido Materno" />
+										</f:facet>
+										<h:outputText value="#{fila.apellidoMaterno}" />
+									</rich:column>
 
-							</rich:dataTable></td>
-					</tr>
-				</table>
+								</rich:dataTable></td>
+						</tr>
+					</table>
+				</h:panelGrid>
 			</h:panelGrid>
 			<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 				style="display:none;">
@@ -68,14 +72,15 @@
 			</h:panelGrid>
 
 			<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-				style="width:100%;text-align:center;">
+				style="width:100%;text-align:center;"
+				rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 2 or sessionScope.usuarioSession.rol.codigoEntero == 4}">
 				<table style="width: 70%;" align="center" border="0">
 					<tr>
 						<td align="center"><rich:dataTable id="idTablaCheckIn"
 								value="#{inicioMBean.checkInPendientes}" var="fila"
 								style="width:100%;" rows="5">
 								<f:facet name="noData">
-									<h:outputText value="No hay clientes cumpleañeros" />
+									<h:outputText value="No hay checkin pendientes" />
 								</f:facet>
 								<f:facet name="header">
 									<h:outputText value="CheckIn Pendientes" />

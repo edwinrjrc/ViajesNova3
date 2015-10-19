@@ -35,6 +35,7 @@ import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.viajes.bean.negocio.ServicioProveedor;
 import pe.com.viajes.bean.negocio.TipoCambio;
+import pe.com.viajes.bean.negocio.Usuario;
 import pe.com.viajes.bean.reportes.CheckIn;
 import pe.com.viajes.negocio.ejb.ConsultaNegocioSessionRemote;
 import pe.com.viajes.negocio.exception.ErrorConsultaDataException;
@@ -389,8 +390,8 @@ public class ConsultaNegocioServicioImpl implements ConsultaNegocioServicio {
 		return ejbSession.listarTipoCambio(fecha);
 	}
 	@Override
-	public List<CheckIn> consultarCheckInPendiente() throws SQLException {
-		return ejbSession.consultarCheckInPendientes();
+	public List<CheckIn> consultarCheckInPendiente(Usuario usuario) throws SQLException {
+		return ejbSession.consultarCheckInPendientes(usuario);
 	}
 
 	@Override

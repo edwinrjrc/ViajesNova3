@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import pe.com.viajes.bean.base.BaseVO;
 import pe.com.viajes.bean.jasper.DetalleServicio;
-import pe.com.viajes.bean.negocio.DetalleServicioAgencia;
 import pe.com.viajes.bean.negocio.Pasajero;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.bean.negocio.ServicioProveedor;
@@ -208,18 +207,24 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 	 * @see pe.com.viajes.negocio.dao.ServicioNegocioDao#consultarCheckInPendientes()
 	 */
 	@Override
-	public List<CheckIn> consultarcheckinpendientes(Date fechaHasta) throws SQLException {
+	public List<CheckIn> consultarcheckinpendientes(Date fechaHasta, Integer idVendedor) throws SQLException {
 		List<CheckIn> resultado = null;
 		Connection conn = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
 		String sql = "";
 		try {
-			sql = "{ ? = call negocio.fn_consultarcheckinpendientes(?) }";
+			sql = "{ ? = call negocio.fn_consultarcheckinpendientes(?, ?) }";
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			cs.registerOutParameter(1, Types.OTHER);
 			cs.setTimestamp(2, UtilJdbc.convertirUtilDateTimeStamp(fechaHasta));
+			if (idVendedor != null && idVendedor.intValue() != 0){
+				cs.setInt(3, idVendedor.intValue());
+			}
+			else{
+				cs.setNull(3, Types.INTEGER);
+			}
 			cs.execute();
 
 			rs = (ResultSet) cs.getObject(1);

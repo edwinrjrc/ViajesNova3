@@ -11,7 +11,6 @@ import java.util.List;
 
 import pe.com.viajes.bean.base.BaseVO;
 import pe.com.viajes.bean.jasper.DetalleServicio;
-import pe.com.viajes.bean.negocio.DetalleServicioAgencia;
 import pe.com.viajes.bean.negocio.Pasajero;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.bean.negocio.ServicioProveedor;
@@ -32,7 +31,7 @@ public interface ServicioNegocioDao {
 	public List<DetalleServicio> consultarServicioVentaJR(Integer idServicio)
 			throws SQLException;
 	
-	List<CheckIn> consultarcheckinpendientes(Date fechaHasta)
+	List<CheckIn> consultarcheckinpendientes(Date fechaHasta, Integer idVendedor)
 			throws SQLException;
 	
 	public Integer ingresarPasajero(Pasajero pasajero, Connection conn) throws SQLException;
