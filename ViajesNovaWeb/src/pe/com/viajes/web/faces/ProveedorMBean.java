@@ -40,6 +40,7 @@ import pe.com.viajes.web.servicio.UtilNegocioServicio;
 import pe.com.viajes.web.servicio.impl.ConsultaNegocioServicioImpl;
 import pe.com.viajes.web.servicio.impl.NegocioServicioImpl;
 import pe.com.viajes.web.servicio.impl.SoporteServicioImpl;
+import pe.com.viajes.web.servicio.impl.UtilNegocioServicioImpl;
 import pe.com.viajes.web.util.UtilWeb;
 
 /**
@@ -96,6 +97,7 @@ public class ProveedorMBean extends BaseMBean {
 			negocioServicio = new NegocioServicioImpl(servletContext);
 			consultaNegocioServicio = new ConsultaNegocioServicioImpl(
 					servletContext);
+			utilNegocioServicio = new UtilNegocioServicioImpl(servletContext);
 		} catch (NamingException e) {
 			logger.error(e.getMessage(), e);
 		}
