@@ -276,52 +276,64 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 		String sql = "";
 		
 		try{
-			sql = "{ ? = call negocio.fn_ingresarpasajero(?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+			sql = "{ ? = call negocio.fn_ingresarpasajero(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 			cs = conn.prepareCall(sql);
 			cs.registerOutParameter(1, Types.INTEGER);
-			cs.setString(2, pasajero.getNombres());
-			cs.setString(3, pasajero.getApellidoPaterno());
+			if (pasajero.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero() != null && pasajero.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue() != 0){
+				cs.setInt(2, pasajero.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(2, Types.INTEGER);
+			}
+			if (StringUtils.isNotBlank(pasajero.getDocumentoIdentidad().getNumeroDocumento())){
+				cs.setString(3, pasajero.getDocumentoIdentidad().getNumeroDocumento());
+			}
+			else{
+				cs.setNull(3, Types.VARCHAR);
+			}
+			cs.setString(4, pasajero.getNombres());
+			cs.setString(5, pasajero.getApellidoPaterno());
 			if (StringUtils.isNotBlank(pasajero.getApellidoMaterno())){
-				cs.setString(4, pasajero.getApellidoMaterno());
-			}
-			else{
-				cs.setNull(4, Types.VARCHAR);
-			}
-			if (StringUtils.isNotBlank(pasajero.getCorreoElectronico())){
-				cs.setString(5, pasajero.getCorreoElectronico());
-			}
-			else{
-				cs.setNull(5, Types.VARCHAR);
-			}
-			if (StringUtils.isNotBlank(pasajero.getTelefono1())){
-				cs.setString(6, pasajero.getTelefono1());
+				cs.setString(6, pasajero.getApellidoMaterno());
 			}
 			else{
 				cs.setNull(6, Types.VARCHAR);
 			}
-			if (StringUtils.isNotBlank(pasajero.getTelefono2())){
-				cs.setString(7, pasajero.getTelefono2());
+			if (StringUtils.isNotBlank(pasajero.getCorreoElectronico())){
+				cs.setString(7, pasajero.getCorreoElectronico());
 			}
 			else{
 				cs.setNull(7, Types.VARCHAR);
 			}
-			if (StringUtils.isNotBlank(pasajero.getNumeroPasajeroFrecuente())){
-				cs.setString(8, pasajero.getNumeroPasajeroFrecuente());
+			if (StringUtils.isNotBlank(pasajero.getTelefono1())){
+				cs.setString(8, pasajero.getTelefono1());
 			}
 			else{
 				cs.setNull(8, Types.VARCHAR);
 			}
+			if (StringUtils.isNotBlank(pasajero.getTelefono2())){
+				cs.setString(9, pasajero.getTelefono2());
+			}
+			else{
+				cs.setNull(9, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(pasajero.getNumeroPasajeroFrecuente())){
+				cs.setString(10, pasajero.getNumeroPasajeroFrecuente());
+			}
+			else{
+				cs.setNull(10, Types.VARCHAR);
+			}
 			cs.setInt(9, pasajero.getRelacion().getCodigoEntero().intValue());
 			if (pasajero.getAerolinea().getCodigoEntero() != null && pasajero.getAerolinea().getCodigoEntero().intValue() != 0){
-				cs.setInt(10, pasajero.getAerolinea().getCodigoEntero().intValue());
+				cs.setInt(11, pasajero.getAerolinea().getCodigoEntero().intValue());
 			}
 			else {
-				cs.setNull(10, Types.INTEGER);
+				cs.setNull(11, Types.INTEGER);
 			}
-			cs.setInt(11, pasajero.getIdServicioDetalle().intValue());
-			cs.setInt(12, pasajero.getIdServicio().intValue());
-			cs.setString(13, pasajero.getUsuarioCreacion());
-			cs.setString(14, pasajero.getIpCreacion());
+			cs.setInt(12, pasajero.getIdServicioDetalle().intValue());
+			cs.setInt(13, pasajero.getIdServicio().intValue());
+			cs.setString(14, pasajero.getUsuarioCreacion());
+			cs.setString(15, pasajero.getIpCreacion());
 			cs.execute();
 			
 			return cs.getInt(1);
@@ -360,6 +372,9 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 			Pasajero pasajero = null;
 			while (rs.next()){
 				pasajero = new Pasajero();
+				pasajero.getDocumentoIdentidad().getTipoDocumento().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipodocumento"));
+				pasajero.getDocumentoIdentidad().getTipoDocumento().setNombre(UtilJdbc.obtenerCadena(rs, "nombretipodocumento"));
+				pasajero.getDocumentoIdentidad().setNumeroDocumento(UtilJdbc.obtenerCadena(rs, "numerodocumento"));
 				pasajero.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
 				pasajero.setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
 				pasajero.setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));

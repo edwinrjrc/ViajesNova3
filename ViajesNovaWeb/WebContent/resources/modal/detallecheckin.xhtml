@@ -82,6 +82,13 @@
 						</f:facet>
 						<rich:column>
 							<f:facet name="header">
+								<h:outputText value="Documento Identidad" />
+							</f:facet>
+							<h:outputText
+								value="#{pax.documentoIdentidad.tipoDocumento.nombre} - #{pax.documentoIdentidad.numeroDocumento}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
 								<h:outputText value="Nombres" />
 							</f:facet>
 							<h:outputText value="#{pax.nombres}" />
