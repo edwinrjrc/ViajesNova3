@@ -960,23 +960,29 @@ public class NegocioSession implements NegocioSessionRemote,
 	@Override
 	public boolean ingresarMaestroServicio(MaestroServicio servicio)
 			throws ErrorRegistroDataException, SQLException, Exception {
+		Connection conn = null;
 		try {
+			userTransaction.begin();
+			conn = UtilConexion.obtenerConexion();
 			MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
 
-			userTransaction.begin();
-			
 			Integer idMaestroServicio = maestroServicioDao
-					.ingresarMaestroServicio(servicio);
+					.ingresarMaestroServicio(servicio, conn);
 
 			if (idMaestroServicio == null || idMaestroServicio.intValue() == 0) {
 				throw new ErrorRegistroDataException(
 						"No se pudo completar el registro de servicio");
 			}
+						
 			userTransaction.commit();
 			return true;
 		} catch (Exception e) {
 			userTransaction.rollback();
 			throw new ErrorRegistroDataException(e);
+		} finally{
+			if (conn != null){
+				conn.close();
+			}
 		}
 	}
 
@@ -984,9 +990,11 @@ public class NegocioSession implements NegocioSessionRemote,
 	public boolean actualizarMaestroServicio(MaestroServicio servicio)
 			throws SQLException, Exception {
 		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
-
+		Connection conn = null;
 		try {
 			userTransaction.begin();
+			conn = UtilConexion.obtenerConexion();
+			
 			if (!maestroServicioDao.actualizarMaestroServicio(servicio)) {
 				throw new ErrorRegistroDataException(
 						"No se pudo completar la actualizacion de servicio");
@@ -996,13 +1004,17 @@ public class NegocioSession implements NegocioSessionRemote,
 					&& !servicio.getListaServicioDepende().isEmpty()) {
 				maestroServicioDao.ingresarServicioMaestroServicio(
 						servicio.getCodigoEntero(),
-						servicio.getListaServicioDepende());
+						servicio.getListaServicioDepende(), conn);
 			}
 			userTransaction.commit();
 			return true;
 		} catch (Exception e) {
 			userTransaction.rollback();
 			throw new ErrorRegistroDataException(e);
+		} finally{
+			if (conn != null){
+				conn.close();
+			}
 		}
 	}
 

@@ -18,7 +18,7 @@ public interface MaestroServicioDao {
 
 	public List<MaestroServicio> listarMaestroServicios() throws SQLException;
 
-	public Integer ingresarMaestroServicio(MaestroServicio servicio)
+	public Integer ingresarMaestroServicio(MaestroServicio servicio, Connection conn)
 			throws SQLException;
 
 	public boolean actualizarMaestroServicio(MaestroServicio servicio)
@@ -34,7 +34,7 @@ public interface MaestroServicioDao {
 	List<MaestroServicio> listarMaestroServiciosIgv() throws SQLException;
 
 	void ingresarServicioMaestroServicio(Integer idServicio,
-			List<BaseVO> listaMaeServicioImpto) throws SQLException, Exception;
+			List<BaseVO> listaMaeServicioImpto, Connection conn) throws SQLException, Exception;
 
 	List<BaseVO> consultarServicioDependientes(Integer idServicio)
 			throws SQLException;

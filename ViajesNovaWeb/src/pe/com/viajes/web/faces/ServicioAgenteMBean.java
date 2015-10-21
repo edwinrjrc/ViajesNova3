@@ -350,12 +350,18 @@ public class ServicioAgenteMBean extends BaseMBean {
 		this.setVendedor(false);
 		HttpSession session = obtenerSession(false);
 		Usuario usuario = (Usuario) session.getAttribute(USUARIO_SESSION);
-		if (Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero())) {
+		this.setVendedor(usuario.isVendedor());
+		
+		if (!this.isVendedor() && Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero())) {
 			this.getServicioAgencia().getVendedor()
 					.setCodigoEntero(usuario.getCodigoEntero());
 			this.getServicioAgencia().getVendedor()
 					.setNombre(usuario.getNombreCompleto());
 			this.setVendedor(true);
+		}
+		else{
+			this.getServicioAgencia().getVendedor().setCodigoEntero(usuario.getCodigoEntero());
+			this.getServicioAgencia().getVendedor().setNombre(usuario.getNombreCompleto());
 		}
 
 		this.getServicioAgencia().setFechaServicio(new Date());

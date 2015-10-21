@@ -341,6 +341,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 						"cambiarclave");
 				Date fechaVctoCredencial = UtilJdbc.obtenerFecha(rs,
 						"feccaducacredencial");
+				resultado.setVendedor(UtilJdbc.obtenerBoolean(rs, "vendedor"));
 
 				resultado.setCredencialVencida(caducaCredencial);
 				if (!caducaCredencial) {

@@ -910,7 +910,8 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 		try {
 			Maestro hijoMaestro = new Maestro();
 			hijoMaestro.setCodigoEntero(contacto.getArea().getCodigoEntero());
-			hijoMaestro.setCodigoMaestro(4);
+			int valorMaestro = UtilEjb.obtenerEnteroPropertieMaestro("maestroAreas", "aplicacionDatosEjb");
+			hijoMaestro.setCodigoMaestro(valorMaestro);
 			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
 			contacto.getArea().setNombre(hijoMaestro.getNombre());
 		} catch (Exception e) {
@@ -925,7 +926,8 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 			throws SQLException, Exception {
 		MaestroDao maestroDao = new MaestroDaoImpl();
 		Maestro hijoMaestro = new Maestro();
-		hijoMaestro.setCodigoMaestro(2);
+		int valorMaestro = UtilEjb.obtenerEnteroPropertieMaestro("maestroVias", "aplicacionDatosEjb");
+		hijoMaestro.setCodigoMaestro(valorMaestro);
 		hijoMaestro.setCodigoEntero(direccion.getVia().getCodigoEntero());
 		hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
 		String direccionCompleta = "" + hijoMaestro.getAbreviatura() + " "
@@ -1088,7 +1090,8 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 		try {
 			MaestroDao maestroDao = new MaestroDaoImpl();
 			Maestro hijoMaestro = new Maestro();
-			hijoMaestro.setCodigoMaestro(23);
+			int valorMaestro = UtilEjb.obtenerEnteroPropertieMaestro("maestroRelacion", "aplicacionDatosEjb");
+			hijoMaestro.setCodigoMaestro(valorMaestro);
 			hijoMaestro.setCodigoEntero(pasajero.getRelacion().getCodigoEntero());
 			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
 			

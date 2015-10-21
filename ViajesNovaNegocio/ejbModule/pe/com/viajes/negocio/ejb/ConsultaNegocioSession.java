@@ -75,6 +75,7 @@ import pe.com.viajes.negocio.exception.ErrorConsultaDataException;
 import pe.com.viajes.negocio.exception.ValidacionException;
 import pe.com.viajes.negocio.util.UtilConexion;
 import pe.com.viajes.negocio.util.UtilDatos;
+import pe.com.viajes.negocio.util.UtilEjb;
 
 /**
  * Session Bean implementation class ConsultaNegocioSession
@@ -104,7 +105,8 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 
 		for (Proveedor proveedor2 : listaProveedores) {
 			Maestro hijoMaestro = new Maestro();
-			hijoMaestro.setCodigoMaestro(2);
+			int valorMaestro = UtilEjb.obtenerEnteroPropertieMaestro("maestroVias", "aplicacionDatosEjb");
+			hijoMaestro.setCodigoMaestro(valorMaestro);
 			hijoMaestro.setCodigoEntero(proveedor2.getDireccion().getVia()
 					.getCodigoEntero());
 			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
@@ -152,7 +154,8 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 
 		for (Proveedor proveedor2 : listaProveedores) {
 			Maestro hijoMaestro = new Maestro();
-			hijoMaestro.setCodigoMaestro(2);
+			int valorMaestro = UtilEjb.obtenerEnteroPropertieMaestro("maestroVias", "aplicacionDatosEjb");
+			hijoMaestro.setCodigoMaestro(valorMaestro);
 			hijoMaestro.setCodigoEntero(proveedor2.getDireccion().getVia()
 					.getCodigoEntero());
 			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
@@ -174,7 +177,8 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 
 		for (Cliente cliente2 : listaClientes) {
 			Maestro hijoMaestro = new Maestro();
-			hijoMaestro.setCodigoMaestro(2);
+			int valorMaestro = UtilEjb.obtenerEnteroPropertieMaestro("maestroVias", "aplicacionDatosEjb");
+			hijoMaestro.setCodigoMaestro(valorMaestro);
 			hijoMaestro.setCodigoEntero(cliente2.getDireccion().getVia()
 					.getCodigoEntero());
 			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
@@ -196,7 +200,8 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 
 		for (Cliente cliente2 : listaClientes) {
 			Maestro hijoMaestro = new Maestro();
-			hijoMaestro.setCodigoMaestro(2);
+			int valorMaestro = UtilEjb.obtenerEnteroPropertieMaestro("maestroVias", "aplicacionDatosEjb");
+			hijoMaestro.setCodigoMaestro(valorMaestro);
 			hijoMaestro.setCodigoEntero(cliente2.getDireccion().getVia()
 					.getCodigoEntero());
 			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
@@ -792,7 +797,7 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 		ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
 		
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.HOUR, 1500);
+		cal.add(Calendar.HOUR, 100);
 		
 		if (usuario.getRol().getCodigoEntero().intValue() == 4){
 			return servicioNegocioDao.consultarcheckinpendientes(cal.getTime(), null);

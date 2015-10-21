@@ -280,9 +280,8 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 	 * (pe.com.viajes.bean.negocio.MaestroServicio)
 	 */
 	@Override
-	public Integer ingresarMaestroServicio(MaestroServicio servicio)
+	public Integer ingresarMaestroServicio(MaestroServicio servicio, Connection conn)
 			throws SQLException {
-		Connection conn = null;
 		CallableStatement cs = null;
 		String sql = "{ ? = call negocio.fn_ingresarservicio(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		Integer resultado = null;
@@ -352,18 +351,8 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				if (cs != null) {
 					cs.close();
 				}
-				if (conn != null) {
-					conn.close();
-				}
 			} catch (SQLException e) {
-				try {
-					if (conn != null) {
-						conn.close();
-					}
-					throw new SQLException(e);
-				} catch (SQLException e1) {
-					throw new SQLException(e);
-				}
+				throw new SQLException(e);
 			}
 		}
 
@@ -673,14 +662,11 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 
 	@Override
 	public void ingresarServicioMaestroServicio(Integer idServicio,
-			List<BaseVO> listaMaeServicioImpto) throws SQLException, Exception {
-		Connection conn = null;
+			List<BaseVO> listaMaeServicioImpto, Connection conn) throws SQLException, Exception {
 		CallableStatement cs = null;
 		String sql = "{ ? = call negocio.fn_ingresarserviciomaestroservicio(?,?) }";
 
 		try {
-			conn = UtilConexion.obtenerConexion();
-
 			for (BaseVO idServicioDepende : listaMaeServicioImpto) {
 				cs = conn.prepareCall(sql);
 				int i = 1;
@@ -701,18 +687,9 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				if (cs != null) {
 					cs.close();
 				}
-				if (conn != null) {
-					conn.close();
-				}
+				
 			} catch (SQLException e) {
-				try {
-					if (conn != null) {
-						conn.close();
-					}
-					throw new SQLException(e);
-				} catch (SQLException e1) {
-					throw new SQLException(e);
-				}
+				throw new SQLException(e);
 			}
 		}
 
