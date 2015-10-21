@@ -131,20 +131,14 @@ public class CorreoMasivoMBean extends BaseMBean {
 			if (tipo > 0) {
 				msje = "Correos Enviados con errores verifique el log";
 			}
-
-			this.setShowModal(true);
-			this.setTipoModal(TIPO_MODAL_EXITO);
-			this.setMensajeModal(msje);
+			this.mostrarMensajeExito(msje);
+			
 		} catch (EnvioCorreoException e) {
-			e.printStackTrace();
-			this.setShowModal(true);
-			this.setTipoModal(TIPO_MODAL_ERROR);
-			this.setMensajeModal(e.getMessage());
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
-			this.setShowModal(true);
-			this.setTipoModal(TIPO_MODAL_ERROR);
-			this.setMensajeModal(e.getMessage());
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -178,9 +172,9 @@ public class CorreoMasivoMBean extends BaseMBean {
 			listaClientesCorreo = consultaNegocioServicio
 					.listarClientesCorreo();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 
 		return listaClientesCorreo;

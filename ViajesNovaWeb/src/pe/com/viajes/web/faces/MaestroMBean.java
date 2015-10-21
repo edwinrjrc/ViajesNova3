@@ -63,9 +63,7 @@ public class MaestroMBean extends BaseMBean {
 			this.setMaestro(soporteServicio.consultarMaestro(id));
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
-			this.setShowModal(true);
-			this.setTipoModal("2");
-			this.setMensajeModal(e.getMessage());
+			this.mostrarMensajeError(e.getMessage());
 		}
 	}
 
@@ -123,19 +121,15 @@ public class MaestroMBean extends BaseMBean {
 	public void ejecutarMetodo() {
 		try {
 			if (this.isNuevoMaestro()) {
-				this.setShowModal(soporteServicio.ingresarMaestro(maestro));
-				this.setTipoModal("1");
-				this.setMensajeModal("Maestro registrado Satisfactoriamente");
+				soporteServicio.ingresarMaestro(maestro);
+				this.mostrarMensajeExito("Maestro registrado Satisfactoriamente");
+				
 			} else if (this.isEditarMaestro()) {
-				this.setShowModal(soporteServicio
-						.actualizarMaestro(getMaestro()));
-				this.setTipoModal("1");
-				this.setMensajeModal("Maestro actualizado Satisfactoriamente");
+				soporteServicio.actualizarMaestro(getMaestro());
+				this.mostrarMensajeError("Maestro actualizado Satisfactoriamente");
 			}
 		} catch (Exception e) {
-			this.setShowModal(true);
-			this.setTipoModal("2");
-			this.setMensajeModal(e.getMessage());
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
 		}
 	}

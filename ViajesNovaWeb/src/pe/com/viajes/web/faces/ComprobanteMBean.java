@@ -117,14 +117,13 @@ public class ComprobanteMBean extends BaseMBean {
 	}
 	
 	public void generarComprobante(){
-		System.out.println("Genera Comprobante");
 		try {
 			HSSFWorkbook archivoExcel = new HSSFWorkbook();
 			
 			HSSFSheet hoja1 = null;
 			
 			// FACTURA
-			if (this.getComprobanteDetalle().getTipoComprobante().getCodigoEntero().intValue() == 1){
+			if (this.getComprobanteDetalle().getTipoComprobante().getCodigoEntero().intValue() == UtilWeb.obtenerEnteroPropertieMaestro("comprobanteFactura", "aplicacionDatos")){
 				hoja1 = archivoExcel.createSheet("Factura");
 				/**
 				 * Inicio de configuracion de hoja excel
@@ -142,7 +141,7 @@ public class ComprobanteMBean extends BaseMBean {
 				 */
 			}
 			// BOLETA
-			else if (this.getComprobanteDetalle().getTipoComprobante().getCodigoEntero().intValue() == 2){
+			else if (this.getComprobanteDetalle().getTipoComprobante().getCodigoEntero().intValue() == UtilWeb.obtenerEnteroPropertieMaestro("comprobanteBoleta", "aplicacionDatos")){
 				hoja1 = archivoExcel.createSheet("Boleta");
 				/**
 				 * Inicio de configuracion de hoja excel
@@ -160,7 +159,7 @@ public class ComprobanteMBean extends BaseMBean {
 				 */
 			}
 			// DOCUMENTO DE COBRANZA
-			else if (this.getComprobanteDetalle().getTipoComprobante().getCodigoEntero().intValue() == 3){
+			else if (this.getComprobanteDetalle().getTipoComprobante().getCodigoEntero().intValue() == UtilWeb.obtenerEnteroPropertieMaestro("comprobanteDocumentoCobranza", "aplicacionDatos")){
 				hoja1 = archivoExcel.createSheet("Documento de Cobranza");
 				/**
 				 * Inicio de configuracion de hoja excel
@@ -202,13 +201,13 @@ public class ComprobanteMBean extends BaseMBean {
 			facesContext.responseComplete();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	

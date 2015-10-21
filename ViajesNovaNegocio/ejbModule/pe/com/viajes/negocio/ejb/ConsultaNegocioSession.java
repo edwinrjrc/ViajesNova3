@@ -49,6 +49,7 @@ import pe.com.viajes.negocio.dao.CuentaBancariaDao;
 import pe.com.viajes.negocio.dao.DireccionDao;
 import pe.com.viajes.negocio.dao.MaestroDao;
 import pe.com.viajes.negocio.dao.MaestroServicioDao;
+import pe.com.viajes.negocio.dao.ParametroDao;
 import pe.com.viajes.negocio.dao.ProveedorDao;
 import pe.com.viajes.negocio.dao.ServicioNegocioDao;
 import pe.com.viajes.negocio.dao.ServicioNovaViajesDao;
@@ -65,6 +66,7 @@ import pe.com.viajes.negocio.dao.impl.CuentaBancariaDaoImpl;
 import pe.com.viajes.negocio.dao.impl.DireccionDaoImpl;
 import pe.com.viajes.negocio.dao.impl.MaestroDaoImpl;
 import pe.com.viajes.negocio.dao.impl.MaestroServicioDaoImpl;
+import pe.com.viajes.negocio.dao.impl.ParametroDaoImpl;
 import pe.com.viajes.negocio.dao.impl.ProveedorDaoImpl;
 import pe.com.viajes.negocio.dao.impl.ServicioNegocioDaoImpl;
 import pe.com.viajes.negocio.dao.impl.ServicioNovaViajesDaoImpl;
@@ -795,11 +797,13 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 	@Override
 	public List<CheckIn> consultarCheckInPendientes(Usuario usuario) throws SQLException{
 		ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
-		
+		ParametroDao parametroDao = new ParametroDaoImpl();
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.HOUR, 100);
+		int numeroHoras = 100;
+		numeroHoras = UtilEjb.convertirCadenaEntero(parametroDao.consultarParametro(UtilEjb.obtenerEnteroPropertieMaestro("rolSupervisorVen", "codigoParametroCheckIn")).getValor());
+		cal.add(Calendar.HOUR, numeroHoras);
 		
-		if (usuario.getRol().getCodigoEntero().intValue() == 4){
+		if (usuario.getRol().getCodigoEntero().intValue() == UtilEjb.obtenerEnteroPropertieMaestro("rolSupervisorVen", "aplicacionDatosEjb")){
 			return servicioNegocioDao.consultarcheckinpendientes(cal.getTime(), null);
 		}
 		else{

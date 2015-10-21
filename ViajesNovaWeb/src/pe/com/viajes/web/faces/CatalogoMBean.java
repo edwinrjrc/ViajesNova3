@@ -86,7 +86,6 @@ public class CatalogoMBean implements Serializable {
 
 	private SeguridadServicio seguridadServicio;
 	private SoporteServicio soporteServicio;
-	private NegocioServicio negocioServicio;
 	private ConsultaNegocioServicio consultaNegocioServicio;
 	private ParametroServicio parametroServicio;
 
@@ -96,7 +95,6 @@ public class CatalogoMBean implements Serializable {
 					.getCurrentInstance().getExternalContext().getContext();
 			seguridadServicio = new SeguridadServicioImpl(servletContext);
 			soporteServicio = new SoporteServicioImpl(servletContext);
-			negocioServicio = new NegocioServicioImpl(servletContext);
 			parametroServicio = new ParametroServicioImpl(servletContext);
 			consultaNegocioServicio = new ConsultaNegocioServicioImpl(
 					servletContext);

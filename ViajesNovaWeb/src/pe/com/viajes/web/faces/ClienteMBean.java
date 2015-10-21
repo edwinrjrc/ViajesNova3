@@ -174,38 +174,24 @@ public class ClienteMBean extends BaseMBean {
 											getCliente().getRazonSocial());
 								}
 
-								this.setShowModal(negocioServicio
-										.actualizarCliente(getCliente()));
-								this.setTipoModal("1");
-								this.setMensajeModal("Cliente actualizado Satisfactoriamente");
+								this.mostrarMensajeExito("Cliente actualizado Satisfactoriamente");
 							}
 						} else {
-							this.setShowModal(true);
-							this.setTipoModal("2");
-							this.setMensajeModal("Debe ingresar por lo menos un telefono, en la direccion o el contacto");
+							this.mostrarMensajeError("Debe ingresar por lo menos un telefono, en la direccion o el contacto");
 						}
 
 					} else {
-						this.setShowModal(true);
-						this.setTipoModal("2");
-						this.setMensajeModal("No se ha agregado ningun contacto para el cliente, para cliente personal natural registre como contacto la mismo persona");
+						this.mostrarMensajeError("No se ha agregado ningun contacto para el cliente, para cliente personal natural registre como contacto la mismo persona");
 					}
 				} else {
-					this.setShowModal(true);
-					this.setTipoModal("2");
-					this.setMensajeModal("No se ha agregado ninguna dirección al proveedor");
+					this.mostrarMensajeError("No se ha agregado ninguna dirección al proveedor");
 				}
 			}
 		} catch (NoEnvioDatoException ex) {
-			this.setShowModal(true);
-			this.setTipoModal("2");
-			this.setMensajeModal(ex.getMessage());
+			this.mostrarMensajeError(ex.getMessage());
 			logger.error(ex.getMessage(), ex);
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			this.setShowModal(true);
-			this.setTipoModal("2");
-			this.setMensajeModal(ex.getMessage());
+			this.mostrarMensajeError(ex.getMessage());
 			logger.error(ex.getMessage(), ex);
 		}
 	}
@@ -417,8 +403,10 @@ public class ClienteMBean extends BaseMBean {
 				}
 			}
 		} catch (SQLException ex) {
+			this.mostrarMensajeError(ex.getMessage());
 			logger.error(ex.getMessage(), ex);
 		} catch (Exception ex) {
+			this.mostrarMensajeError(ex.getMessage());
 			logger.error(ex.getMessage(), ex);
 		}
 	}
@@ -580,8 +568,10 @@ public class ClienteMBean extends BaseMBean {
 				this.setContactoAgregada(true);
 			}
 		} catch (SQLException ex) {
+			this.mostrarMensajeError(ex.getMessage());
 			logger.error(ex.getMessage(), ex);
 		} catch (Exception ex) {
+			this.mostrarMensajeError(ex.getMessage());
 			logger.error(ex.getMessage(), ex);
 		}
 	}

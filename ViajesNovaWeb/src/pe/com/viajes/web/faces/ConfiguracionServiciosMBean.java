@@ -75,19 +75,14 @@ public class ConfiguracionServiciosMBean extends BaseMBean {
 				this.soporteServicio
 						.guardarConfiguracionServicio(this.listaConfigServicios);
 			}
-
-			this.setShowModal(true);
-			this.setTipoModal("1");
-			this.setMensajeModal("Configuracion guardada satisfactoriamente");
+			
+			this.mostrarMensajeExito("Configuracion guardada satisfactoriamente");
+			
 		} catch (ValidacionException ex) {
-			this.setShowModal(true);
-			this.setTipoModal("2");
-			this.setMensajeModal(ex.getMessage());
+			this.mostrarMensajeError(ex.getMessage());
 			logger.error(ex.getMessage(), ex);
 		} catch (Exception ex) {
-			this.setShowModal(true);
-			this.setTipoModal("2");
-			this.setMensajeModal(ex.getMessage());
+			this.mostrarMensajeError(ex.getMessage());
 			logger.error(ex.getMessage(), ex);
 		}
 	}
@@ -134,9 +129,9 @@ public class ConfiguracionServiciosMBean extends BaseMBean {
 				listaServicios.add(si);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 
 		return listaServicios;
@@ -178,9 +173,9 @@ public class ConfiguracionServiciosMBean extends BaseMBean {
 
 			this.setShowModal(false);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 
 		return listaConfigServicios;

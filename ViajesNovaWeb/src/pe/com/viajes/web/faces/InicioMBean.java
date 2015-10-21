@@ -69,7 +69,7 @@ public class InicioMBean extends BaseMBean {
 			
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 

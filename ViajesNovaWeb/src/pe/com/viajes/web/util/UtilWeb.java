@@ -85,7 +85,7 @@ public class UtilWeb {
 
 			return convertirCadenaEntero(resourceMaestros.getString(llave));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return 0;
 	}

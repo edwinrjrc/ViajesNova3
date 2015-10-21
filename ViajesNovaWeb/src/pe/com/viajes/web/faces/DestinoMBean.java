@@ -81,9 +81,8 @@ public class DestinoMBean extends BaseMBean {
 				getDestino().setIpCreacion(obtenerRequest().getRemoteAddr());
 				this.soporteServicio.ingresarDestino(getDestino());
 
-				this.setShowModal(true);
-				this.setTipoModal("1");
-				this.setMensajeModal("Destino registrado Satisfactoriamente");
+				this.mostrarMensajeExito("Destino registrado Satisfactoriamente");
+				
 			} else if (this.isEditarDestino()) {
 				HttpSession session = obtenerSession(false);
 				Usuario usuario = (Usuario) session
@@ -94,11 +93,15 @@ public class DestinoMBean extends BaseMBean {
 				getDestino()
 						.setIpModificacion(obtenerRequest().getRemoteAddr());
 				this.soporteServicio.actualizarDestino(getDestino());
+				
+				this.mostrarMensajeExito("Destino actualizado Satisfactoriamente");
 			}
 
 		} catch (SQLException e) {
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
 		}
 	}
