@@ -800,7 +800,7 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 		ParametroDao parametroDao = new ParametroDaoImpl();
 		Calendar cal = Calendar.getInstance();
 		int numeroHoras = 100;
-		numeroHoras = UtilEjb.convertirCadenaEntero(parametroDao.consultarParametro(UtilEjb.obtenerEnteroPropertieMaestro("rolSupervisorVen", "codigoParametroCheckIn")).getValor());
+		numeroHoras = UtilEjb.convertirCadenaEntero(parametroDao.consultarParametro(UtilEjb.obtenerEnteroPropertieMaestro("codigoParametroCheckIn", "aplicacionDatosEjb")).getValor());
 		cal.add(Calendar.HOUR, numeroHoras);
 		
 		if (usuario.getRol().getCodigoEntero().intValue() == UtilEjb.obtenerEnteroPropertieMaestro("rolSupervisorVen", "aplicacionDatosEjb")){
