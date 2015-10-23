@@ -12,6 +12,9 @@ public class BaseVO extends Base {
 	private static final long serialVersionUID = 6210620262453450979L;
 	private String nombre;
 	private String abreviatura;
+	
+	//FIXME debe colocarse esto en un objeto independiente
+	private boolean valorBoolean;
 
 	/**
 	 * 
@@ -56,6 +59,20 @@ public class BaseVO extends Base {
 	 */
 	public void setAbreviatura(String abreviatura) {
 		this.abreviatura = abreviatura;
+	}
+
+	/**
+	 * @return the valorBoolean
+	 */
+	public boolean isValorBoolean() {
+		return valorBoolean;
+	}
+
+	/**
+	 * @param valorBoolean the valorBoolean to set
+	 */
+	public void setValorBoolean(boolean valorBoolean) {
+		this.valorBoolean = valorBoolean;
 	}
 
 }

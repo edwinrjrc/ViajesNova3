@@ -419,48 +419,54 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 	}
 
 	private String generarDescripcionServicio(DetalleServicioAgencia detalle) {
-
 		try {
-			ConfiguracionTipoServicio configuracion = this.soporteSessionLocal
-					.consultarConfiguracionServicio(detalle.getTipoServicio()
-							.getCodigoEntero());
-
 			String descripcion = "";
-			descripcion = detalle.getTipoServicio().getNombre() + " ";
-			if (configuracion.isMuestraRuta()) {
-				for (Tramo tramo : detalle.getRuta().getTramos()) {
-					descripcion = descripcion
-							+ tramo.getOrigen().getDescripcion() + " - "
-							+ tramo.getDestino().getDescripcion() + " / ";
+			if (StringUtils.isBlank(detalle.getDescripcionServicio())){
+				ConfiguracionTipoServicio configuracion = this.soporteSessionLocal
+						.consultarConfiguracionServicio(detalle.getTipoServicio()
+								.getCodigoEntero());
+				
+				descripcion = detalle.getTipoServicio().getNombre() + " ";
+				if (configuracion.isMuestraRuta()) {
+					for (Tramo tramo : detalle.getRuta().getTramos()) {
+						descripcion = descripcion
+								+ tramo.getOrigen().getDescripcion() + " - "
+								+ tramo.getDestino().getDescripcion() + " / ";
+					}
 				}
+				if (configuracion.isMuestraAerolinea()) {
+					descripcion = descripcion + " con "
+							+ detalle.getAerolinea().getNombre() + " ";
+				}
+				if (configuracion.isMuestraFechaServicio()) {
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+					descripcion = descripcion + " desde "
+							+ sdf.format(detalle.getFechaIda());
+				}
+				if (configuracion.isMuestraFechaRegreso()) {
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+					descripcion = descripcion + " hasta "
+							+ sdf.format(detalle.getFechaRegreso());
+				}
+				if (configuracion.isMuestraHotel()) {
+					descripcion = descripcion + " en hotel "
+							+ detalle.getHotel().getNombre();
+				}
+				if (configuracion.isMuestraCodigoReserva()) {
+					descripcion = descripcion + " con codigo de reserva: "
+							+ detalle.getCodigoReserva();
+				}
+				if (configuracion.isMuestraNumeroBoleto()) {
+					descripcion = descripcion + " numero de boleto: "
+							+ detalle.getNumeroBoleto();
+				}
+				return StringUtils.normalizeSpace(descripcion);
 			}
-			if (configuracion.isMuestraAerolinea()) {
-				descripcion = descripcion + " con "
-						+ detalle.getAerolinea().getNombre() + " ";
+			else{
+				descripcion = detalle.getTipoServicio().getNombre() + " " + descripcion;
+				
+				return StringUtils.normalizeSpace(descripcion);
 			}
-			if (configuracion.isMuestraFechaServicio()) {
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-				descripcion = descripcion + " desde "
-						+ sdf.format(detalle.getFechaIda());
-			}
-			if (configuracion.isMuestraFechaRegreso()) {
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-				descripcion = descripcion + " hasta "
-						+ sdf.format(detalle.getFechaRegreso());
-			}
-			if (configuracion.isMuestraHotel()) {
-				descripcion = descripcion + " en hotel "
-						+ detalle.getHotel().getNombre();
-			}
-			if (configuracion.isMuestraCodigoReserva()) {
-				descripcion = descripcion + " con codigo de reserva: "
-						+ detalle.getCodigoReserva();
-			}
-			if (configuracion.isMuestraNumeroBoleto()) {
-				descripcion = descripcion + " numero de boleto: "
-						+ detalle.getNumeroBoleto();
-			}
-			return StringUtils.normalizeSpace(descripcion);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -784,9 +790,8 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 			Exception {
 		DestinoDao destinoDao = new DestinoDaoImpl();
 		ProveedorDao proveedorDao = new ProveedorDaoImpl();
-
-		switch (detalleServicio.getTipoServicio().getCodigoEntero().intValue()) {
-		case 11:// BOLETO DE VIAJE
+		int idTipoServicio = detalleServicio.getTipoServicio().getCodigoEntero().intValue();
+		if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro("servicioBoletoAereo", "aplicacionDatosEjb")){
 			int nacionales = 0;
 			int internacionales = 0;
 			Locale localidad = Locale.getDefault();
@@ -831,37 +836,88 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 					}
 				}
 			}
-
-			break;
-		case 12:// FEE
-			break;
-		case 13:// IGV
-			break;
-		case 14:// PROGRAMA
-			break;
-		case 15:// PAQUETE
-			break;
-		case 16:// IMPUESTO AEREO
-			break;
-		case 17:// HOTEL
-			if (detalleServicio.getServicioProveedor().getProveedor()
-					.getCodigoEntero() != null
-					&& detalleServicio.getHotel().getCodigoEntero() != null) {
-				lista = proveedorDao.consultarServicioProveedor(detalleServicio
-						.getServicioProveedor().getProveedor()
-						.getCodigoEntero());
-				for (ServicioProveedor servicioProveedor : lista) {
-					if (servicioProveedor.getProveedorServicio()
-							.getCodigoEntero().intValue() == detalleServicio
-							.getHotel().getCodigoEntero().intValue()) {
-						return servicioProveedor.getPorcentajeComision();
-					}
+		}
+		else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro("servicioPaquete", "aplicacionDatosEjb")){
+			List<ServicioProveedor> lista = proveedorDao
+					.consultarServicioProveedor(detalleServicio
+							.getServicioProveedor().getProveedor()
+							.getCodigoEntero());
+			
+			for (ServicioProveedor servicioProveedor : lista) {
+				if ((servicioProveedor.getProveedorServicio().getCodigoEntero() != null && detalleServicio
+						.getOperadora().getCodigoEntero() != null)
+						&& servicioProveedor.getProveedorServicio()
+								.getCodigoEntero().intValue() == detalleServicio
+								.getOperadora().getCodigoEntero().intValue()) {
+					return servicioProveedor.getPorcenComInternacional();
 				}
 			}
-
-			break;
 		}
-
+		else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro("servicioPrograma", "aplicacionDatosEjb")){
+			List<ServicioProveedor> lista = proveedorDao
+					.consultarServicioProveedor(detalleServicio
+							.getServicioProveedor().getProveedor()
+							.getCodigoEntero());
+			
+			for (ServicioProveedor servicioProveedor : lista) {
+				if ((servicioProveedor.getProveedorServicio().getCodigoEntero() != null && detalleServicio
+						.getOperadora().getCodigoEntero() != null)
+						&& servicioProveedor.getProveedorServicio()
+								.getCodigoEntero().intValue() == detalleServicio
+								.getOperadora().getCodigoEntero().intValue()) {
+					return servicioProveedor.getPorcenComInternacional();
+				}
+			}
+		}
+		else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro("servicioHotel", "aplicacionDatosEjb")){
+			List<ServicioProveedor> lista = proveedorDao
+					.consultarServicioProveedor(detalleServicio
+							.getServicioProveedor().getProveedor()
+							.getCodigoEntero());
+			
+			for (ServicioProveedor servicioProveedor : lista) {
+				if ((servicioProveedor.getProveedorServicio().getCodigoEntero() != null && detalleServicio
+						.getHotel().getCodigoEntero() != null)
+						&& servicioProveedor.getProveedorServicio()
+								.getCodigoEntero().intValue() == detalleServicio
+								.getHotel().getCodigoEntero().intValue()) {
+					return servicioProveedor.getPorcenComInternacional();
+				}
+			}
+		}
+		else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro("servicioTraslado", "aplicacionDatosEjb")){
+			List<ServicioProveedor> lista = proveedorDao
+					.consultarServicioProveedor(detalleServicio
+							.getServicioProveedor().getProveedor()
+							.getCodigoEntero());
+			
+			for (ServicioProveedor servicioProveedor : lista) {
+				if ((servicioProveedor.getProveedorServicio().getCodigoEntero() != null && detalleServicio
+						.getOperadora().getCodigoEntero() != null)
+						&& servicioProveedor.getProveedorServicio()
+								.getCodigoEntero().intValue() == detalleServicio
+								.getOperadora().getCodigoEntero().intValue()) {
+					return servicioProveedor.getPorcenComInternacional();
+				}
+			}
+		}
+		else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro("servicioBoletoTerrestre", "aplicacionDatosEjb")){
+			List<ServicioProveedor> lista = proveedorDao
+					.consultarServicioProveedor(detalleServicio
+							.getServicioProveedor().getProveedor()
+							.getCodigoEntero());
+			
+			for (ServicioProveedor servicioProveedor : lista) {
+				if ((servicioProveedor.getProveedorServicio().getCodigoEntero() != null && detalleServicio
+						.getEmpresaTransporte().getCodigoEntero() != null)
+						&& servicioProveedor.getProveedorServicio()
+								.getCodigoEntero().intValue() == detalleServicio
+								.getEmpresaTransporte().getCodigoEntero().intValue()) {
+					return servicioProveedor.getPorcenComInternacional();
+				}
+			}
+		}
+		
 		return BigDecimal.ZERO;
 	}
 

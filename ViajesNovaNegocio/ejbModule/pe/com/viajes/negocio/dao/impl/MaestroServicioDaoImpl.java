@@ -719,6 +719,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				bean.setCodigoEntero(UtilJdbc.obtenerNumero(rs,
 						"idserviciodepende"));
 				bean.setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
+				bean.setValorBoolean(UtilJdbc.obtenerBoolean(rs, "visible"));
 
 				resultado.add(bean);
 			}
