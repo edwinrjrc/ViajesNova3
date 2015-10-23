@@ -287,7 +287,6 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 		Integer resultado = null;
 
 		try {
-			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			int i = 1;
 			cs.registerOutParameter(i++, Types.INTEGER);

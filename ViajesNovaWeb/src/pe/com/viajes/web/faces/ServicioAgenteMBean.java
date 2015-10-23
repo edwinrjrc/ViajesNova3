@@ -545,7 +545,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 			for (BaseVO baseVO : listaDependientes) {
 				if (!estaEnListaServicios(baseVO)
-						&& 13 != baseVO.getCodigoEntero().intValue()) {
+						&& UtilWeb.obtenerEnteroPropertieMaestro("servicioIGV", "aplicacionDatos") != baseVO.getCodigoEntero().intValue()) {
 					throw new ErrorRegistroDataException("No se agrego "
 							+ baseVO.getNombre());
 				}

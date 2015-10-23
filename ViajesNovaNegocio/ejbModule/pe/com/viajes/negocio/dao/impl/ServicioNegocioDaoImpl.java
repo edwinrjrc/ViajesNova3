@@ -323,17 +323,17 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 			else{
 				cs.setNull(10, Types.VARCHAR);
 			}
-			cs.setInt(9, pasajero.getRelacion().getCodigoEntero().intValue());
+			cs.setInt(11, pasajero.getRelacion().getCodigoEntero().intValue());
 			if (pasajero.getAerolinea().getCodigoEntero() != null && pasajero.getAerolinea().getCodigoEntero().intValue() != 0){
-				cs.setInt(11, pasajero.getAerolinea().getCodigoEntero().intValue());
+				cs.setInt(12, pasajero.getAerolinea().getCodigoEntero().intValue());
 			}
 			else {
-				cs.setNull(11, Types.INTEGER);
+				cs.setNull(12, Types.INTEGER);
 			}
-			cs.setInt(12, pasajero.getIdServicioDetalle().intValue());
-			cs.setInt(13, pasajero.getIdServicio().intValue());
-			cs.setString(14, pasajero.getUsuarioCreacion());
-			cs.setString(15, pasajero.getIpCreacion());
+			cs.setInt(13, pasajero.getIdServicioDetalle().intValue());
+			cs.setInt(14, pasajero.getIdServicio().intValue());
+			cs.setString(15, pasajero.getUsuarioCreacion());
+			cs.setString(16, pasajero.getIpCreacion());
 			cs.execute();
 			
 			return cs.getInt(1);

@@ -221,6 +221,10 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 					detalleServicio.setFechaIda(detalle.getFechaIda());
 				}
 			}
+			
+			if (detalleServicio.getFechaIda() == null){
+				detalleServicio.setFechaIda(new Date());
+			}
 
 			// obtener nombre empresa proveedor
 			if (detalleServicio.getServicioProveedor().getProveedor()
