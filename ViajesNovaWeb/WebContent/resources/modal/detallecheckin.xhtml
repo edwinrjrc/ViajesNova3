@@ -51,12 +51,6 @@
 							value="#{inicioMBean.detalleServicioAgencia.ruta.tramo.fechaLlegada}">
 							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-05" />
 						</h:outputText>
-						<h:outputText value="Codigo Reserva" />
-						<h:outputText
-							value="#{inicioMBean.detalleServicioAgencia.codigoReserva}" />
-						<h:outputText value="Numero boleto" />
-						<h:outputText
-							value="#{inicioMBean.detalleServicioAgencia.numeroBoleto}" />
 						<h:outputText value="Proveedor" />
 						<h:outputText
 							value="#{inicioMBean.detalleServicioAgencia.servicioProveedor.nombreProveedor}" />
@@ -113,18 +107,6 @@
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
-								<h:outputText value="Telefono 1" />
-							</f:facet>
-							<h:outputText value="#{pax.telefono1}" />
-						</rich:column>
-						<rich:column>
-							<f:facet name="header">
-								<h:outputText value="Telefono 2" />
-							</f:facet>
-							<h:outputText value="#{pax.telefono2}" />
-						</rich:column>
-						<rich:column>
-							<f:facet name="header">
 								<h:outputText value="Relación" />
 							</f:facet>
 							<h:outputText value="#{pax.relacion.nombre}" />
@@ -140,6 +122,18 @@
 								<h:outputText value="Aerolinea" />
 							</f:facet>
 							<h:outputText value="#{pax.aerolinea.nombre}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Código Reserva" />
+							</f:facet>
+							<h:outputText value="#{pax.codigoReserva}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Número Boleto" />
+							</f:facet>
+							<h:outputText value="#{pax.numeroBoleto}" />
 						</rich:column>
 					</rich:dataTable>
 				</rich:tab>

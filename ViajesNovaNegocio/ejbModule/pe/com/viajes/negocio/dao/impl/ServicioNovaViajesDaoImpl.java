@@ -286,7 +286,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		Integer resultado = 0;
 		CallableStatement cs = null;
 
-		String sql = "{ ? = call negocio.fn_ingresarserviciodetalle(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarserviciodetalle(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
 		try {
 			cs = conn.prepareCall(sql);
@@ -392,26 +392,39 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.setBoolean(i++, detalleServicio.getServicioProveedor()
 					.isEditoComision());
 			cs.setBoolean(i++, detalleServicio.isTarifaNegociada());
-			if (detalleServicio.getServicioProveedor().getPorcentajeComision() != null
-					&& !detalleServicio.getServicioProveedor()
-							.getPorcentajeComision().equals(BigDecimal.ZERO)) {
-				cs.setBigDecimal(i++, detalleServicio.getServicioProveedor()
-						.getPorcentajeComision());
-			} else {
+			
+			if (detalleServicio.getServicioProveedor().getComision().getValorComision() != null && !detalleServicio.getServicioProveedor().getComision().getValorComision().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, detalleServicio.getServicioProveedor().getComision().getValorComision());
+			}
+			else{
 				cs.setNull(i++, Types.DECIMAL);
 			}
-			cs.setBigDecimal(i++, detalleServicio.getMontoComision());
-			if (StringUtils.isNotBlank(detalleServicio.getCodigoReserva())) {
-				cs.setString(i++, detalleServicio.getCodigoReserva());
-			} else {
-				cs.setNull(i++, Types.VARCHAR);
+			if (detalleServicio.getServicioProveedor().getComision().getTipoComision().getCodigoEntero()!= null && detalleServicio.getServicioProveedor().getComision().getTipoComision().getCodigoEntero()!=0){
+				cs.setInt(i++, detalleServicio.getServicioProveedor().getComision().getTipoComision().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			cs.setBoolean(i++, detalleServicio.getServicioProveedor().getComision().isAplicaIGV());
+			if (detalleServicio.getServicioProveedor().getComision().getValorComisionSinIGV()!=null && !detalleServicio.getServicioProveedor().getComision().getValorComisionSinIGV().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, detalleServicio.getServicioProveedor().getComision().getValorComisionSinIGV());
+			}
+			else{
+				cs.setNull(i++, Types.DECIMAL);
+			}
+			if (detalleServicio.getServicioProveedor().getComision().getValorIGVComision() !=null && !detalleServicio.getServicioProveedor().getComision().getValorIGVComision().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, detalleServicio.getServicioProveedor().getComision().getValorIGVComision());
+			}
+			else{
+				cs.setNull(i++, Types.DECIMAL);
+			}
+			if (detalleServicio.getMontoComision() !=null && !detalleServicio.getMontoComision().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, detalleServicio.getMontoComision());
+			}
+			else{
+				cs.setNull(i++, Types.DECIMAL);
 			}
 			cs.setBigDecimal(i++, detalleServicio.getTotalServicio());
-			if (StringUtils.isNotBlank(detalleServicio.getNumeroBoleto())) {
-				cs.setString(i++, detalleServicio.getNumeroBoleto());
-			} else {
-				cs.setNull(i++, Types.VARCHAR);
-			}
 			if (detalleServicio.getServicioPadre().getCodigoEntero() != null
 					&& detalleServicio.getServicioPadre().getCodigoEntero()
 							.intValue() != 0) {
@@ -787,10 +800,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						"cantidad"));
 				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(
 						rs, "preciobase"));
-				detalleServicio.getServicioProveedor().setPorcentajeComision(
-						UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
 				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs,
-						"montocomision"));
+						"montototalcomision"));
 				detalleServicio
 						.getServicioProveedor()
 						.getProveedor()
@@ -808,10 +819,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						.getProveedor()
 						.setApellidoMaterno(
 								UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
-				detalleServicio.setCodigoReserva(UtilJdbc.obtenerCadena(rs,
-						"codigoreserva"));
-				detalleServicio.setNumeroBoleto(UtilJdbc.obtenerCadena(rs,
-						"numeroboleto"));
 
 				resultado.add(detalleServicio);
 			}
@@ -892,10 +899,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						"cantidad"));
 				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(
 						rs, "preciobase"));
-				detalleServicio.getServicioProveedor().setPorcentajeComision(
-						UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
 				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs,
-						"montocomision"));
+						"montototalcomision"));
 				detalleServicio
 						.getServicioProveedor()
 						.getProveedor()
@@ -916,10 +921,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.getTipoServicio().setVisible(
 						UtilJdbc.obtenerBoolean(rs, "visible"));
 				detalleServicio.getServicioPadre().setCodigoEntero(idServicio);
-				detalleServicio.setCodigoReserva(UtilJdbc.obtenerCadena(rs,
-						"codigoreserva"));
-				detalleServicio.setNumeroBoleto(UtilJdbc.obtenerCadena(rs,
-						"numeroboleto"));
 
 				resultado.add(detalleServicio);
 			}
@@ -992,10 +993,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						"cantidad"));
 				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(
 						rs, "preciobase"));
-				detalleServicio.getServicioProveedor().setPorcentajeComision(
-						UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
 				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs,
-						"montocomision"));
+						"montototalcomision"));
 				detalleServicio
 						.getServicioProveedor()
 						.getProveedor()
@@ -1016,10 +1015,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.getTipoServicio().setVisible(
 						UtilJdbc.obtenerBoolean(rs, "visible"));
 				detalleServicio.getServicioPadre().setCodigoEntero(idServicio);
-				detalleServicio.setCodigoReserva(UtilJdbc.obtenerCadena(rs,
-						"codigoreserva"));
-				detalleServicio.setNumeroBoleto(UtilJdbc.obtenerCadena(rs,
-						"numeroboleto"));
 
 				resultado.add(detalleServicio);
 			}
@@ -1094,10 +1089,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						"cantidad"));
 				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(
 						rs, "preciobase"));
-				detalleServicio.getServicioProveedor().setPorcentajeComision(
-						UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
 				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs,
-						"montocomision"));
+						"montototalcomision"));
 				detalleServicio
 						.getServicioProveedor()
 						.getProveedor()
@@ -1118,10 +1111,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.getTipoServicio().setVisible(
 						UtilJdbc.obtenerBoolean(rs, "visible"));
 				detalleServicio.getServicioPadre().setCodigoEntero(idServicio);
-				detalleServicio.setCodigoReserva(UtilJdbc.obtenerCadena(rs,
-						"codigoreserva"));
-				detalleServicio.setNumeroBoleto(UtilJdbc.obtenerCadena(rs,
-						"numeroboleto"));
 
 				resultado.add(detalleServicio);
 			}
@@ -1196,10 +1185,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						"cantidad"));
 				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(
 						rs, "preciobase"));
-				detalleServicio.getServicioProveedor().setPorcentajeComision(
-						UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
 				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs,
-						"montocomision"));
+						"montototalcomision"));
 				detalleServicio
 						.getServicioProveedor()
 						.getProveedor()
@@ -1217,10 +1204,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						.getProveedor()
 						.setApellidoMaterno(
 								UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
-				detalleServicio.setCodigoReserva(UtilJdbc.obtenerCadena(rs,
-						"codigoreserva"));
-				detalleServicio.setNumeroBoleto(UtilJdbc.obtenerCadena(rs,
-						"numeroboleto"));
 
 				resultado.add(detalleServicio);
 			}
@@ -2440,10 +2423,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						"cantidad"));
 				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(
 						rs, "preciobase"));
-				detalleServicio.getServicioProveedor().setPorcentajeComision(
-						UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
 				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs,
-						"montocomision"));
+						"montototalcomision"));
 				detalleServicio
 						.getServicioProveedor()
 						.getProveedor()
@@ -2556,10 +2537,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						"cantidad"));
 				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(
 						rs, "preciobase"));
-				detalleServicio.getServicioProveedor().setPorcentajeComision(
-						UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
 				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs,
-						"montocomision"));
+						"montototalcomision"));
 				detalleServicio
 						.getServicioProveedor()
 						.getProveedor()
@@ -2670,10 +2649,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						"cantidad"));
 				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(
 						rs, "preciobase"));
-				detalleServicio.getServicioProveedor().setPorcentajeComision(
-						UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
 				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs,
-						"montocomision"));
+						"montototalcomision"));
 				detalleServicio
 						.getServicioProveedor()
 						.getProveedor()
@@ -2794,10 +2771,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						"cantidad"));
 				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(
 						rs, "preciobase"));
-				detalleServicio.getServicioProveedor().setPorcentajeComision(
-						UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
 				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs,
-						"montocomision"));
+						"montototalcomision"));
 				detalleServicio
 						.getServicioProveedor()
 						.getProveedor()
@@ -3405,10 +3380,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						"cantidad"));
 				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(
 						rs, "preciobase"));
-				detalleServicio.getServicioProveedor().setPorcentajeComision(
-						UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
 				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs,
-						"montocomision"));
+						"montototalcomision"));
 				detalleServicio
 						.getServicioProveedor()
 						.getProveedor()
@@ -3427,10 +3400,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						.setApellidoMaterno(
 								UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
 				detalleServicio.getServicioProveedor().setNombreProveedor(detalleServicio.getServicioProveedor().getProveedor().getNombreCompleto());
-				detalleServicio.setCodigoReserva(UtilJdbc.obtenerCadena(rs,
-						"codigoreserva"));
-				detalleServicio.setNumeroBoleto(UtilJdbc.obtenerCadena(rs,
-						"numeroboleto"));
 
 			}
 		} catch (SQLException e) {
@@ -3542,16 +3511,14 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	}
 
 	@Override
-	public List<Tramo> consultarTramos(Integer idRuta) throws SQLException {
+	public List<Tramo> consultarTramos(Integer idRuta, Connection conn) throws SQLException {
 		List<Tramo> tramos = null;
-		Connection conn = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
 		String sql = UtilEjb.generaSentenciaFuncion(
 				"negocio.fn_consultartramosruta", 1);
 
 		try {
-			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			int i = 1;
 			cs.registerOutParameter(i++, Types.OTHER);
@@ -3588,9 +3555,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				}
 				if (cs != null) {
 					cs.close();
-				}
-				if (conn != null) {
-					conn.close();
 				}
 
 			} catch (SQLException e) {

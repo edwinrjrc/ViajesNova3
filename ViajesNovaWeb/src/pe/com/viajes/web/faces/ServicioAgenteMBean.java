@@ -2146,7 +2146,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 				nombres = nombres.replaceAll(" ", "#");
 				resumenPasajeros = resumenPasajeros + nombres.split("#")[0];
 				resumenPasajeros = resumenPasajeros + " " + StringUtils.trimToEmpty(pasajero.getApellidoPaterno());
-				resumenPasajeros = resumenPasajeros + " " + StringUtils.trimToEmpty(pasajero.getApellidoMaterno()).charAt(0)+".";
+				if (StringUtils.isNotBlank(pasajero.getApellidoMaterno())){
+					resumenPasajeros = resumenPasajeros + " " + StringUtils.trimToEmpty(pasajero.getApellidoMaterno()).charAt(0)+".";
+				}
 				
 				resumenPasajeros = resumenPasajeros + "/";
 			}
@@ -2172,12 +2174,12 @@ public class ServicioAgenteMBean extends BaseMBean {
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
-		if (StringUtils.isBlank(this.getPasajero().getApellidoMaterno())){
+		/*if (StringUtils.isBlank(this.getPasajero().getApellidoMaterno())){
 			this.agregarMensaje(idFormulario + ":idTxtApMaterno",
 					"Ingrese el apellido materno del pasajero", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
-		}
+		}*/
 		/*if (StringUtils.isBlank(this.getPasajero().getTelefono1())){
 			this.agregarMensaje(idFormulario + ":idTxtTelefono1",
 					"Ingrese el telefono 1", "",

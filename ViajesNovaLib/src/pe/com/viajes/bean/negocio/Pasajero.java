@@ -3,6 +3,8 @@
  */
 package pe.com.viajes.bean.negocio;
 
+import java.util.Date;
+
 import pe.com.viajes.bean.base.BaseVO;
 import pe.com.viajes.bean.base.Persona;
 
@@ -22,6 +24,11 @@ public class Pasajero extends Persona {
 	private BaseVO relacion;
 	private Integer idServicioDetalle;
 	private Integer idServicio;
+	
+	private Date fechaVctoPasaporte;
+	private Date fechaNacimiento;
+	private String codigoReserva;
+	private String numeroBoleto;
 	
 
 	public Pasajero() {
@@ -157,6 +164,62 @@ public class Pasajero extends Persona {
 	 */
 	public void setAerolinea(BaseVO aerolinea) {
 		this.aerolinea = aerolinea;
+	}
+
+	/**
+	 * @return the fechaVctoPasaporte
+	 */
+	public Date getFechaVctoPasaporte() {
+		return fechaVctoPasaporte;
+	}
+
+	/**
+	 * @param fechaVctoPasaporte the fechaVctoPasaporte to set
+	 */
+	public void setFechaVctoPasaporte(Date fechaVctoPasaporte) {
+		this.fechaVctoPasaporte = fechaVctoPasaporte;
+	}
+
+	/**
+	 * @return the fechaNacimiento
+	 */
+	public Date getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	/**
+	 * @param fechaNacimiento the fechaNacimiento to set
+	 */
+	public void setFechaNacimiento(Date fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	/**
+	 * @return the codigoReserva
+	 */
+	public String getCodigoReserva() {
+		return codigoReserva;
+	}
+
+	/**
+	 * @param codigoReserva the codigoReserva to set
+	 */
+	public void setCodigoReserva(String codigoReserva) {
+		this.codigoReserva = codigoReserva;
+	}
+
+	/**
+	 * @return the numeroBoleto
+	 */
+	public String getNumeroBoleto() {
+		return numeroBoleto;
+	}
+
+	/**
+	 * @param numeroBoleto the numeroBoleto to set
+	 */
+	public void setNumeroBoleto(String numeroBoleto) {
+		this.numeroBoleto = numeroBoleto;
 	}
 
 }

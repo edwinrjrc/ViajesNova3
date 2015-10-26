@@ -21,15 +21,12 @@ public class ServicioProveedor extends BaseNegocio {
 	private String nombreProveedor;
 	private Proveedor proveedor;
 	private Proveedor proveedorServicio;
+	private ComisionServicio comision;
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -7190639530649610005L;
 
-	/**
-	 * 
-	 */
+	
 	public ServicioProveedor() {
 		// TODO Auto-generated constructor stub
 	}
@@ -146,6 +143,23 @@ public class ServicioProveedor extends BaseNegocio {
 	 */
 	public void setEditoComision(boolean editoComision) {
 		this.editoComision = editoComision;
+	}
+
+	/**
+	 * @return the comision
+	 */
+	public ComisionServicio getComision() {
+		if (comision == null){
+			comision = new ComisionServicio();
+		}
+		return comision;
+	}
+
+	/**
+	 * @param comision the comision to set
+	 */
+	public void setComision(ComisionServicio comision) {
+		this.comision = comision;
 	}
 
 }

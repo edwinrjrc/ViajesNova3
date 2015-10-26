@@ -159,5 +159,5 @@ public interface ServicioNovaViajesDao {
 
 	Integer obtenerSiguienteRuta(Connection conn) throws SQLException;
 
-	List<Tramo> consultarTramos(Integer codigoEntero) throws SQLException;
+	List<Tramo> consultarTramos(Integer codigoEntero, Connection conn) throws SQLException;
 }

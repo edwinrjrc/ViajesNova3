@@ -361,23 +361,79 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 				totalVenta = totalVenta.add(total);
 			}
 
-			if (detalleServicio.getServicioProveedor().getPorcentajeComision() != null) {
-				comision = detalleServicio.getServicioProveedor()
-						.getPorcentajeComision().multiply(totalVenta);
-				comision = comision.divide(BigDecimal.valueOf(100.0));
-
-				ParametroDao parametroDao = new ParametroDaoImpl();
-				Parametro paramIGV = parametroDao
-						.consultarParametro(UtilEjb
-								.obtenerEnteroPropertieMaestro(
-										"codigoParametroImptoIGV",
-										"aplicacionDatosEjb"));
-				BigDecimal valorParametroIGV = BigDecimal.ZERO;
-				valorParametroIGV = UtilEjb.convertirCadenaDecimal(paramIGV
-						.getValor());
-				valorParametroIGV = valorParametroIGV.add(BigDecimal.ONE);
-
-				comision = comision.multiply(valorParametroIGV);
+			if (detalleServicio.getServicioProveedor().getComision().getValorComision() != null){
+				int tipoComision = detalleServicio.getServicioProveedor().getComision().getTipoComision().getCodigoEntero().intValue();
+				boolean servicioConIGV = false;
+				boolean servicioSinIGV = false;
+				String serviciosCadena = UtilEjb.obtenerCadenaPropertieMaestro("serviciosConIGV", "aplicacionDatosEjb");
+				if (StringUtils.isBlank(serviciosCadena)){
+					throw new ErrorRegistroDataException("No se configuro los servicios con IGV en archivo properties aplicacionDatosEjb.properties");
+				}
+				String[] servicios = serviciosCadena.split(",");
+				
+				for(String idServicio : servicios){
+					if (UtilEjb.convertirCadenaEntero(idServicio) == detalleServicio.getTipoServicio().getCodigoEntero().intValue() ){
+						servicioConIGV = true;
+						break;
+					}
+				}
+				
+				serviciosCadena = UtilEjb.obtenerCadenaPropertieMaestro("serviciosSinIGV", "aplicacionDatosEjb");
+				if (StringUtils.isBlank(serviciosCadena)){
+					throw new ErrorRegistroDataException("No se configuro los servicios sin IGV en archivo properties aplicacionDatosEjb.properties");
+				}
+				servicios = serviciosCadena.split(",");
+				
+				for(String idServicio : servicios){
+					if (UtilEjb.convertirCadenaEntero(idServicio) == detalleServicio.getTipoServicio().getCodigoEntero().intValue() ){
+						servicioSinIGV = true;
+						break;
+					}
+				}
+				
+				if (servicioConIGV){
+					if (tipoComision == UtilEjb.obtenerEnteroPropertieMaestro("comisionPorcentaje", "aplicacionDatosEjb")){
+						
+						comision = detalleServicio.getServicioProveedor().getComision().getValorComision().multiply(totalVenta);
+						detalleServicio.getServicioProveedor().getComision().setValorComisionSinIGV(desglozarMontoSinIGV(comision));
+						detalleServicio.getServicioProveedor().getComision().setValorIGVComision(comision.subtract(detalleServicio.getServicioProveedor().getComision().getValorComisionSinIGV()));
+						comision = comision.divide(BigDecimal.valueOf(100.0));
+						
+						detalleServicio.getServicioProveedor().getComision().setMontoTotal(comision);
+					}
+					else if (tipoComision == UtilEjb.obtenerEnteroPropertieMaestro("comisionMontoFijo", "aplicacionDatosEjb")){
+						comision = comision.add(detalleServicio.getServicioProveedor().getComision().getValorComision());
+						
+						detalleServicio.getServicioProveedor().getComision().setValorComisionSinIGV(desglozarMontoSinIGV(comision));
+						detalleServicio.getServicioProveedor().getComision().setValorIGVComision(comision.subtract(detalleServicio.getServicioProveedor().getComision().getValorComisionSinIGV()));
+						
+						detalleServicio.getServicioProveedor().getComision().setMontoTotal(comision);
+					}
+				}
+				else if (servicioSinIGV){
+					if (tipoComision == UtilEjb.obtenerEnteroPropertieMaestro("comisionPorcentaje", "aplicacionDatosEjb")){
+						
+						comision = detalleServicio.getServicioProveedor().getComision().getValorComision().multiply(totalVenta);
+						comision = comision.divide(BigDecimal.valueOf(100.0));
+						detalleServicio.getServicioProveedor().getComision().setValorComisionSinIGV(comision);
+						detalleServicio.getServicioProveedor().getComision().setValorIGVComision(calcularIGVMonto(comision));
+						
+						if (detalleServicio.getServicioProveedor().getComision().isAplicaIGV()){
+							comision = aplicarIGVMonto(comision);
+						}
+						detalleServicio.getServicioProveedor().getComision().setMontoTotal(comision);
+					}
+					else if (tipoComision == UtilEjb.obtenerEnteroPropertieMaestro("comisionMontoFijo", "aplicacionDatosEjb")){
+						comision = comision.add(detalleServicio.getServicioProveedor().getComision().getValorComision());
+						
+						detalleServicio.getServicioProveedor().getComision().setValorComisionSinIGV(comision);
+						detalleServicio.getServicioProveedor().getComision().setValorIGVComision(calcularIGVMonto(comision));
+						if (detalleServicio.getServicioProveedor().getComision().isAplicaIGV()){
+							comision = aplicarIGVMonto(comision);
+						}
+						detalleServicio.getServicioProveedor().getComision().setMontoTotal(comision);
+					}
+				}
 			}
 
 			detalleServicio.setMontoComision(comision);
@@ -417,15 +473,43 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 			}
 		}
 	}
+	
+	private BigDecimal obtenerPorcentajeIGV() throws SQLException{
+		ParametroDao parametroDao = new ParametroDaoImpl();
+		Parametro paramIGV = parametroDao.consultarParametro(UtilEjb
+				.obtenerEnteroPropertieMaestro("codigoParametroImptoIGV",
+						"aplicacionDatosEjb"));
+		
+		return UtilEjb.convertirCadenaDecimal(paramIGV.getValor());
+	}
+	
+	private BigDecimal calcularIGVMonto(BigDecimal montoValor) throws SQLException{
+		return montoValor.multiply(obtenerPorcentajeIGV());
+	}
+
+	private BigDecimal aplicarIGVMonto(BigDecimal monto) throws SQLException {
+		BigDecimal valorParametroIGV = obtenerPorcentajeIGV();
+		valorParametroIGV = valorParametroIGV.add(BigDecimal.ONE);
+		monto = monto.multiply(valorParametroIGV);
+
+		return monto;
+	}
+	
+	private BigDecimal desglozarMontoSinIGV(BigDecimal monto) throws SQLException{
+		BigDecimal valorDesglozar = obtenerPorcentajeIGV().add(BigDecimal.ONE);
+		monto = monto.divide(valorDesglozar, RoundingMode.HALF_UP);
+		
+		return monto;
+	}
 
 	private String generarDescripcionServicio(DetalleServicioAgencia detalle) {
 		try {
 			String descripcion = "";
-			if (StringUtils.isBlank(detalle.getDescripcionServicio())){
+			if (StringUtils.isBlank(detalle.getDescripcionServicio())) {
 				ConfiguracionTipoServicio configuracion = this.soporteSessionLocal
-						.consultarConfiguracionServicio(detalle.getTipoServicio()
-								.getCodigoEntero());
-				
+						.consultarConfiguracionServicio(detalle
+								.getTipoServicio().getCodigoEntero());
+
 				descripcion = detalle.getTipoServicio().getNombre() + " ";
 				if (configuracion.isMuestraRuta()) {
 					for (Tramo tramo : detalle.getRuta().getTramos()) {
@@ -439,12 +523,14 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 							+ detalle.getAerolinea().getNombre() + " ";
 				}
 				if (configuracion.isMuestraFechaServicio()) {
-					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							"dd/MM/yyyy HH:mm");
 					descripcion = descripcion + " desde "
 							+ sdf.format(detalle.getFechaIda());
 				}
 				if (configuracion.isMuestraFechaRegreso()) {
-					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							"dd/MM/yyyy HH:mm");
 					descripcion = descripcion + " hasta "
 							+ sdf.format(detalle.getFechaRegreso());
 				}
@@ -461,10 +547,10 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 							+ detalle.getNumeroBoleto();
 				}
 				return StringUtils.normalizeSpace(descripcion);
-			}
-			else{
-				descripcion = detalle.getTipoServicio().getNombre() + " " + descripcion;
-				
+			} else {
+				descripcion = detalle.getTipoServicio().getNombre() + " "
+						+ descripcion;
+
 				return StringUtils.normalizeSpace(descripcion);
 			}
 
@@ -644,23 +730,79 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 				totalVenta = totalVenta.add(total);
 			}
 
-			if (detalleServicio.getServicioProveedor().getPorcentajeComision() != null) {
-				comision = detalleServicio.getServicioProveedor()
-						.getPorcentajeComision().multiply(totalVenta);
-				comision = comision.divide(BigDecimal.valueOf(100.0));
-
-				ParametroDao parametroDao = new ParametroDaoImpl();
-				Parametro paramIGV = parametroDao
-						.consultarParametro(UtilEjb
-								.obtenerEnteroPropertieMaestro(
-										"codigoParametroImptoIGV",
-										"aplicacionDatosEjb"));
-				BigDecimal valorParametroIGV = BigDecimal.ZERO;
-				valorParametroIGV = UtilEjb.convertirCadenaDecimal(paramIGV
-						.getValor());
-				valorParametroIGV = valorParametroIGV.add(BigDecimal.ONE);
-
-				comision = comision.multiply(valorParametroIGV);
+			if (detalleServicio.getServicioProveedor().getComision().getValorComision() != null){
+				int tipoComision = detalleServicio.getServicioProveedor().getComision().getTipoComision().getCodigoEntero().intValue();
+				boolean servicioConIGV = false;
+				boolean servicioSinIGV = false;
+				String serviciosCadena = UtilEjb.obtenerCadenaPropertieMaestro("serviciosConIGV", "aplicacionDatosEjb");
+				if (StringUtils.isBlank(serviciosCadena)){
+					throw new ErrorRegistroDataException("No se configuro los servicios con IGV en archivo properties aplicacionDatosEjb.properties");
+				}
+				String[] servicios = serviciosCadena.split(",");
+				
+				for(String idServicio : servicios){
+					if (UtilEjb.convertirCadenaEntero(idServicio) == detalleServicio.getTipoServicio().getCodigoEntero().intValue() ){
+						servicioConIGV = true;
+						break;
+					}
+				}
+				
+				serviciosCadena = UtilEjb.obtenerCadenaPropertieMaestro("serviciosSinIGV", "aplicacionDatosEjb");
+				if (StringUtils.isBlank(serviciosCadena)){
+					throw new ErrorRegistroDataException("No se configuro los servicios sin IGV en archivo properties aplicacionDatosEjb.properties");
+				}
+				servicios = serviciosCadena.split(",");
+				
+				for(String idServicio : servicios){
+					if (UtilEjb.convertirCadenaEntero(idServicio) == detalleServicio.getTipoServicio().getCodigoEntero().intValue() ){
+						servicioSinIGV = true;
+						break;
+					}
+				}
+				
+				if (servicioConIGV){
+					if (tipoComision == UtilEjb.obtenerEnteroPropertieMaestro("comisionPorcentaje", "aplicacionDatosEjb")){
+						
+						comision = detalleServicio.getServicioProveedor().getComision().getValorComision().multiply(totalVenta);
+						detalleServicio.getServicioProveedor().getComision().setValorComisionSinIGV(desglozarMontoSinIGV(comision));
+						detalleServicio.getServicioProveedor().getComision().setValorIGVComision(comision.subtract(detalleServicio.getServicioProveedor().getComision().getValorComisionSinIGV()));
+						comision = comision.divide(BigDecimal.valueOf(100.0));
+						
+						detalleServicio.getServicioProveedor().getComision().setMontoTotal(comision);
+					}
+					else if (tipoComision == UtilEjb.obtenerEnteroPropertieMaestro("comisionMontoFijo", "aplicacionDatosEjb")){
+						comision = comision.add(detalleServicio.getServicioProveedor().getComision().getValorComision());
+						
+						detalleServicio.getServicioProveedor().getComision().setValorComisionSinIGV(desglozarMontoSinIGV(comision));
+						detalleServicio.getServicioProveedor().getComision().setValorIGVComision(comision.subtract(detalleServicio.getServicioProveedor().getComision().getValorComisionSinIGV()));
+						
+						detalleServicio.getServicioProveedor().getComision().setMontoTotal(comision);
+					}
+				}
+				else if (servicioSinIGV){
+					if (tipoComision == UtilEjb.obtenerEnteroPropertieMaestro("comisionPorcentaje", "aplicacionDatosEjb")){
+						
+						comision = detalleServicio.getServicioProveedor().getComision().getValorComision().multiply(totalVenta);
+						comision = comision.divide(BigDecimal.valueOf(100.0));
+						detalleServicio.getServicioProveedor().getComision().setValorComisionSinIGV(comision);
+						detalleServicio.getServicioProveedor().getComision().setValorIGVComision(calcularIGVMonto(comision));
+						
+						if (detalleServicio.getServicioProveedor().getComision().isAplicaIGV()){
+							comision = aplicarIGVMonto(comision);
+						}
+						detalleServicio.getServicioProveedor().getComision().setMontoTotal(comision);
+					}
+					else if (tipoComision == UtilEjb.obtenerEnteroPropertieMaestro("comisionMontoFijo", "aplicacionDatosEjb")){
+						comision = comision.add(detalleServicio.getServicioProveedor().getComision().getValorComision());
+						
+						detalleServicio.getServicioProveedor().getComision().setValorComisionSinIGV(comision);
+						detalleServicio.getServicioProveedor().getComision().setValorIGVComision(calcularIGVMonto(comision));
+						if (detalleServicio.getServicioProveedor().getComision().isAplicaIGV()){
+							comision = aplicarIGVMonto(comision);
+						}
+						detalleServicio.getServicioProveedor().getComision().setMontoTotal(comision);
+					}
+				}
 			}
 			detalleServicioAgencia.setMontoComision(comision);
 
@@ -790,8 +932,10 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 			Exception {
 		DestinoDao destinoDao = new DestinoDaoImpl();
 		ProveedorDao proveedorDao = new ProveedorDaoImpl();
-		int idTipoServicio = detalleServicio.getTipoServicio().getCodigoEntero().intValue();
-		if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro("servicioBoletoAereo", "aplicacionDatosEjb")){
+		int idTipoServicio = detalleServicio.getTipoServicio()
+				.getCodigoEntero().intValue();
+		if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro(
+				"servicioBoletoAereo", "aplicacionDatosEjb")) {
 			int nacionales = 0;
 			int internacionales = 0;
 			Locale localidad = Locale.getDefault();
@@ -836,13 +980,13 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 					}
 				}
 			}
-		}
-		else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro("servicioPaquete", "aplicacionDatosEjb")){
+		} else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro(
+				"servicioPaquete", "aplicacionDatosEjb")) {
 			List<ServicioProveedor> lista = proveedorDao
 					.consultarServicioProveedor(detalleServicio
 							.getServicioProveedor().getProveedor()
 							.getCodigoEntero());
-			
+
 			for (ServicioProveedor servicioProveedor : lista) {
 				if ((servicioProveedor.getProveedorServicio().getCodigoEntero() != null && detalleServicio
 						.getOperadora().getCodigoEntero() != null)
@@ -852,13 +996,13 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 					return servicioProveedor.getPorcenComInternacional();
 				}
 			}
-		}
-		else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro("servicioPrograma", "aplicacionDatosEjb")){
+		} else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro(
+				"servicioPrograma", "aplicacionDatosEjb")) {
 			List<ServicioProveedor> lista = proveedorDao
 					.consultarServicioProveedor(detalleServicio
 							.getServicioProveedor().getProveedor()
 							.getCodigoEntero());
-			
+
 			for (ServicioProveedor servicioProveedor : lista) {
 				if ((servicioProveedor.getProveedorServicio().getCodigoEntero() != null && detalleServicio
 						.getOperadora().getCodigoEntero() != null)
@@ -868,13 +1012,13 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 					return servicioProveedor.getPorcenComInternacional();
 				}
 			}
-		}
-		else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro("servicioHotel", "aplicacionDatosEjb")){
+		} else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro(
+				"servicioHotel", "aplicacionDatosEjb")) {
 			List<ServicioProveedor> lista = proveedorDao
 					.consultarServicioProveedor(detalleServicio
 							.getServicioProveedor().getProveedor()
 							.getCodigoEntero());
-			
+
 			for (ServicioProveedor servicioProveedor : lista) {
 				if ((servicioProveedor.getProveedorServicio().getCodigoEntero() != null && detalleServicio
 						.getHotel().getCodigoEntero() != null)
@@ -884,13 +1028,13 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 					return servicioProveedor.getPorcenComInternacional();
 				}
 			}
-		}
-		else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro("servicioTraslado", "aplicacionDatosEjb")){
+		} else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro(
+				"servicioTraslado", "aplicacionDatosEjb")) {
 			List<ServicioProveedor> lista = proveedorDao
 					.consultarServicioProveedor(detalleServicio
 							.getServicioProveedor().getProveedor()
 							.getCodigoEntero());
-			
+
 			for (ServicioProveedor servicioProveedor : lista) {
 				if ((servicioProveedor.getProveedorServicio().getCodigoEntero() != null && detalleServicio
 						.getOperadora().getCodigoEntero() != null)
@@ -900,24 +1044,25 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 					return servicioProveedor.getPorcenComInternacional();
 				}
 			}
-		}
-		else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro("servicioBoletoTerrestre", "aplicacionDatosEjb")){
+		} else if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro(
+				"servicioBoletoTerrestre", "aplicacionDatosEjb")) {
 			List<ServicioProveedor> lista = proveedorDao
 					.consultarServicioProveedor(detalleServicio
 							.getServicioProveedor().getProveedor()
 							.getCodigoEntero());
-			
+
 			for (ServicioProveedor servicioProveedor : lista) {
 				if ((servicioProveedor.getProveedorServicio().getCodigoEntero() != null && detalleServicio
 						.getEmpresaTransporte().getCodigoEntero() != null)
 						&& servicioProveedor.getProveedorServicio()
 								.getCodigoEntero().intValue() == detalleServicio
-								.getEmpresaTransporte().getCodigoEntero().intValue()) {
+								.getEmpresaTransporte().getCodigoEntero()
+								.intValue()) {
 					return servicioProveedor.getPorcenComInternacional();
 				}
 			}
 		}
-		
+
 		return BigDecimal.ZERO;
 	}
 
@@ -970,7 +1115,8 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 		try {
 			Maestro hijoMaestro = new Maestro();
 			hijoMaestro.setCodigoEntero(contacto.getArea().getCodigoEntero());
-			int valorMaestro = UtilEjb.obtenerEnteroPropertieMaestro("maestroAreas", "aplicacionDatosEjb");
+			int valorMaestro = UtilEjb.obtenerEnteroPropertieMaestro(
+					"maestroAreas", "aplicacionDatosEjb");
 			hijoMaestro.setCodigoMaestro(valorMaestro);
 			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
 			contacto.getArea().setNombre(hijoMaestro.getNombre());
@@ -986,7 +1132,8 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 			throws SQLException, Exception {
 		MaestroDao maestroDao = new MaestroDaoImpl();
 		Maestro hijoMaestro = new Maestro();
-		int valorMaestro = UtilEjb.obtenerEnteroPropertieMaestro("maestroVias", "aplicacionDatosEjb");
+		int valorMaestro = UtilEjb.obtenerEnteroPropertieMaestro("maestroVias",
+				"aplicacionDatosEjb");
 		hijoMaestro.setCodigoMaestro(valorMaestro);
 		hijoMaestro.setCodigoEntero(direccion.getVia().getCodigoEntero());
 		hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
@@ -1144,19 +1291,22 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 
 		return valorCuota;
 	}
-	
+
 	@Override
-	public Pasajero agregarPasajero(Pasajero pasajero) throws ErrorRegistroDataException{
+	public Pasajero agregarPasajero(Pasajero pasajero)
+			throws ErrorRegistroDataException {
 		try {
 			MaestroDao maestroDao = new MaestroDaoImpl();
 			Maestro hijoMaestro = new Maestro();
-			int valorMaestro = UtilEjb.obtenerEnteroPropertieMaestro("maestroRelacion", "aplicacionDatosEjb");
+			int valorMaestro = UtilEjb.obtenerEnteroPropertieMaestro(
+					"maestroRelacion", "aplicacionDatosEjb");
 			hijoMaestro.setCodigoMaestro(valorMaestro);
-			hijoMaestro.setCodigoEntero(pasajero.getRelacion().getCodigoEntero());
+			hijoMaestro.setCodigoEntero(pasajero.getRelacion()
+					.getCodigoEntero());
 			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
-			
+
 			pasajero.getRelacion().setNombre(hijoMaestro.getNombre());
-			
+
 			return pasajero;
 		} catch (SQLException e) {
 			throw new ErrorRegistroDataException("No se agrego el pasajero");

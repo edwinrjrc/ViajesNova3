@@ -43,14 +43,6 @@ public class MaestroServicio extends BaseNegocio {
 	private BaseVO parametroAsociado;
 	private String valorParametro;
 
-	public final static Integer SERVICIO_BOLETO = 11;
-	public final static Integer SERVICIO_FEE = 12;
-	public final static Integer SERVICIO_IGV = 13;
-	public final static Integer SERVICIO_PROGRAMA = 14;
-	public final static Integer SERVICIO_PAQUETE = 15;
-	public final static Integer SERVICIO_IMPTOAEREO = 16;
-	public final static Integer SERVICIO_HOTEL = 17;
-
 	/**
 	 * 
 	 */

@@ -716,15 +716,13 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 			List<Pasajero> pasajeros = servicioNegocioDao.consultarPasajeros(idDetServicio, conn);
 			
 			detalle.setListaPasajeros(pasajeros);
-
-			switch (detalle.getTipoServicio().getCodigoEntero().intValue()) {
-			case 11:// BOLETO DE VIAJE
+			int idTipoServicio = detalle.getTipoServicio().getCodigoEntero().intValue();
+			if (idTipoServicio == UtilEjb.obtenerEnteroPropertieMaestro("servicioBoletoAereo", "aplicacionDatosEjb")){
 				detalle.getRuta().setTramos(
 						servicioNovaViajesDao.consultarTramos(detalle.getRuta()
-								.getCodigoEntero()));
+								.getCodigoEntero(), conn));
 				
 				detalle.setAerolinea(detalle.getRuta().getTramos().get(0).getAerolinea());
-				break;
 			}
 
 			return detalle;

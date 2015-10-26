@@ -592,13 +592,13 @@ public class ClienteMBean extends BaseMBean {
 			resultado = false;
 			this.setPestanaActiva("idFC01");
 		}
-		if (StringUtils.isBlank(getContacto().getApellidoMaterno())) {
+		/*if (StringUtils.isBlank(getContacto().getApellidoMaterno())) {
 			this.agregarMensaje(idFormulario + ":idApeMat",
 					"Ingrese el apellido materno", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 			this.setPestanaActiva("idFC01");
-		}
+		}*/
 		if (StringUtils.isBlank(getContacto().getNombres())) {
 			this.agregarMensaje(idFormulario + ":idForProNom",
 					"Ingrese los nombres", "", FacesMessage.SEVERITY_ERROR);

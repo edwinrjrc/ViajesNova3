@@ -45,8 +45,8 @@
 						<h:outputText value="Número Documento" />
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							columns="1" style="width:100%;">
-							<h:inputText id="idTxtNroDocumentoPasajero" styleClass="estilocampo1"
-								maxlength="11"
+							<h:inputText id="idTxtNroDocumentoPasajero"
+								styleClass="estilocampo1" maxlength="11"
 								value="#{servicioAgenteMBean.pasajero.documentoIdentidad.numeroDocumento}" />
 							<rich:message for="idTxtNroDocumentoPasajero" showDetail="false"
 								showSummary="true" ajaxRendered="true"></rich:message>
@@ -150,11 +150,28 @@
 								showSummary="true" ajaxRendered="true"></rich:message>
 						</h:panelGrid>
 						<h:outputText value="Aerolinea" />
-						<h:selectOneMenu
+						<h:selectOneMenu style="width:100px;"
 							value="#{servicioAgenteMBean.pasajero.aerolinea.codigoEntero}">
 							<f:selectItem itemLabel="-Seleccione la aerolinea-" />
 							<f:selectItems value="#{catalogoMBean.catalogoAerolineas}" />
 						</h:selectOneMenu>
+
+						<h:outputText value="Fecha Vcto Pasaporte" />
+						<rich:calendar datePattern="dd/MM/yyyy"
+							value="#{servicioAgenteMBean.pasajero.fechaVctoPasaporte}"></rich:calendar>
+
+						<h:outputText value="Fecha Nacimiento" />
+						<rich:calendar datePattern="dd/MM/yyyy"
+							value="#{servicioAgenteMBean.pasajero.fechaNacimiento}"></rich:calendar>
+
+						<h:outputText value="Código Reserva" />
+						<h:inputText value="#{servicioAgenteMBean.pasajero.codigoReserva}"
+							maxlength="10" size="15" styleClass="estilocampo1" />
+
+						<h:outputText value="Número Boleto" />
+						<h:inputText maxlength="13" size="15" id="idTxtNumeroBoleto"
+							onkeypress="return js_soloEntero(event)"
+							value="#{servicioAgenteMBean.pasajero.numeroBoleto}" />
 					</h:panelGrid>
 
 					<f:facet name="footer">
