@@ -279,12 +279,9 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 								conn).getNombreCompleto());
 			}
 
-			if (StringUtils.isBlank(detalleServicio.getDescripcionServicio())) {
-				detalleServicio.setDescripcionServicio(this
-						.generarDescripcionServicio(detalleServicio));
-
-			}
-
+			// Obtener la descripcion del servicio
+			detalleServicio.setDescripcionServicio(this.generarDescripcionServicio(detalleServicio));
+			
 			BigDecimal comision = BigDecimal.ZERO;
 			BigDecimal totalVenta = BigDecimal.ZERO;
 
@@ -512,10 +509,10 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 
 				descripcion = detalle.getTipoServicio().getNombre() + " ";
 				if (configuracion.isMuestraRuta()) {
-					for (Tramo tramo : detalle.getRuta().getTramos()) {
-						descripcion = descripcion
-								+ tramo.getOrigen().getDescripcion() + " - "
-								+ tramo.getDestino().getDescripcion() + " / ";
+					descripcion = descripcion + detalle.getRuta().getTramos().get(0).getOrigen().getDescripcion() + " / ";
+					for (int i=0; i<detalle.getRuta().getTramos().size(); i++){
+						Tramo tramo = detalle.getRuta().getTramos().get(i);
+						descripcion = descripcion + tramo.getDestino().getDescripcion() + " / ";
 					}
 				}
 				if (configuracion.isMuestraAerolinea()) {
@@ -548,8 +545,8 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 				}
 				return StringUtils.normalizeSpace(descripcion);
 			} else {
-				descripcion = detalle.getTipoServicio().getNombre() + " "
-						+ descripcion;
+				descripcion = detalle.getTipoServicio().getNombre() + " - "
+						+ detalle.getDescripcionServicio();
 
 				return StringUtils.normalizeSpace(descripcion);
 			}
@@ -661,11 +658,8 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 			BigDecimal comision = BigDecimal.ZERO;
 			BigDecimal totalVenta = BigDecimal.ZERO;
 
-			if (StringUtils.isBlank(detalleServicio.getDescripcionServicio())) {
-				detalleServicioAgencia.setDescripcionServicio(StringUtils
-						.upperCase(detalleServicio.getTipoServicio()
-								.getNombre()));
-			}
+			detalleServicioAgencia.setDescripcionServicio(StringUtils
+						.upperCase(this.generarDescripcionServicio(detalleServicio)));
 
 			detalleServicioAgencia.setDescripcionServicio(StringUtils
 					.upperCase(detalleServicio.getDescripcionServicio()));

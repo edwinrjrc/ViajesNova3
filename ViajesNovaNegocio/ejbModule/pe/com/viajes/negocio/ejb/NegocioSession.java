@@ -1389,10 +1389,10 @@ public class NegocioSession implements NegocioSessionRemote,
 						}
 					}
 				}
-
+				userTransaction.commit();
 				return true;
 			}
-			userTransaction.commit();
+			
 		} catch (ErrorRegistroDataException e) {
 			userTransaction.rollback();
 			throw new ErrorRegistroDataException(e);
