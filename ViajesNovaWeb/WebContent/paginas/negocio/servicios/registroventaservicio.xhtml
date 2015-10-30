@@ -171,6 +171,15 @@
 									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
 							</h:panelGrid>
 
+							<h:panelGrid columns="4" border="0" cellpadding="0"
+								cellspacing="0" style="width:100%;"
+								columnClasses="col1form,col2form,col1form,col2form">
+								
+								<h:outputText value="Código Novios" />
+								<h:inputText value="#{servicioAgenteMBean.servicioAgencia.codigoNovios}" maxlength="5" />
+
+							</h:panelGrid>
+
 							<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 								style="width:100%;" columns="1">
 								<h:outputText value="Observaciones" styleClass="col1form" />
@@ -228,7 +237,8 @@
 												<f:selectItem itemLabel="-Seleccione-" />
 												<f:selectItems
 													value="#{servicioAgenteMBean.listadoEmpresas}" />
-												<a4j:ajax event="valueChange" render="idPnComisionServicio,idGrComiPro" />
+												<a4j:ajax event="valueChange"
+													render="idPnComisionServicio,idGrComiPro" />
 											</h:selectOneMenu>
 											<rich:message for="idSelEmpServicio" showDetail="false"
 												showSummary="true" ajaxRendered="true" />
@@ -507,7 +517,7 @@
 									           servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraComision}"
 											value="#{servicioAgenteMBean.detalleServicio.tarifaNegociada}">
 										</h:selectBooleanCheckbox>
-										
+
 										<h:outputText value=""
 											rendered="#{!(servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != null and
 									            servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != 0 and 
@@ -519,8 +529,8 @@
 									</h:panelGrid>
 
 								</h:panelGrid>
-								<h:panelGrid id="idPnComisionServicio" columns="1" cellpadding="0" cellspacing="0"
-										border="0" style="width:100%;">
+								<h:panelGrid id="idPnComisionServicio" columns="1"
+									cellpadding="0" cellspacing="0" border="0" style="width:100%;">
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0" style="width:100%;"
 										rendered="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != null and
@@ -535,7 +545,8 @@
 										</f:facet>
 
 										<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
-											border="0" style="width:100%;" columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
+											border="0" style="width:100%;"
+											columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
 
 											<h:outputText value="Tipo valor comisión" />
 											<h:selectOneMenu

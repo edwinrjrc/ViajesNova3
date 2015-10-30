@@ -161,8 +161,7 @@
 									<h:selectOneMenu id="idSelMoneda"
 										value="#{noviosMBean.programaNovios.moneda.codigoEntero}">
 										<f:selectItem itemLabel="-Seleccione-" />
-										<f:selectItem itemLabel="Nuevos Soles (S/.)" itemValue="1" />
-										<f:selectItem itemLabel="Dolares Americanos ($)" itemValue="2" />
+										<f:selectItems value="#{catalogoMBean.catalogoMoneda}"></f:selectItems>
 									</h:selectOneMenu>
 									<rich:message for="idSelMoneda" showSummary="true"
 										showDetail="false" ajaxRendered="true" />
