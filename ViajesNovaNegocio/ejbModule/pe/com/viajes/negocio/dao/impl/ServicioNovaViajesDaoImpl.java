@@ -193,7 +193,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			Connection conn) throws SQLException {
 		Integer idservicio = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
 		try {
 			cs = conn.prepareCall(sql);
@@ -260,6 +260,12 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			}
 			cs.setString(i++, servicioAgencia.getUsuarioCreacion());
 			cs.setString(i++, servicioAgencia.getIpCreacion());
+			if (StringUtils.isNotBlank(servicioAgencia.getCodigoNovios())){
+				cs.setString(i++, servicioAgencia.getCodigoNovios());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
 			cs.execute();
 
 			idservicio = cs.getInt(1);

@@ -60,6 +60,8 @@ public class ServicioAgencia extends BaseNegocio {
 	private int tienePagos;
 
 	private Integer idReferencia;
+	
+	private String codigoNovios;
 
 	public static final Integer ESTADO_PENDIENTE_CIERRE = 1;
 	public static final Integer ESTADO_CERRADO = 2;
@@ -625,5 +627,19 @@ public class ServicioAgencia extends BaseNegocio {
 	 */
 	public void setListaPasajeros(List<Pasajero> listaPasajeros) {
 		this.listaPasajeros = listaPasajeros;
+	}
+
+	/**
+	 * @return the codigoNovios
+	 */
+	public String getCodigoNovios() {
+		return codigoNovios;
+	}
+
+	/**
+	 * @param codigoNovios the codigoNovios to set
+	 */
+	public void setCodigoNovios(String codigoNovios) {
+		this.codigoNovios = codigoNovios;
 	}
 }

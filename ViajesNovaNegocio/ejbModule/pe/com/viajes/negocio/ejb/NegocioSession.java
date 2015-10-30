@@ -570,82 +570,10 @@ public class NegocioSession implements NegocioSessionRemote,
 	public Integer registrarNovios(ProgramaNovios programaNovios)
 			throws ErrorRegistroDataException, SQLException, Exception {
 		ServicioNoviosDao servicioNoviosDao = new ServicioNoviosDaoImpl();
-		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
-		DestinoDao destinoDao = new DestinoDaoImpl();
-		userTransaction.begin();
 		Connection conexion = null;
 		try {
+			userTransaction.begin();
 			conexion = UtilConexion.obtenerConexion();
-			int idServicio = 0;
-			ServicioAgencia servicioAgencia = new ServicioAgencia();
-			servicioAgencia.setCliente(programaNovios.getNovia());
-			servicioAgencia.setCliente2(programaNovios.getNovio());
-			servicioAgencia.setFechaServicio(new Date());
-			servicioAgencia.setCantidadServicios(0);
-			if (programaNovios.getListaServicios() != null
-					&& !programaNovios.getListaServicios().isEmpty()) {
-				servicioAgencia.setCantidadServicios(programaNovios
-						.getListaServicios().size());
-			}
-
-			servicioAgencia.setDestino(destinoDao.consultarDestino(
-					programaNovios.getDestino().getCodigoEntero(), conexion));
-			servicioAgencia.getFormaPago().setCodigoEntero(1);
-			servicioAgencia.getEstadoPago().setCodigoEntero(1);
-			servicioAgencia.setVendedor(programaNovios.getVendedor());
-			servicioAgencia.setMontoTotalComision(programaNovios
-					.getMontoTotalComision());
-			servicioAgencia.setMontoTotalServicios(programaNovios
-					.getMontoTotalServiciosPrograma());
-			servicioAgencia.setMontoTotalFee(programaNovios.getMontoTotalFee());
-			servicioAgencia.setMontoTotalIGV(programaNovios.getMontoTotalIGV());
-			servicioAgencia.setUsuarioCreacion(programaNovios
-					.getUsuarioCreacion());
-			servicioAgencia.setIpCreacion(programaNovios.getIpCreacion());
-			servicioAgencia.setUsuarioModificacion(programaNovios
-					.getUsuarioModificacion());
-			servicioAgencia.setIpModificacion(programaNovios
-					.getIpModificacion());
-			servicioAgencia.getEstadoServicio().setCodigoEntero(1);
-
-			idServicio = servicioNovaViajesDao.ingresarCabeceraServicio(
-					servicioAgencia, conexion);
-			if (idServicio == 0) {
-				throw new ErrorRegistroDataException(
-						"No se pudo registrar los servicios de los novios");
-			}
-			if (programaNovios.getListaServicios() != null
-					&& !programaNovios.getListaServicios().isEmpty()) {
-				for (DetalleServicioAgencia detalleServicio : programaNovios
-						.getListaServicios()) {
-					Integer resultado = servicioNovaViajesDao
-							.ingresarDetalleServicio(detalleServicio,
-									idServicio, conexion);
-					if (resultado == null || resultado.intValue() == 0) {
-						throw new ErrorRegistroDataException(
-								"No se pudo registrar los servicios v");
-					} else {
-						for (DetalleServicioAgencia detalleServicio2 : detalleServicio
-								.getServiciosHijos()) {
-							detalleServicio2.getServicioPadre()
-									.setCodigoEntero(resultado);
-							resultado = servicioNovaViajesDao
-									.ingresarDetalleServicio(detalleServicio2,
-											idServicio, conexion);
-							if (resultado == null || resultado.intValue() == 0) {
-								throw new ErrorRegistroDataException(
-										"No se pudo registrar los servicios de los novios");
-							}
-						}
-					}
-				}
-			} else {
-				throw new ErrorRegistroDataException(
-						"No se enviaron los servicios de los novios");
-			}
-
-			programaNovios.setIdServicio(idServicio);
-
 			Integer idnovios = servicioNoviosDao.registrarNovios(
 					programaNovios, conexion);
 
