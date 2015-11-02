@@ -177,6 +177,8 @@
 								
 								<h:outputText value="Código Novios" />
 								<h:inputText value="#{servicioAgenteMBean.servicioAgencia.codigoNovios}" maxlength="5" />
+								<h:outputText value="" />
+								<h:outputText value="" />
 
 							</h:panelGrid>
 
@@ -231,7 +233,7 @@
 										<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 											border="0"
 											rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraProveedor}">
-											<h:selectOneMenu id="idSelEmpServicio"
+											<h:selectOneMenu id="idSelEmpServicio" style="width:250px;"
 												value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero}"
 												valueChangeListener="#{servicioAgenteMBean.seleccionarEmpresa}">
 												<f:selectItem itemLabel="-Seleccione-" />
@@ -281,8 +283,8 @@
 											<h:outputText id="idTextResumenPasajeros"
 												value="#{servicioAgenteMBean.detalleServicio.resumenPasajeros}" />
 											<a4j:commandButton value="Ingresar Pasajeros" type="button"
-												oncomplete="mostrarModal3('idModalpasajeros')"
-												render="idPnFrPasajeros"></a4j:commandButton>
+												oncomplete="mostrarModal3('idModalpasajeros')" action="#{servicioAgenteMBean.ingresarPasajeros}"
+												render="idPnFrPasajeros, idPnFrAddPax"></a4j:commandButton>
 											<rich:message for="idTextResumenPasajeros" showSummary="true"
 												showDetail="false" ajaxRendered="true"></rich:message>
 										</h:panelGrid>

@@ -48,9 +48,11 @@ import pe.com.viajes.bean.base.BaseVO;
 import pe.com.viajes.bean.negocio.Cliente;
 import pe.com.viajes.bean.negocio.Comprobante;
 import pe.com.viajes.bean.negocio.ConfiguracionTipoServicio;
+import pe.com.viajes.bean.negocio.Contacto;
 import pe.com.viajes.bean.negocio.CuentaBancaria;
 import pe.com.viajes.bean.negocio.Destino;
 import pe.com.viajes.bean.negocio.DetalleServicioAgencia;
+import pe.com.viajes.bean.negocio.Direccion;
 import pe.com.viajes.bean.negocio.DocumentoAdicional;
 import pe.com.viajes.bean.negocio.EventoObsAnu;
 import pe.com.viajes.bean.negocio.MaestroServicio;
@@ -61,6 +63,7 @@ import pe.com.viajes.bean.negocio.Proveedor;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.viajes.bean.negocio.ServicioProveedor;
+import pe.com.viajes.bean.negocio.Telefono;
 import pe.com.viajes.bean.negocio.Tramo;
 import pe.com.viajes.bean.negocio.Usuario;
 import pe.com.viajes.bean.util.UtilParse;
@@ -2211,6 +2214,67 @@ public class ServicioAgenteMBean extends BaseMBean {
 			resultado = false;
 		}
 		return resultado;
+	}
+	
+	public void cargarPasajero(ValueChangeEvent e){
+		try {
+			String valor = e.getNewValue().toString();
+			
+			if (valor.equals(UtilWeb.obtenerCadenaPropertieMaestro("pasajeroelmismo", "aplicacionDatos")) && this.getServicioAgencia().getCliente().getCodigoEntero()!=null){
+				Cliente elmismo = this.consultaNegocioServicio.consultarCliente(this.getServicioAgencia().getCliente().getCodigoEntero());
+				
+				this.getPasajero().setDocumentoIdentidad(elmismo.getDocumentoIdentidad());
+				this.getPasajero().setNombres(elmismo.getNombres());
+				this.getPasajero().setApellidoPaterno(elmismo.getApellidoPaterno());
+				this.getPasajero().setApellidoMaterno(elmismo.getApellidoMaterno());
+				this.getPasajero().setFechaVctoPasaporte(elmismo.getFechaVctoPasaporte());
+				this.getPasajero().setFechaNacimiento(elmismo.getFechaNacimiento());
+				
+				if (!elmismo.getListaContactos().isEmpty()){
+					List<Telefono> listaTelefonos = elmismo.getListaContactos().get(0).getListaTelefonos();
+					if (!listaTelefonos.isEmpty()){
+						this.getPasajero().setTelefono1(listaTelefonos.get(0).getNumeroTelefono());
+						if (listaTelefonos.size()>1){
+							this.getPasajero().setTelefono2(listaTelefonos.get(1).getNumeroTelefono());
+						}
+					}
+					Contacto contacto2 = null;
+					for (Contacto contacto : elmismo.getListaContactos()){
+						if (contacto.getDocumentoIdentidad().getNumeroDocumento().equals(elmismo.getDocumentoIdentidad().getNumeroDocumento())){
+							contacto2 = contacto;
+							break;
+						}
+					}
+					if (!contacto2.getListaCorreos().isEmpty()){
+						this.getPasajero().setCorreoElectronico(contacto2.getListaCorreos().get(0).getDireccion());
+					}
+				}
+				if (StringUtils.isBlank(this.getPasajero().getTelefono1())){
+					if (!elmismo.getListaDirecciones().isEmpty()){
+						Direccion direccion = elmismo.getListaDirecciones().get(0);
+						if (!direccion.getTelefonos().isEmpty()){
+							this.getPasajero().setTelefono1(direccion.getTelefonos().get(0).getNumeroTelefono());
+						}
+					}
+				}
+				if (StringUtils.isBlank(this.getPasajero().getTelefono2())){
+					if (!elmismo.getListaDirecciones().isEmpty()){
+						Direccion direccion = elmismo.getListaDirecciones().get(0);
+						if (direccion.getTelefonos().size()>1){
+							this.getPasajero().setTelefono2(direccion.getTelefonos().get(1).getNumeroTelefono());
+						}
+					}
+				}
+			}
+		} catch (SQLException ex) {
+			logger.error(ex.getMessage(), ex);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+		}
+	}
+	
+	public void ingresarPasajeros(){
+		this.setPasajero(null);
 	}
 
 	/**
