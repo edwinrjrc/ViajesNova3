@@ -948,4 +948,30 @@ public class ProveedorDaoImpl implements ProveedorDao {
 
 		return resultado;
 	}
+	
+	@Override
+	public boolean eliminarTipoServicioProveedor(Proveedor proveedor, Connection conn) throws SQLException{
+		CallableStatement cs = null;
+		String sql = "";
+
+		try {
+			sql = "{ ? = call negocio.fn_eliminarproveedorservicio(?,?,?) }";
+			int i = 1;
+			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, proveedor.getCodigoEntero().intValue());
+			cs.setString(i++, proveedor.getUsuarioModificacion());
+			cs.setString(i++, proveedor.getIpModificacion());
+			cs.execute();
+
+			return cs.getBoolean(1);
+		} catch (SQLException e) {
+			logger.error(e.getMessage(), e);
+			throw new SQLException(e);
+		} finally {
+			if (cs != null) {
+				cs.close();
+			}
+		}
+	}
 }

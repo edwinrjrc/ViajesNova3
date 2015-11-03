@@ -160,6 +160,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private Integer tipoEvento;
 	private Integer columnasComprobantes;
 	private String idModales;
+	private String renderFormularioPasajero;
 
 	/**
 	 * 
@@ -577,18 +578,24 @@ public class ServicioAgenteMBean extends BaseMBean {
 		return resultado;
 	}
 
-	private void validarFee() throws ErrorRegistroDataException {
-		int fees = 0;
-
+	private void validarFee() throws ErrorRegistroDataException, ValidacionException {
+		boolean requiereFee = false;
+		int fee =0;
 		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()) {
-			if (detalle.getTipoServicio().isEsFee()) {
-				fees++;
+			if (detalle.getTipoServicio().isRequiereFee()) {
+				requiereFee = true;
+				break;
 			}
 		}
-
-		if (0 == fees) {
-			// throw new
-			// ErrorRegistroDataException("Debe agregar El Fee de Venta");
+		
+		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()) {
+			if (detalle.getTipoServicio().isEsFee()) {
+				fee++;
+				break;
+			}
+		}
+		if (fee ==0 && requiereFee){
+			throw new ValidacionException("No se ha agreado Fee de venta requerido");
 		}
 	}
 
@@ -2218,63 +2225,74 @@ public class ServicioAgenteMBean extends BaseMBean {
 	
 	public void cargarPasajero(ValueChangeEvent e){
 		try {
-			String valor = e.getNewValue().toString();
-			
-			if (valor.equals(UtilWeb.obtenerCadenaPropertieMaestro("pasajeroelmismo", "aplicacionDatos")) && this.getServicioAgencia().getCliente().getCodigoEntero()!=null){
-				Cliente elmismo = this.consultaNegocioServicio.consultarCliente(this.getServicioAgencia().getCliente().getCodigoEntero());
+			if (e.getNewValue()!=null){
+				String valor = e.getNewValue().toString();
+				this.setRenderFormularioPasajero("");
 				
-				this.getPasajero().setDocumentoIdentidad(elmismo.getDocumentoIdentidad());
-				this.getPasajero().setNombres(elmismo.getNombres());
-				this.getPasajero().setApellidoPaterno(elmismo.getApellidoPaterno());
-				this.getPasajero().setApellidoMaterno(elmismo.getApellidoMaterno());
-				this.getPasajero().setFechaVctoPasaporte(elmismo.getFechaVctoPasaporte());
-				this.getPasajero().setFechaNacimiento(elmismo.getFechaNacimiento());
-				
-				if (!elmismo.getListaContactos().isEmpty()){
-					List<Telefono> listaTelefonos = elmismo.getListaContactos().get(0).getListaTelefonos();
-					if (!listaTelefonos.isEmpty()){
-						this.getPasajero().setTelefono1(listaTelefonos.get(0).getNumeroTelefono());
-						if (listaTelefonos.size()>1){
-							this.getPasajero().setTelefono2(listaTelefonos.get(1).getNumeroTelefono());
+				if (valor.equals(UtilWeb.obtenerCadenaPropertieMaestro("pasajeroelmismo", "aplicacionDatos")) && this.getServicioAgencia().getCliente().getCodigoEntero()!=null){
+					Cliente elmismo = this.consultaNegocioServicio.consultarCliente(this.getServicioAgencia().getCliente().getCodigoEntero());
+					
+					this.getPasajero().setDocumentoIdentidad(elmismo.getDocumentoIdentidad());
+					this.getPasajero().setNombres(elmismo.getNombres());
+					this.getPasajero().setApellidoPaterno(elmismo.getApellidoPaterno());
+					this.getPasajero().setApellidoMaterno(elmismo.getApellidoMaterno());
+					this.getPasajero().setFechaVctoPasaporte(elmismo.getFechaVctoPasaporte());
+					this.getPasajero().setFechaNacimiento(elmismo.getFechaNacimiento());
+					
+					if (!elmismo.getListaContactos().isEmpty()){
+						List<Telefono> listaTelefonos = elmismo.getListaContactos().get(0).getListaTelefonos();
+						if (!listaTelefonos.isEmpty()){
+							this.getPasajero().setTelefono1(listaTelefonos.get(0).getNumeroTelefono());
+							if (listaTelefonos.size()>1){
+								this.getPasajero().setTelefono2(listaTelefonos.get(1).getNumeroTelefono());
+							}
+						}
+						Contacto contacto2 = null;
+						for (Contacto contacto : elmismo.getListaContactos()){
+							if (contacto.getDocumentoIdentidad().getNumeroDocumento().equals(elmismo.getDocumentoIdentidad().getNumeroDocumento())){
+								contacto2 = contacto;
+								break;
+							}
+						}
+						if (!contacto2.getListaCorreos().isEmpty()){
+							this.getPasajero().setCorreoElectronico(contacto2.getListaCorreos().get(0).getDireccion());
 						}
 					}
-					Contacto contacto2 = null;
-					for (Contacto contacto : elmismo.getListaContactos()){
-						if (contacto.getDocumentoIdentidad().getNumeroDocumento().equals(elmismo.getDocumentoIdentidad().getNumeroDocumento())){
-							contacto2 = contacto;
-							break;
+					if (StringUtils.isBlank(this.getPasajero().getTelefono1())){
+						if (!elmismo.getListaDirecciones().isEmpty()){
+							Direccion direccion = elmismo.getListaDirecciones().get(0);
+							if (!direccion.getTelefonos().isEmpty()){
+								this.getPasajero().setTelefono1(direccion.getTelefonos().get(0).getNumeroTelefono());
+							}
 						}
 					}
-					if (!contacto2.getListaCorreos().isEmpty()){
-						this.getPasajero().setCorreoElectronico(contacto2.getListaCorreos().get(0).getDireccion());
-					}
-				}
-				if (StringUtils.isBlank(this.getPasajero().getTelefono1())){
-					if (!elmismo.getListaDirecciones().isEmpty()){
-						Direccion direccion = elmismo.getListaDirecciones().get(0);
-						if (!direccion.getTelefonos().isEmpty()){
-							this.getPasajero().setTelefono1(direccion.getTelefonos().get(0).getNumeroTelefono());
+					if (StringUtils.isBlank(this.getPasajero().getTelefono2())){
+						if (!elmismo.getListaDirecciones().isEmpty()){
+							Direccion direccion = elmismo.getListaDirecciones().get(0);
+							if (direccion.getTelefonos().size()>1){
+								this.getPasajero().setTelefono2(direccion.getTelefonos().get(1).getNumeroTelefono());
+							}
 						}
 					}
-				}
-				if (StringUtils.isBlank(this.getPasajero().getTelefono2())){
-					if (!elmismo.getListaDirecciones().isEmpty()){
-						Direccion direccion = elmismo.getListaDirecciones().get(0);
-						if (direccion.getTelefonos().size()>1){
-							this.getPasajero().setTelefono2(direccion.getTelefonos().get(1).getNumeroTelefono());
-						}
-					}
+					
+					this.setRenderFormularioPasajero("idPnFrAddPax");
 				}
 			}
 		} catch (SQLException ex) {
+			this.setRenderFormularioPasajero("");
 			logger.error(ex.getMessage(), ex);
 		} catch (Exception ex) {
+			this.setRenderFormularioPasajero("");
 			logger.error(ex.getMessage(), ex);
 		}
 	}
 	
 	public void ingresarPasajeros(){
 		this.setPasajero(null);
+	}
+	
+	public void consultarPasajero(){
+		
 	}
 
 	/**
@@ -3189,5 +3207,19 @@ public class ServicioAgenteMBean extends BaseMBean {
 	 */
 	public void setPasajero(Pasajero pasajero) {
 		this.pasajero = pasajero;
+	}
+
+	/**
+	 * @return the renderFormularioPasajero
+	 */
+	public String getRenderFormularioPasajero() {
+		return renderFormularioPasajero;
+	}
+
+	/**
+	 * @param renderFormularioPasajero the renderFormularioPasajero to set
+	 */
+	public void setRenderFormularioPasajero(String renderFormularioPasajero) {
+		this.renderFormularioPasajero = renderFormularioPasajero;
 	}
 }

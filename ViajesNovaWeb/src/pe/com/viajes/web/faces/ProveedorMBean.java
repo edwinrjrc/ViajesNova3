@@ -60,6 +60,7 @@ public class ProveedorMBean extends BaseMBean {
 	private List<Proveedor> listaProveedores;
 
 	private Proveedor proveedor;
+	private Proveedor proveedorBusqueda;
 	private Direccion direccion;
 	private Contacto contacto;
 
@@ -101,6 +102,13 @@ public class ProveedorMBean extends BaseMBean {
 		} catch (NamingException e) {
 			logger.error(e.getMessage(), e);
 		}
+	}
+	
+	public String iniciaAdmProveedor(){
+		this.setProveedorBusqueda(null);
+		this.setListaProveedores(null);
+		
+		return "irAdministrarProveedor";
 	}
 
 	public void nuevoProveedor() {
@@ -169,7 +177,7 @@ public class ProveedorMBean extends BaseMBean {
 	public void buscarProveedor() {
 		try {
 			this.setListaProveedores(this.consultaNegocioServicio
-					.buscarProveedor(getProveedor()));
+					.buscarProveedor(getProveedorBusqueda()));
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		}
@@ -1073,6 +1081,23 @@ public class ProveedorMBean extends BaseMBean {
 	 */
 	public void setCuentasBorradas(String cuentasBorradas) {
 		this.cuentasBorradas = cuentasBorradas;
+	}
+
+	/**
+	 * @return the proveedorBusqueda
+	 */
+	public Proveedor getProveedorBusqueda() {
+		if (proveedorBusqueda == null){
+			proveedorBusqueda = new Proveedor();
+		}
+		return proveedorBusqueda;
+	}
+
+	/**
+	 * @param proveedorBusqueda the proveedorBusqueda to set
+	 */
+	public void setProveedorBusqueda(Proveedor proveedorBusqueda) {
+		this.proveedorBusqueda = proveedorBusqueda;
 	}
 
 }

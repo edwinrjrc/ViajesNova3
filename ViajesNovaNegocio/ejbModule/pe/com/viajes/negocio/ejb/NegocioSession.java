@@ -182,6 +182,7 @@ public class NegocioSession implements NegocioSessionRemote,
 					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
 			}
+			
 			if (proveedor.getListaServicioProveedor() != null) {
 				for (ServicioProveedor servicio : proveedor
 						.getListaServicioProveedor()) {
@@ -205,7 +206,6 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 
 			proveedorDao.registroProveedor(proveedor, conexion);
-
 			proveedorDao.registroProveedorTipo(proveedor, conexion);
 
 			userTransaction.commit();
@@ -311,6 +311,10 @@ public class NegocioSession implements NegocioSessionRemote,
 
 					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
+			}
+			if (!proveedorDao.eliminarTipoServicioProveedor(proveedor, conexion)){
+				throw new ResultadoCeroDaoException(
+						"No se pudo eliminar el registro de servicio");
 			}
 			if (proveedor.getListaServicioProveedor() != null) {
 				for (ServicioProveedor servicio : proveedor

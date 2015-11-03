@@ -44,10 +44,13 @@
 						</h:panelGrid>
 						<h:outputText value="Número Documento" />
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-							columns="1" style="width:100%;">
+							columns="2">
 							<h:inputText id="idTxtNroDocumentoPasajero"
 								styleClass="estilocampo1" maxlength="11"
 								value="#{servicioAgenteMBean.pasajero.documentoIdentidad.numeroDocumento}" />
+							<a4j:commandLink action="#{servicioAgenteMBean.consultarPasajero}" render="idPnFrAddPax">
+								<h:graphicImage style="width:15px;height:15px;" name="refresh.png" value="refresh.png" library="img" />
+							</a4j:commandLink>
 							<rich:message for="idTxtNroDocumentoPasajero" showDetail="false"
 								showSummary="true" ajaxRendered="true"></rich:message>
 						</h:panelGrid>
@@ -134,7 +137,7 @@
 								<f:selectItem itemLabel="-Seleccione-" />
 								<f:selectItems value="#{catalogoMBean.catalogoRelacion}" />
 								<a4j:ajax event="valueChange"
-													render="idPnFrAddPax" />
+									render="#{servicioAgenteMBean.renderFormularioPasajero}" />
 							</h:selectOneMenu>
 							<rich:message for="idSelRelacion" showDetail="false"
 								showSummary="true" ajaxRendered="true"></rich:message>

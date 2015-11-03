@@ -71,4 +71,7 @@ public interface ProveedorDao {
 
 	List<CuentaBancaria> listarCuentasBancarias(Integer idProveedor)
 			throws SQLException;
+
+	boolean eliminarTipoServicioProveedor(Proveedor proveedor, Connection conn)
+			throws SQLException;
 }
