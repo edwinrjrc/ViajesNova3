@@ -305,6 +305,7 @@ public class ProveedorDaoImpl implements ProveedorDao {
 						"apellidopaterno"));
 				resultado.setApellidoMaterno(UtilJdbc.obtenerCadena(rs,
 						"apellidomaterno"));
+				resultado.setNombreComercial(UtilJdbc.obtenerCadena(rs, "nombrecomercial"));
 				resultado.getGenero().setCodigoEntero(
 						UtilJdbc.obtenerNumero(rs, "idgenero"));
 				resultado.getEstadoCivil().setCodigoEntero(
@@ -664,7 +665,7 @@ public class ProveedorDaoImpl implements ProveedorDao {
 	public void registroProveedorTipo(Proveedor proveedor, Connection conexion)
 			throws SQLException {
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarproveedortipo(?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarproveedortipo(?,?,?,?,?) }";
 
 		try {
 			cs = conexion.prepareCall(sql);
@@ -675,6 +676,12 @@ public class ProveedorDaoImpl implements ProveedorDao {
 					.intValue());
 			cs.setString(i++, proveedor.getUsuarioCreacion());
 			cs.setString(i++, proveedor.getIpCreacion());
+			if (StringUtils.isNotBlank(proveedor.getNombreComercial())){
+				cs.setString(i++, UtilJdbc.convertirMayuscula(proveedor.getNombreComercial()));
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
 
 			cs.execute();
 		} catch (SQLException e) {
@@ -694,7 +701,7 @@ public class ProveedorDaoImpl implements ProveedorDao {
 	public void actualizarProveedorTipo(Proveedor proveedor, Connection conexion)
 			throws SQLException {
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_actualizarproveedortipo(?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_actualizarproveedortipo(?,?,?,?,?) }";
 
 		try {
 			cs = conexion.prepareCall(sql);
@@ -705,6 +712,12 @@ public class ProveedorDaoImpl implements ProveedorDao {
 					.intValue());
 			cs.setString(i++, proveedor.getUsuarioModificacion());
 			cs.setString(i++, proveedor.getIpModificacion());
+			if (StringUtils.isNotBlank(proveedor.getNombreComercial())){
+				cs.setString(i++, UtilJdbc.convertirMayuscula(proveedor.getNombreComercial()));
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
 
 			cs.execute();
 		} catch (SQLException e) {

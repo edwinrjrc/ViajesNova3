@@ -186,8 +186,6 @@ public class ProveedorMBean extends BaseMBean {
 	public void ejecutarMetodo(ActionEvent e) {
 		try {
 			this.setShowModal(false);
-			int tipoDocRUC = UtilWeb.obtenerEnteroPropertieMaestro(
-					"tipoDocumentoRUC", "aplicacionDatos");
 			this.setListaProveedores(null);
 
 			if (validarProveedor(e)) {
@@ -202,14 +200,9 @@ public class ProveedorMBean extends BaseMBean {
 										usuario.getUsuario());
 								getProveedor().setIpCreacion(
 										obtenerRequest().getRemoteAddr());
-								if (tipoDocRUC == getProveedor()
-										.getDocumentoIdentidad()
-										.getTipoDocumento().getCodigoEntero()
-										.intValue()) {
-									getProveedor().setNombres(
-											getProveedor().getRazonSocial());
-								}
-
+								getProveedor().setNombres(
+										getProveedor().getRazonSocial());
+								
 								this.setShowModal(negocioServicio
 										.registrarProveedor(getProveedor()));
 								this.setTipoModal("1");
@@ -222,13 +215,8 @@ public class ProveedorMBean extends BaseMBean {
 										usuario.getUsuario());
 								getProveedor().setIpModificacion(
 										obtenerRequest().getRemoteAddr());
-								if (tipoDocRUC == getProveedor()
-										.getDocumentoIdentidad()
-										.getTipoDocumento().getCodigoEntero()
-										.intValue()) {
-									getProveedor().setNombres(
-											getProveedor().getRazonSocial());
-								}
+								getProveedor().setNombres(
+										getProveedor().getRazonSocial());
 
 								parseaUsuarioListaServicio(getProveedor());
 								parseaUsuarioListaCuentasBancarias(getProveedor());
@@ -371,10 +359,16 @@ public class ProveedorMBean extends BaseMBean {
 				resultado = false;
 			}
 		}
-		if (tipoDocRUC == getProveedor().getDocumentoIdentidad()
+		if (tipoDocDNI != getProveedor().getDocumentoIdentidad()
 				.getTipoDocumento().getCodigoEntero().intValue()) {
 			if (StringUtils.isBlank(getProveedor().getRazonSocial())) {
 				this.agregarMensaje(idFormulario + ":idRazSocPro",
+						"Ingrese la razon social", "",
+						FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			if (StringUtils.isBlank(getProveedor().getNombreComercial())) {
+				this.agregarMensaje(idFormulario + ":idNomComercialPro",
 						"Ingrese la razon social", "",
 						FacesMessage.SEVERITY_ERROR);
 				resultado = false;

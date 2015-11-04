@@ -108,7 +108,7 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 				servicio2 = new ServicioProveedor();
 				servicio2.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
 				servicio2.setNombreProveedor(UtilJdbc.obtenerCadena(rs,
-						"nombres"));
+						"nombrecomercial"));
 				/*servicio2.setPorcentajeComision(UtilJdbc.obtenerBigDecimal(rs,
 						"porcencomnacional"));
 				servicio2.setPorcenComInternacional(UtilJdbc.obtenerBigDecimal(
@@ -274,7 +274,7 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 		String sql = "";
 		
 		try{
-			sql = "{ ? = call negocio.fn_ingresarpasajero(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+			sql = "{ ? = call negocio.fn_ingresarpasajero(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 			cs = conn.prepareCall(sql);
 			cs.registerOutParameter(1, Types.INTEGER);
 			if (pasajero.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero() != null && pasajero.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue() != 0){
@@ -356,6 +356,12 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 			cs.setInt(18, pasajero.getIdServicio().intValue());
 			cs.setString(19, pasajero.getUsuarioCreacion());
 			cs.setString(20, pasajero.getIpCreacion());
+			if (pasajero.getPais().getCodigoEntero() != null && pasajero.getPais().getCodigoEntero().intValue() !=0){
+				cs.setInt(21, pasajero.getPais().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(21, Types.INTEGER);
+			}
 			cs.execute();
 			
 			return cs.getInt(1);

@@ -83,7 +83,7 @@
 								</h:panelGrid>
 							</h:panelGrid>
 							<h:panelGrid border="0" cellpadding="0" cellspacing="0"
-								style="width:100%;" columns="4"
+								style="width:100%;" columns="2"
 								columnClasses="col1fil2proveedor,col2fil2proveedor">
 								<h:outputText value="Nombres"
 									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 1 or proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 2}" />
@@ -97,14 +97,25 @@
 										showDetail="false" />
 								</h:panelGrid>
 								<h:outputText value="Razon Social"
-									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 3}" />
+									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero != 1 and proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero != 2}" />
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1"
-									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 3}">
+									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero != 1 and proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero != 2}">
 									<h:inputText id="idRazSocPro"
 										value="#{proveedorMBean.proveedor.razonSocial}" maxlength="80"
 										size="80" styleClass="estilocampo1" />
 									<rich:message for="idRazSocPro" showSummary="true"
+										showDetail="false" />
+								</h:panelGrid>
+								<h:outputText value="Nombre Comercial"
+									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero != 1 and proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero != 2}" />
+								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+									columns="1"
+									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero != 1 and proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero != 2}">
+									<h:inputText id="idNomComercialPro"
+										value="#{proveedorMBean.proveedor.nombreComercial}" maxlength="100"
+										size="80" styleClass="estilocampo1" />
+									<rich:message for="idNomComercialPro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
 							</h:panelGrid>

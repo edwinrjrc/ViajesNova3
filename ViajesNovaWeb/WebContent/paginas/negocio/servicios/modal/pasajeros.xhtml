@@ -48,23 +48,37 @@
 							<h:inputText id="idTxtNroDocumentoPasajero"
 								styleClass="estilocampo1" maxlength="11"
 								value="#{servicioAgenteMBean.pasajero.documentoIdentidad.numeroDocumento}" />
-							<a4j:commandLink action="#{servicioAgenteMBean.consultarPasajero}" render="idPnFrAddPax">
-								<h:graphicImage style="width:15px;height:15px;" name="refresh.png" value="refresh.png" library="img" />
+							<a4j:commandLink
+								action="#{servicioAgenteMBean.consultarPasajero}"
+								render="idPnFrAddPax">
+								<h:graphicImage style="width:15px;height:15px;"
+									name="refresh.png" value="refresh.png" library="img" />
 							</a4j:commandLink>
 							<rich:message for="idTxtNroDocumentoPasajero" showDetail="false"
 								showSummary="true" ajaxRendered="true"></rich:message>
 						</h:panelGrid>
 					</h:panelGrid>
 
-					<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="2"
+					<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="4"
 						style="width:100%;"
-						columnClasses="col1fil2formulario,col2fil2formulario">
+						columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
 						<h:outputText value="Nombres" />
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							columns="1" style="width:100%;">
 							<h:inputText id="idTxtNombres" styleClass="estilocampo1"
 								maxlength="100" value="#{servicioAgenteMBean.pasajero.nombres}" />
 							<rich:message for="idTxtNombres" showDetail="false"
+								showSummary="true" ajaxRendered="true"></rich:message>
+						</h:panelGrid>
+						<h:outputText value="Nacionalidad" />
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+							columns="1" style="width:100%;">
+							<h:selectOneMenu id="idSelNacionalidad"
+								value="#{servicioAgenteMBean.pasajero.pais.codigoEntero}">
+								<f:selectItem itemLabel="-Seleccione-"/>
+								<f:selectItems value="#{catalogoMBean.catalogoPais}"></f:selectItems>
+							</h:selectOneMenu>
+							<rich:message for="idSelNacionalidad" showDetail="false"
 								showSummary="true" ajaxRendered="true"></rich:message>
 						</h:panelGrid>
 					</h:panelGrid>

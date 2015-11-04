@@ -449,7 +449,13 @@ public class MaestroDaoImpl implements MaestroDao {
 
 			cs = conn.prepareCall(sql);
 			cs.registerOutParameter(1, Types.OTHER);
-			cs.setInt(2, idcontinente);
+			if (idcontinente != 0){
+				cs.setInt(2, idcontinente);
+			}
+			else{
+				cs.setNull(2, Types.INTEGER);
+			}
+			
 			cs.execute();
 			rs = (ResultSet) cs.getObject(1);
 

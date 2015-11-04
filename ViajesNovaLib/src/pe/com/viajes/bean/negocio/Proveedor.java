@@ -25,6 +25,8 @@ public class Proveedor extends Persona {
 	private Integer codigoSeleccionado;
 
 	private String cuentasEliminadas;
+	
+	private String nombreComercial;
 
 	public Proveedor() {
 
@@ -135,6 +137,20 @@ public class Proveedor extends Persona {
 	 */
 	public void setCuentasEliminadas(String cuentasEliminadas) {
 		this.cuentasEliminadas = cuentasEliminadas;
+	}
+
+	/**
+	 * @return the nombreComercial
+	 */
+	public String getNombreComercial() {
+		return nombreComercial;
+	}
+
+	/**
+	 * @param nombreComercial the nombreComercial to set
+	 */
+	public void setNombreComercial(String nombreComercial) {
+		this.nombreComercial = nombreComercial;
 	}
 
 }

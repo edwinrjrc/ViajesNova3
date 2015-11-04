@@ -29,7 +29,7 @@ public class Pasajero extends Persona {
 	private Date fechaNacimiento;
 	private String codigoReserva;
 	private String numeroBoleto;
-	
+	private BaseVO pais;
 
 	public Pasajero() {
 		// TODO Auto-generated constructor stub
@@ -220,6 +220,23 @@ public class Pasajero extends Persona {
 	 */
 	public void setNumeroBoleto(String numeroBoleto) {
 		this.numeroBoleto = numeroBoleto;
+	}
+
+	/**
+	 * @return the pais
+	 */
+	public BaseVO getPais() {
+		if (pais == null){
+			pais = new BaseVO();
+		}
+		return pais;
+	}
+
+	/**
+	 * @param pais the pais to set
+	 */
+	public void setPais(BaseVO pais) {
+		this.pais = pais;
 	}
 
 }
