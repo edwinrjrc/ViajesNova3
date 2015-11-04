@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -529,8 +528,8 @@ public class ComprobanteMBean extends BaseMBean {
 		}
 		
 		String linea1 = "Referencia: Pax "+pasajero.getApellidoPaterno()+" "+pasajero.getApellidoMaterno()+" "+pasajero.getNombres();
-		String linea2 = "Fee por emision de boleto aereo";
-		String linea3 = "LIM/LAX/SFO/LAX/LIM";
+		String linea2 = "";
+		String linea3 = "";
 		String linea4 = "";
 		String linea5 = "";
 		String linea6 = "";
@@ -722,8 +721,8 @@ public class ComprobanteMBean extends BaseMBean {
 		}
 		
 		String linea1 = "Referencia: Pax "+pasajero.getApellidoPaterno()+" "+pasajero.getApellidoMaterno()+" "+pasajero.getNombres();
-		String linea2 = "Fee por emision de boleto aereo";
-		String linea3 = "LIM/LAX/SFO/LAX/LIM";
+		String linea2 = "";
+		String linea3 = "";
 		String linea4 = "";
 		String linea5 = "";
 		String linea6 = "";
@@ -915,8 +914,8 @@ public class ComprobanteMBean extends BaseMBean {
 		}
 		
 		String linea1 = "Referencia: Pax "+pasajero.getApellidoPaterno()+" "+pasajero.getApellidoMaterno()+" "+pasajero.getNombres();
-		String linea2 = "Fee por emision de boleto aereo";
-		String linea3 = "LIM/LAX/SFO/LAX/LIM";
+		String linea2 = "";
+		String linea3 = "";
 		String linea4 = "";
 		String linea5 = "";
 		String linea6 = "";
