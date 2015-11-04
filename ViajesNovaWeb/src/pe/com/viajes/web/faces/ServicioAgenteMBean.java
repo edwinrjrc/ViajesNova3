@@ -67,6 +67,7 @@ import pe.com.viajes.bean.negocio.Telefono;
 import pe.com.viajes.bean.negocio.Tramo;
 import pe.com.viajes.bean.negocio.Usuario;
 import pe.com.viajes.bean.util.UtilParse;
+import pe.com.viajes.negocio.exception.ErrorConsultaDataException;
 import pe.com.viajes.negocio.exception.ErrorRegistroDataException;
 import pe.com.viajes.negocio.exception.ValidacionException;
 import pe.com.viajes.web.servicio.ConsultaNegocioServicio;
@@ -2292,7 +2293,26 @@ public class ServicioAgenteMBean extends BaseMBean {
 	}
 	
 	public void consultarPasajero(){
-		
+		try {
+			boolean encontrado = false;
+			for (DetalleServicioAgencia detalleServicio : this.getListadoDetalleServicio()){
+				for (Pasajero pax : detalleServicio.getListaPasajeros()){
+					if (pax.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero() != null && this.getPasajero().getDocumentoIdentidad().getCodigoEntero() != null && StringUtils.isNotBlank(pax.getDocumentoIdentidad().getNumeroDocumento()) && StringUtils.isNotBlank(this.getPasajero().getDocumentoIdentidad().getNumeroDocumento())){
+						if (pax.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue() == this.getPasajero().getDocumentoIdentidad().getCodigoEntero().intValue() && pax.getDocumentoIdentidad().getNumeroDocumento().equals(this.getPasajero().getDocumentoIdentidad().getNumeroDocumento())){
+							this.setPasajero(pax);
+							encontrado = true;
+							break;
+						}
+					}
+				}
+			}
+			if (!encontrado){
+				List<Pasajero> listaPax = this.consultaNegocioServicio.consultarPasajeroHistorico(getPasajero());
+				this.setPasajero(listaPax.get(0));
+			}
+		} catch (ErrorConsultaDataException e) {
+			logger.error(e.getMessage(), e);
+		}
 	}
 
 	/**

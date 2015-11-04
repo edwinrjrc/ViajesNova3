@@ -23,6 +23,7 @@ import pe.com.viajes.bean.negocio.ImpresionArchivoCargado;
 import pe.com.viajes.bean.negocio.MaestroServicio;
 import pe.com.viajes.bean.negocio.MovimientoCuenta;
 import pe.com.viajes.bean.negocio.PagoServicio;
+import pe.com.viajes.bean.negocio.Pasajero;
 import pe.com.viajes.bean.negocio.ProgramaNovios;
 import pe.com.viajes.bean.negocio.Proveedor;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
@@ -168,4 +169,7 @@ public interface ConsultaNegocioServicio {
 			Integer idArchivoCargado) throws SQLException;
 
 	List<CheckIn> consultarCheckInPendiente(Usuario usuario) throws SQLException;
+
+	List<Pasajero> consultarPasajeroHistorico(Pasajero pasajero)
+			throws ErrorConsultaDataException;
 }

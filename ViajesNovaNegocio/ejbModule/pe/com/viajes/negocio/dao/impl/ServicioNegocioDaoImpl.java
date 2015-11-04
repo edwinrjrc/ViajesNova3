@@ -438,4 +438,69 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 			}
 		}
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see pe.com.viajes.negocio.dao.ServicioNegocioDao#consultarPasajeroHistorico(pe.com.viajes.bean.negocio.Pasajero)
+	 */
+	@Override
+	public List<Pasajero> consultarPasajeroHistorico(Pasajero pasajero) throws SQLException{
+		List<Pasajero> resultado = null;
+		CallableStatement cs = null;
+		Connection conn = null;
+		ResultSet rs = null;
+		String sql = "";
+		
+		try{
+			conn = UtilConexion.obtenerConexion();
+			sql = "{ ? = call negocio.fn_consultarpasajeroshistorico(?,?)}";
+			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(1, Types.OTHER);
+			cs.setInt(2, pasajero.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue());
+			cs.setString(3, pasajero.getDocumentoIdentidad().getNumeroDocumento());
+			cs.execute();
+			
+			rs = (ResultSet) cs.getObject(1);
+			resultado = new ArrayList<Pasajero>();
+			Pasajero pasajero2 = null;
+			while (rs.next()){
+				pasajero2 = new Pasajero();
+				pasajero2.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				pasajero2.getDocumentoIdentidad().getTipoDocumento().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipodocumento"));
+				pasajero2.getDocumentoIdentidad().setNumeroDocumento(UtilJdbc.obtenerCadena(rs, "numerodocumento"));
+				pasajero2.setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
+				pasajero2.setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
+				pasajero2.setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
+				pasajero2.setTelefono1(UtilJdbc.obtenerCadena(rs, "telefono1"));
+				pasajero2.setTelefono2(UtilJdbc.obtenerCadena(rs, "telefono2"));
+				pasajero2.setCorreoElectronico(UtilJdbc.obtenerCadena(rs, "correoelectronico"));
+				pasajero2.setNumeroPasajeroFrecuente(UtilJdbc.obtenerCadena(rs, "nropaxfrecuente"));
+				pasajero2.getAerolinea().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idaerolinea"));
+				pasajero2.setCodigoReserva(UtilJdbc.obtenerCadena(rs, "codigoreserva"));
+				pasajero2.setNumeroBoleto(UtilJdbc.obtenerCadena(rs, "numeroboleto"));
+				pasajero2.setFechaVctoPasaporte(UtilJdbc.obtenerFecha(rs, "fechavctopasaporte"));
+				pasajero2.setFechaNacimiento(UtilJdbc.obtenerFecha(rs, "fechanacimiento"));
+				pasajero2.getRelacion().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idrelacion"));
+				
+				resultado.add(pasajero2);
+			}
+			
+			return resultado;
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+			throw new SQLException (e);
+		}
+		finally{
+			if (rs != null){
+				rs.close();
+			}
+			if (cs != null){
+				cs.close();
+			}
+			if (conn != null){
+				conn.close();
+			}
+		}
+	}
 }

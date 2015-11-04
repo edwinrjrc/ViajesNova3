@@ -816,4 +816,17 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 		
 		return archivoReporteDao.consultaImpresionArchivoCargado(idArchivoCargado);
 	}
+	
+	@Override
+	public List<Pasajero> consultarPasajeroHistorico(Pasajero pasajero) throws ErrorConsultaDataException{
+		try {
+			ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
+			
+			List<Pasajero> listaPasajeros = servicioNegocioDao.consultarPasajeroHistorico(pasajero);
+			
+			return listaPasajeros;
+		} catch (SQLException e) {
+			throw new ErrorConsultaDataException(e.getMessage());
+		}
+	}
 }

@@ -29,6 +29,7 @@ import pe.com.viajes.bean.negocio.ImpresionArchivoCargado;
 import pe.com.viajes.bean.negocio.MaestroServicio;
 import pe.com.viajes.bean.negocio.MovimientoCuenta;
 import pe.com.viajes.bean.negocio.PagoServicio;
+import pe.com.viajes.bean.negocio.Pasajero;
 import pe.com.viajes.bean.negocio.ProgramaNovios;
 import pe.com.viajes.bean.negocio.Proveedor;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
@@ -398,5 +399,10 @@ public class ConsultaNegocioServicioImpl implements ConsultaNegocioServicio {
 	public List<ImpresionArchivoCargado> consultaImpresionArchivoCargado(
 			Integer idArchivoCargado) throws SQLException {
 		return ejbSession.consultaImpresionArchivoCargado(idArchivoCargado);
+	}
+	
+	@Override
+	public List<Pasajero> consultarPasajeroHistorico(Pasajero pasajero) throws ErrorConsultaDataException{
+		return ejbSession.consultarPasajeroHistorico(pasajero);
 	}
 }

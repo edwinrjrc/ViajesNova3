@@ -38,4 +38,7 @@ public interface ServicioNegocioDao {
 	
 	List<Pasajero> consultarPasajeros(Integer idServicioDetalle, Connection conn)
 			throws SQLException;
+
+	List<Pasajero> consultarPasajeroHistorico(Pasajero pasajero)
+			throws SQLException;
 }
