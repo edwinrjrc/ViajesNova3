@@ -92,7 +92,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 	private final static Logger logger = Logger
 			.getLogger(ServicioAgenteMBean.class);
-	
+
 	private static final long serialVersionUID = 3451688997471435575L;
 
 	private ServicioAgencia servicioAgencia;
@@ -356,23 +356,26 @@ public class ServicioAgenteMBean extends BaseMBean {
 		HttpSession session = obtenerSession(false);
 		Usuario usuario = (Usuario) session.getAttribute(USUARIO_SESSION);
 		this.setVendedor(usuario.isVendedor());
-		
-		if (!this.isVendedor() && Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero())) {
+
+		if (!this.isVendedor()
+				&& Integer.valueOf(2)
+						.equals(usuario.getRol().getCodigoEntero())) {
 			this.getServicioAgencia().getVendedor()
 					.setCodigoEntero(usuario.getCodigoEntero());
 			this.getServicioAgencia().getVendedor()
 					.setNombre(usuario.getNombreCompleto());
 			this.setVendedor(true);
-		}
-		else{
-			this.getServicioAgencia().getVendedor().setCodigoEntero(usuario.getCodigoEntero());
-			this.getServicioAgencia().getVendedor().setNombre(usuario.getNombreCompleto());
+		} else {
+			this.getServicioAgencia().getVendedor()
+					.setCodigoEntero(usuario.getCodigoEntero());
+			this.getServicioAgencia().getVendedor()
+					.setNombre(usuario.getNombreCompleto());
 		}
 
 		this.getServicioAgencia().setFechaServicio(new Date());
 		this.setListaDocumentosAdicionales(null);
 		this.getServicioAgencia().getMoneda().setCodigoEntero(2);
-		
+
 		this.inicializaTipoServicio();
 	}
 
@@ -415,10 +418,10 @@ public class ServicioAgenteMBean extends BaseMBean {
 					}
 
 				}
-				
+
 				inicializaTipoServicio();
 			}
-			
+
 		} catch (ErrorRegistroDataException e) {
 			logger.error(e.getMessage(), e);
 			this.mostrarMensajeError(e.getMessage());
@@ -462,7 +465,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 				this.setListadoEmpresas(null);
 				this.setEditaServicioAgregado(false);
 				this.setCargoConfiguracionTipoServicio(false);
-				
+
 				this.inicializaTipoServicio();
 			}
 
@@ -549,8 +552,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 							.getCodigoEntero());
 
 			for (BaseVO baseVO : listaDependientes) {
-				if (!estaEnListaServicios(baseVO)
-						&& baseVO.isValorBoolean()) {
+				if (!estaEnListaServicios(baseVO) && baseVO.isValorBoolean()) {
 					throw new ErrorRegistroDataException("No se agrego "
 							+ baseVO.getNombre());
 				}
@@ -579,24 +581,26 @@ public class ServicioAgenteMBean extends BaseMBean {
 		return resultado;
 	}
 
-	private void validarFee() throws ErrorRegistroDataException, ValidacionException {
+	private void validarFee() throws ErrorRegistroDataException,
+			ValidacionException {
 		boolean requiereFee = false;
-		int fee =0;
+		int fee = 0;
 		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()) {
 			if (detalle.getTipoServicio().isRequiereFee()) {
 				requiereFee = true;
 				break;
 			}
 		}
-		
+
 		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()) {
 			if (detalle.getTipoServicio().isEsFee()) {
 				fee++;
 				break;
 			}
 		}
-		if (fee ==0 && requiereFee){
-			throw new ValidacionException("No se ha agreado Fee de venta requerido");
+		if (fee == 0 && requiereFee) {
+			throw new ValidacionException(
+					"No se ha agreado Fee de venta requerido");
 		}
 	}
 
@@ -679,21 +683,47 @@ public class ServicioAgenteMBean extends BaseMBean {
 				throw new ValidacionException(
 						"No puede agregar este servicio hasta que no haya agregado un servicio padre o principal");
 			}
-			
-			if (configuracionTipoServicio.isMuestraRuta()){
-				if (this.getDetalleServicio().getRuta().getTramos().isEmpty()){
+
+			if (configuracionTipoServicio.isMuestraRuta()) {
+				if (this.getDetalleServicio().getRuta().getTramos().isEmpty()) {
 					this.agregarMensaje(idFormulario + ":idTextRuta",
 							"Ingrese la ruta del servicio", "",
 							FacesMessage.SEVERITY_ERROR);
 					resultado = false;
 				}
 			}
-			
-			if (this.getDetalleServicio().getTipoServicio()
-					.isServicioPadre() && !this.getDetalleServicio().getTipoServicio().isEsFee()){
-				if (this.getDetalleServicio().getListaPasajeros().isEmpty()){
-					this.agregarMensaje(idFormulario + ":idTextResumenPasajeros",
+
+			if (this.getDetalleServicio().getTipoServicio().isServicioPadre()
+					&& !this.getDetalleServicio().getTipoServicio().isEsFee()) {
+				if (this.getDetalleServicio().getListaPasajeros().isEmpty()) {
+					this.agregarMensaje(idFormulario
+							+ ":idTextResumenPasajeros",
 							"Ingrese los pasajeros", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+			}
+
+			if (this.getDetalleServicio().getServicioProveedor().getProveedor()
+					.getCodigoEntero() != null
+					&& this.getDetalleServicio().getServicioProveedor()
+							.getProveedor().getCodigoEntero().intValue() != 0
+					&& configuracionTipoServicio.isMuestraComision()) {
+				if (this.getDetalleServicio().getServicioProveedor()
+						.getComision().getTipoComision().getCodigoEntero() == null
+						|| this.getDetalleServicio().getServicioProveedor()
+								.getComision().getTipoComision()
+								.getCodigoEntero().intValue() == 0) {
+					this.agregarMensaje(idFormulario
+							+ ":idSelTipoValorComision",
+							"Seleccione el tipo de valor de comision", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (this.getDetalleServicio().getServicioProveedor().getComision().getValorComision() == null){
+					this.agregarMensaje(idFormulario
+							+ ":idTxtValorComision",
+							"Ingrese el valor de comision", "",
 							FacesMessage.SEVERITY_ERROR);
 					resultado = false;
 				}
@@ -1312,7 +1342,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 		this.setDetalleServicio(null);
 		this.setCargoConfiguracionTipoServicio(false);
 		this.setEditaServicioAgregado(false);
-		
+
 		agregarServiciosPadre();
 
 		calcularTotales();
@@ -1999,7 +2029,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	public void aceptarRuta() {
 		String descripcion = "";
 		try {
-			if (validarRuta()){
+			if (validarRuta()) {
 				BigDecimal precioRuta = BigDecimal.ZERO;
 				for (Tramo tramo : this.getListaTramos()) {
 
@@ -2025,8 +2055,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 							tramo.getDestino().getDescripcion() + "("
 									+ tramo.getDestino().getCodigoIATA() + ")");
 
-					descripcion = descripcion + tramo.getOrigen().getDescripcion()
-							+ " >> " + tramo.getDestino().getDescripcion() + " / ";
+					descripcion = descripcion
+							+ tramo.getOrigen().getDescripcion() + " >> "
+							+ tramo.getDestino().getDescripcion() + " / ";
 
 					precioRuta = precioRuta.add(tramo.getPrecio());
 				}
@@ -2035,16 +2066,19 @@ public class ServicioAgenteMBean extends BaseMBean {
 						getListaTramos().get(0).getFechaSalida());
 				getDetalleServicio().getRuta().setTramos(getListaTramos());
 				HttpSession session = obtenerSession(false);
-				Usuario usuario = (Usuario) session.getAttribute("usuarioSession");
+				Usuario usuario = (Usuario) session
+						.getAttribute("usuarioSession");
 				getDetalleServicio().getRuta().setUsuarioCreacion(
 						usuario.getUsuario());
 				getDetalleServicio().getRuta().setIpCreacion(
 						obtenerRequest().getRemoteAddr());
 
 				getDetalleServicio().setPrecioUnitarioAnterior(precioRuta);
-				
-				descripcion = descripcion.substring(0, (descripcion.length() - 2));
-				this.getDetalleServicio().getRuta().setDescripcionRuta(descripcion);
+
+				descripcion = descripcion.substring(0,
+						(descripcion.length() - 2));
+				this.getDetalleServicio().getRuta()
+						.setDescripcionRuta(descripcion);
 			}
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
@@ -2056,25 +2090,27 @@ public class ServicioAgenteMBean extends BaseMBean {
 	}
 
 	private boolean validarRuta() throws ValidacionException {
-		if (this.getListaTramos().isEmpty()){
+		if (this.getListaTramos().isEmpty()) {
 			throw new ValidacionException("No se agrego la ruta al servicio");
-		}
-		else{
-			for (Tramo tramo : this.getListaTramos()){
-				if (StringUtils.isBlank(tramo.getOrigen().getCodigoCadena())){
-					throw new ValidacionException("No se selecciono el origen de la ruta");
-				}
-				else if (tramo.getFechaSalida() == null){
-					throw new ValidacionException("No se selecciono la fecha de salida");
-				}
-				else if (StringUtils.isBlank(tramo.getDestino().getCodigoCadena())){
-					throw new ValidacionException("No se selecciono el destino de la ruta");
-				}
-				else if (tramo.getFechaLlegada() == null){
-					throw new ValidacionException("No se selecciono la fecha de llegada");
-				}
-				else if (tramo.getAerolinea().getCodigoEntero() == null || tramo.getAerolinea().getCodigoEntero().intValue() == 0){
-					throw new ValidacionException("No se selecciono la aerolinea");
+		} else {
+			for (Tramo tramo : this.getListaTramos()) {
+				if (StringUtils.isBlank(tramo.getOrigen().getCodigoCadena())) {
+					throw new ValidacionException(
+							"No se selecciono el origen de la ruta");
+				} else if (tramo.getFechaSalida() == null) {
+					throw new ValidacionException(
+							"No se selecciono la fecha de salida");
+				} else if (StringUtils.isBlank(tramo.getDestino()
+						.getCodigoCadena())) {
+					throw new ValidacionException(
+							"No se selecciono el destino de la ruta");
+				} else if (tramo.getFechaLlegada() == null) {
+					throw new ValidacionException(
+							"No se selecciono la fecha de llegada");
+				} else if (tramo.getAerolinea().getCodigoEntero() == null
+						|| tramo.getAerolinea().getCodigoEntero().intValue() == 0) {
+					throw new ValidacionException(
+							"No se selecciono la aerolinea");
 				}
 			}
 		}
@@ -2125,18 +2161,23 @@ public class ServicioAgenteMBean extends BaseMBean {
 		}
 
 	}
-	
-	public void agregarPasajero(){
+
+	public void agregarPasajero() {
 		try {
-			if (validarPasajero()){
-				
+			if (validarPasajero()) {
+
 				HttpSession session = obtenerSession(false);
-				Usuario usuario = (Usuario)session.getAttribute(USUARIO_SESSION);
-				this.getPasajero().setIpCreacion(obtenerRequest().getRemoteAddr());
+				Usuario usuario = (Usuario) session
+						.getAttribute(USUARIO_SESSION);
+				this.getPasajero().setIpCreacion(
+						obtenerRequest().getRemoteAddr());
 				this.getPasajero().setUsuarioCreacion(usuario.getUsuario());
-				
-				this.getDetalleServicio().getListaPasajeros().add(this.utilNegocioServicio.agregarPasajero(this.getPasajero()));
-				
+
+				this.getDetalleServicio()
+						.getListaPasajeros()
+						.add(this.utilNegocioServicio.agregarPasajero(this
+								.getPasajero()));
+
 				this.setPasajero(null);
 			}
 		} catch (ErrorRegistroDataException e) {
@@ -2144,78 +2185,89 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.mostrarMensajeError(e.getMessage());
 		}
 	}
-	
-	public void eliminarPasajero(Pasajero pax){
+
+	public void eliminarPasajero(Pasajero pax) {
 		this.getDetalleServicio().getListaPasajeros().remove(pax);
 	}
-	
-	public void aceptarPasajeros(){
-		if (this.getDetalleServicio().getListaPasajeros() != null){
+
+	public void aceptarPasajeros() {
+		if (this.getDetalleServicio().getListaPasajeros() != null) {
 			String resumenPasajeros = "";
-			for (Pasajero pasajero : this.getDetalleServicio().getListaPasajeros()) {
-				String nombres = StringUtils.normalizeSpace(StringUtils.trimToEmpty(pasajero.getNombres()));
+			for (Pasajero pasajero : this.getDetalleServicio()
+					.getListaPasajeros()) {
+				String nombres = StringUtils.normalizeSpace(StringUtils
+						.trimToEmpty(pasajero.getNombres()));
 				nombres = nombres.replaceAll(" ", "#");
 				resumenPasajeros = resumenPasajeros + nombres.split("#")[0];
-				resumenPasajeros = resumenPasajeros + " " + StringUtils.trimToEmpty(pasajero.getApellidoPaterno());
-				if (StringUtils.isNotBlank(pasajero.getApellidoMaterno())){
-					resumenPasajeros = resumenPasajeros + " " + StringUtils.trimToEmpty(pasajero.getApellidoMaterno()).charAt(0)+".";
+				resumenPasajeros = resumenPasajeros
+						+ " "
+						+ StringUtils
+								.trimToEmpty(pasajero.getApellidoPaterno());
+				if (StringUtils.isNotBlank(pasajero.getApellidoMaterno())) {
+					resumenPasajeros = resumenPasajeros
+							+ " "
+							+ StringUtils.trimToEmpty(
+									pasajero.getApellidoMaterno()).charAt(0)
+							+ ".";
 				}
-				
+
 				resumenPasajeros = resumenPasajeros + "/";
 			}
-			resumenPasajeros = StringUtils.substring(resumenPasajeros, 0, (StringUtils.length(resumenPasajeros)-1));
+			resumenPasajeros = StringUtils.substring(resumenPasajeros, 0,
+					(StringUtils.length(resumenPasajeros) - 1));
 			this.getDetalleServicio().setResumenPasajeros(resumenPasajeros);
-			this.getDetalleServicio().setCantidad(this.getDetalleServicio().getListaPasajeros().size());
+			this.getDetalleServicio().setCantidad(
+					this.getDetalleServicio().getListaPasajeros().size());
 		}
 	}
-	
+
 	private boolean validarPasajero() {
 		boolean resultado = true;
 		String idFormulario = "idFrPasajeros";
-		
-		if (StringUtils.isBlank(this.getPasajero().getNombres())){
+
+		if (StringUtils.isBlank(this.getPasajero().getNombres())) {
 			this.agregarMensaje(idFormulario + ":idTxtNombres",
 					"Ingrese los nombres del pasajero", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
-		if (StringUtils.isBlank(this.getPasajero().getApellidoPaterno())){
+		if (StringUtils.isBlank(this.getPasajero().getApellidoPaterno())) {
 			this.agregarMensaje(idFormulario + ":idTxtApPaterno",
 					"Ingrese el apellido paterno del pasajero", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
-		/*if (StringUtils.isBlank(this.getPasajero().getApellidoMaterno())){
-			this.agregarMensaje(idFormulario + ":idTxtApMaterno",
-					"Ingrese el apellido materno del pasajero", "",
-					FacesMessage.SEVERITY_ERROR);
-			resultado = false;
-		}*/
-		/*if (StringUtils.isBlank(this.getPasajero().getTelefono1())){
-			this.agregarMensaje(idFormulario + ":idTxtTelefono1",
-					"Ingrese el telefono 1", "",
-					FacesMessage.SEVERITY_ERROR);
-			resultado = false;
-		}
-		if (StringUtils.isBlank(this.getPasajero().getTelefono2())){
-			this.agregarMensaje(idFormulario + ":idTxtTelefono2",
-					"Ingrese el telefono 2", "",
-					FacesMessage.SEVERITY_ERROR);
-			resultado = false;
-		}
-		if (StringUtils.isBlank(this.getPasajero().getCorreoElectronico())){
-			this.agregarMensaje(idFormulario + ":idTxtCorreoElectronico",
-					"Ingrese el Correo electronico", "",
-					FacesMessage.SEVERITY_ERROR);
-			resultado = false;
-		}*/
-		if (StringUtils.isNotBlank(this.getPasajero().getCorreoElectronico()) && !UtilWeb.validarCorreo(this.getPasajero().getCorreoElectronico())){
+		/*
+		 * if (StringUtils.isBlank(this.getPasajero().getApellidoMaterno())){
+		 * this.agregarMensaje(idFormulario + ":idTxtApMaterno",
+		 * "Ingrese el apellido materno del pasajero", "",
+		 * FacesMessage.SEVERITY_ERROR); resultado = false; }
+		 */
+		/*
+		 * if (StringUtils.isBlank(this.getPasajero().getTelefono1())){
+		 * this.agregarMensaje(idFormulario + ":idTxtTelefono1",
+		 * "Ingrese el telefono 1", "", FacesMessage.SEVERITY_ERROR); resultado
+		 * = false; } if
+		 * (StringUtils.isBlank(this.getPasajero().getTelefono2())){
+		 * this.agregarMensaje(idFormulario + ":idTxtTelefono2",
+		 * "Ingrese el telefono 2", "", FacesMessage.SEVERITY_ERROR); resultado
+		 * = false; } if
+		 * (StringUtils.isBlank(this.getPasajero().getCorreoElectronico())){
+		 * this.agregarMensaje(idFormulario + ":idTxtCorreoElectronico",
+		 * "Ingrese el Correo electronico", "", FacesMessage.SEVERITY_ERROR);
+		 * resultado = false; }
+		 */
+		if (StringUtils.isNotBlank(this.getPasajero().getCorreoElectronico())
+				&& !UtilWeb.validarCorreo(this.getPasajero()
+						.getCorreoElectronico())) {
 			this.agregarMensaje(idFormulario + ":idTxtCorreoElectronico",
 					"Ingrese el correo electronico correcto", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
-		if (this.getPasajero().getRelacion().getCodigoEntero() == null || this.getPasajero().getRelacion().getCodigoEntero().intValue() == 0){
+		if (this.getPasajero().getRelacion().getCodigoEntero() == null
+				|| this.getPasajero().getRelacion().getCodigoEntero()
+						.intValue() == 0) {
 			this.agregarMensaje(idFormulario + ":idSelRelacion",
 					"Seleccione la relacion del pasajero", "",
 					FacesMessage.SEVERITY_ERROR);
@@ -2223,59 +2275,85 @@ public class ServicioAgenteMBean extends BaseMBean {
 		}
 		return resultado;
 	}
-	
-	public void cargarPasajero(ValueChangeEvent e){
+
+	public void cargarPasajero(ValueChangeEvent e) {
 		try {
-			if (e.getNewValue()!=null){
+			if (e.getNewValue() != null) {
 				String valor = e.getNewValue().toString();
 				this.setRenderFormularioPasajero("");
-				
-				if (valor.equals(UtilWeb.obtenerCadenaPropertieMaestro("pasajeroelmismo", "aplicacionDatos")) && this.getServicioAgencia().getCliente().getCodigoEntero()!=null){
-					Cliente elmismo = this.consultaNegocioServicio.consultarCliente(this.getServicioAgencia().getCliente().getCodigoEntero());
-					
-					this.getPasajero().setDocumentoIdentidad(elmismo.getDocumentoIdentidad());
+
+				if (valor.equals(UtilWeb.obtenerCadenaPropertieMaestro(
+						"pasajeroelmismo", "aplicacionDatos"))
+						&& this.getServicioAgencia().getCliente()
+								.getCodigoEntero() != null) {
+					Cliente elmismo = this.consultaNegocioServicio
+							.consultarCliente(this.getServicioAgencia()
+									.getCliente().getCodigoEntero());
+
+					this.getPasajero().setDocumentoIdentidad(
+							elmismo.getDocumentoIdentidad());
 					this.getPasajero().setNombres(elmismo.getNombres());
-					this.getPasajero().setApellidoPaterno(elmismo.getApellidoPaterno());
-					this.getPasajero().setApellidoMaterno(elmismo.getApellidoMaterno());
-					this.getPasajero().setFechaVctoPasaporte(elmismo.getFechaVctoPasaporte());
-					this.getPasajero().setFechaNacimiento(elmismo.getFechaNacimiento());
-					
-					if (!elmismo.getListaContactos().isEmpty()){
-						List<Telefono> listaTelefonos = elmismo.getListaContactos().get(0).getListaTelefonos();
-						if (!listaTelefonos.isEmpty()){
-							this.getPasajero().setTelefono1(listaTelefonos.get(0).getNumeroTelefono());
-							if (listaTelefonos.size()>1){
-								this.getPasajero().setTelefono2(listaTelefonos.get(1).getNumeroTelefono());
+					this.getPasajero().setApellidoPaterno(
+							elmismo.getApellidoPaterno());
+					this.getPasajero().setApellidoMaterno(
+							elmismo.getApellidoMaterno());
+					this.getPasajero().setFechaVctoPasaporte(
+							elmismo.getFechaVctoPasaporte());
+					this.getPasajero().setFechaNacimiento(
+							elmismo.getFechaNacimiento());
+
+					if (!elmismo.getListaContactos().isEmpty()) {
+						List<Telefono> listaTelefonos = elmismo
+								.getListaContactos().get(0).getListaTelefonos();
+						if (!listaTelefonos.isEmpty()) {
+							this.getPasajero().setTelefono1(
+									listaTelefonos.get(0).getNumeroTelefono());
+							if (listaTelefonos.size() > 1) {
+								this.getPasajero().setTelefono2(
+										listaTelefonos.get(1)
+												.getNumeroTelefono());
 							}
 						}
 						Contacto contacto2 = null;
-						for (Contacto contacto : elmismo.getListaContactos()){
-							if (contacto.getDocumentoIdentidad().getNumeroDocumento().equals(elmismo.getDocumentoIdentidad().getNumeroDocumento())){
+						for (Contacto contacto : elmismo.getListaContactos()) {
+							if (contacto
+									.getDocumentoIdentidad()
+									.getNumeroDocumento()
+									.equals(elmismo.getDocumentoIdentidad()
+											.getNumeroDocumento())) {
 								contacto2 = contacto;
 								break;
 							}
 						}
-						if (!contacto2.getListaCorreos().isEmpty()){
-							this.getPasajero().setCorreoElectronico(contacto2.getListaCorreos().get(0).getDireccion());
+						if (!contacto2.getListaCorreos().isEmpty()) {
+							this.getPasajero().setCorreoElectronico(
+									contacto2.getListaCorreos().get(0)
+											.getDireccion());
 						}
 					}
-					if (StringUtils.isBlank(this.getPasajero().getTelefono1())){
-						if (!elmismo.getListaDirecciones().isEmpty()){
-							Direccion direccion = elmismo.getListaDirecciones().get(0);
-							if (!direccion.getTelefonos().isEmpty()){
-								this.getPasajero().setTelefono1(direccion.getTelefonos().get(0).getNumeroTelefono());
+					if (StringUtils.isBlank(this.getPasajero().getTelefono1())) {
+						if (!elmismo.getListaDirecciones().isEmpty()) {
+							Direccion direccion = elmismo.getListaDirecciones()
+									.get(0);
+							if (!direccion.getTelefonos().isEmpty()) {
+								this.getPasajero().setTelefono1(
+										direccion.getTelefonos().get(0)
+												.getNumeroTelefono());
 							}
 						}
 					}
-					if (StringUtils.isBlank(this.getPasajero().getTelefono2())){
-						if (!elmismo.getListaDirecciones().isEmpty()){
-							Direccion direccion = elmismo.getListaDirecciones().get(0);
-							if (direccion.getTelefonos().size()>1){
-								this.getPasajero().setTelefono2(direccion.getTelefonos().get(1).getNumeroTelefono());
+					if (StringUtils.isBlank(this.getPasajero().getTelefono2())) {
+						if (!elmismo.getListaDirecciones().isEmpty()) {
+							Direccion direccion = elmismo.getListaDirecciones()
+									.get(0);
+							if (direccion.getTelefonos().size() > 1) {
+								this.getPasajero().setTelefono2(
+										direccion.getTelefonos().get(1)
+												.getNumeroTelefono());
 							}
 						}
 					}
-					
+
 					this.setRenderFormularioPasajero("idPnFrAddPax");
 				}
 			}
@@ -2287,18 +2365,37 @@ public class ServicioAgenteMBean extends BaseMBean {
 			logger.error(ex.getMessage(), ex);
 		}
 	}
-	
-	public void ingresarPasajeros(){
+
+	public void ingresarPasajeros() {
 		this.setPasajero(null);
 	}
-	
-	public void consultarPasajero(){
+
+	public void consultarPasajero() {
 		try {
 			boolean encontrado = false;
-			for (DetalleServicioAgencia detalleServicio : this.getListadoDetalleServicio()){
-				for (Pasajero pax : detalleServicio.getListaPasajeros()){
-					if (pax.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero() != null && this.getPasajero().getDocumentoIdentidad().getCodigoEntero() != null && StringUtils.isNotBlank(pax.getDocumentoIdentidad().getNumeroDocumento()) && StringUtils.isNotBlank(this.getPasajero().getDocumentoIdentidad().getNumeroDocumento())){
-						if (pax.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue() == this.getPasajero().getDocumentoIdentidad().getCodigoEntero().intValue() && pax.getDocumentoIdentidad().getNumeroDocumento().equals(this.getPasajero().getDocumentoIdentidad().getNumeroDocumento())){
+			for (DetalleServicioAgencia detalleServicio : this
+					.getListadoDetalleServicio()) {
+				for (Pasajero pax : detalleServicio.getListaPasajeros()) {
+					if (pax.getDocumentoIdentidad().getTipoDocumento()
+							.getCodigoEntero() != null
+							&& this.getPasajero().getDocumentoIdentidad()
+									.getTipoDocumento().getCodigoEntero() != null
+							&& StringUtils.isNotBlank(pax
+									.getDocumentoIdentidad()
+									.getNumeroDocumento())
+							&& StringUtils.isNotBlank(this.getPasajero()
+									.getDocumentoIdentidad()
+									.getNumeroDocumento())) {
+						if (pax.getDocumentoIdentidad().getTipoDocumento()
+								.getCodigoEntero().intValue() == this
+								.getPasajero().getDocumentoIdentidad()
+								.getTipoDocumento().getCodigoEntero()
+								.intValue()
+								&& pax.getDocumentoIdentidad()
+										.getNumeroDocumento()
+										.equals(this.getPasajero()
+												.getDocumentoIdentidad()
+												.getNumeroDocumento())) {
 							this.setPasajero(pax);
 							encontrado = true;
 							break;
@@ -2306,10 +2403,16 @@ public class ServicioAgenteMBean extends BaseMBean {
 					}
 				}
 			}
-			if (!encontrado){
-				List<Pasajero> listaPax = this.consultaNegocioServicio.consultarPasajeroHistorico(getPasajero());
-				this.setPasajero(listaPax.get(0));
+			if (!encontrado) {
+				List<Pasajero> listaPax = this.consultaNegocioServicio
+						.consultarPasajeroHistorico(getPasajero());
+				if (!listaPax.isEmpty()) {
+					this.setPasajero(listaPax.get(0));
+				}
 			}
+
+			this.getPasajero().setCodigoReserva(null);
+			this.getPasajero().setNumeroBoleto(null);
 		} catch (ErrorConsultaDataException e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -3206,7 +3309,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 	}
 
 	/**
-	 * @param aplicaIGV the aplicaIGV to set
+	 * @param aplicaIGV
+	 *            the aplicaIGV to set
 	 */
 	public void setAplicaIGV(boolean aplicaIGV) {
 		this.aplicaIGV = aplicaIGV;
@@ -3216,14 +3320,15 @@ public class ServicioAgenteMBean extends BaseMBean {
 	 * @return the pasajero
 	 */
 	public Pasajero getPasajero() {
-		if (pasajero == null){
+		if (pasajero == null) {
 			pasajero = new Pasajero();
 		}
 		return pasajero;
 	}
 
 	/**
-	 * @param pasajero the pasajero to set
+	 * @param pasajero
+	 *            the pasajero to set
 	 */
 	public void setPasajero(Pasajero pasajero) {
 		this.pasajero = pasajero;
@@ -3237,7 +3342,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 	}
 
 	/**
-	 * @param renderFormularioPasajero the renderFormularioPasajero to set
+	 * @param renderFormularioPasajero
+	 *            the renderFormularioPasajero to set
 	 */
 	public void setRenderFormularioPasajero(String renderFormularioPasajero) {
 		this.renderFormularioPasajero = renderFormularioPasajero;

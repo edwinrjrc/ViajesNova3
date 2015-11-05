@@ -174,9 +174,11 @@
 							<h:panelGrid columns="4" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
 								columnClasses="col1form,col2form,col1form,col2form">
-								
+
 								<h:outputText value="Código Novios" />
-								<h:inputText value="#{servicioAgenteMBean.servicioAgencia.codigoNovios}" maxlength="5" />
+								<h:inputText
+									value="#{servicioAgenteMBean.servicioAgencia.codigoNovios}"
+									maxlength="5" />
 								<h:outputText value="" />
 								<h:outputText value="" />
 
@@ -283,7 +285,8 @@
 											<h:outputText id="idTextResumenPasajeros"
 												value="#{servicioAgenteMBean.detalleServicio.resumenPasajeros}" />
 											<a4j:commandButton value="Ingresar Pasajeros" type="button"
-												oncomplete="mostrarModal3('idModalpasajeros')" action="#{servicioAgenteMBean.ingresarPasajeros}"
+												oncomplete="mostrarModal3('idModalpasajeros')"
+												action="#{servicioAgenteMBean.ingresarPasajeros}"
 												render="idPnFrPasajeros, idPnFrAddPax"></a4j:commandButton>
 											<rich:message for="idTextResumenPasajeros" showSummary="true"
 												showDetail="false" ajaxRendered="true"></rich:message>
@@ -551,15 +554,27 @@
 											columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
 
 											<h:outputText value="Tipo valor comisión" />
-											<h:selectOneMenu
-												value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.comision.tipoComision.codigoEntero}">
-												<f:selectItem itemLabel="-Seleccione-" />
-												<f:selectItem itemLabel="Porcentaje (%)" itemValue="1" />
-												<f:selectItem itemLabel="Monto Fijo" itemValue="2" />
-											</h:selectOneMenu>
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1">
+												<h:selectOneMenu id="idSelTipoValorComision"
+													value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.comision.tipoComision.codigoEntero}">
+													<f:selectItem itemLabel="-Seleccione-" />
+													<f:selectItem itemLabel="Porcentaje (%)" itemValue="1" />
+													<f:selectItem itemLabel="Monto Fijo" itemValue="2" />
+												</h:selectOneMenu>
+												<rich:message showDetail="false" for="idSelTipoValorComision"
+													showSummary="true" ajaxRendered="true"></rich:message>
+											</h:panelGrid>
+
 											<h:outputText value="Valor comisión" />
-											<h:inputText
-												value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.comision.valorComision}" />
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												columns="1">
+												<h:inputText onkeypress="return js_soloDecimal(event)"
+													id="idTxtValorComision" style="text-align:right;" size="10"
+													maxlength="8"
+													value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.comision.valorComision}" />
+												<rich:message showDetail="false" for="idTxtValorComision"
+													showSummary="true" ajaxRendered="true"></rich:message>
+											</h:panelGrid>
 
 											<h:outputText value="Aplicar IGV" />
 											<h:selectBooleanCheckbox
