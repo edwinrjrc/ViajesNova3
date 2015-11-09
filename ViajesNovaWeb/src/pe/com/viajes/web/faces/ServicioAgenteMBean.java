@@ -490,9 +490,17 @@ public class ServicioAgenteMBean extends BaseMBean {
 			if (detalle.getTipoServicio().isServicioPadre()) {
 				si = new SelectItem();
 				si.setValue(detalle.getCodigoEntero());
+				Pasajero pasajero = null;
+				if (!detalle.getListaPasajeros().isEmpty()){
+					pasajero = detalle.getListaPasajeros().get(0);
+				}
 
-				String etiqueta = "" + detalle.getTipoServicio().getNombre();
-
+				String etiqueta = "" + detalle.getTipoServicio().getNombre() +" " + UtilWeb.rutaCorta(detalle.getRuta());
+				
+				if (pasajero != null){
+					etiqueta = etiqueta + UtilWeb.nvl(pasajero.getCodigoReserva(),"");
+				}
+ 
 				si.setLabel(etiqueta);
 				this.getListadoServiciosPadre().add(si);
 				this.setAgregoServicioPadre(true);
@@ -755,6 +763,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 						&& ds.getTipoServicio().isEsFee()) {
 					montoFee = montoFee.add(ds.getTotalServicio());
 				}
+				
+				this.getServicioAgencia().setMoneda(ds.getMonedaFacturacion());
 			}
 
 		} catch (Exception e) {
@@ -2018,8 +2028,62 @@ public class ServicioAgenteMBean extends BaseMBean {
 		Usuario usuario = (Usuario) session.getAttribute("usuarioSession");
 		tramo.setUsuarioCreacion(usuario.getUsuario());
 		tramo.setIpCreacion(obtenerRequest().getRemoteAddr());
+		
+		int tamanio = this.getListaTramos().size();
+		if (tamanio > 0){
+			Tramo tramo1 = this.getListaTramos().get(tamanio-1);
+			
+			tramo.setAerolinea(tramo1.getAerolinea());
+			tramo.setOrigen(tramo1.getDestino());
+			tramo.setPrecio(tramo1.getPrecio());
+		}
 
 		this.getListaTramos().add(tramo);
+	}
+	
+	public void agregarTramoRegreso() {
+		try {
+			if (validarTramosIngresados()){
+				for (int i=this.getListaTramos().size()-1; i>=0; i--){
+					Tramo tramoAnterior = this.getListaTramos().get(i);
+					
+					Tramo tramo = new Tramo();
+					HttpSession session = obtenerSession(false);
+					Usuario usuario = (Usuario) session.getAttribute("usuarioSession");
+					tramo.setUsuarioCreacion(usuario.getUsuario());
+					tramo.setIpCreacion(obtenerRequest().getRemoteAddr());
+					tramo.setOrigen(tramoAnterior.getDestino());
+					tramo.setDestino(tramoAnterior.getOrigen());
+					tramo.setAerolinea(tramoAnterior.getAerolinea());
+					
+					this.getListaTramos().add(tramo);
+				}
+			}
+		} catch (ValidacionException e) {
+			this.mostrarMensajeError(e.getMensajeError());
+		}
+		
+	}
+
+	private boolean validarTramosIngresados() throws ValidacionException {
+		if (this.getListaTramos().isEmpty()){
+			throw new ValidacionException("No se han agregado tramos");
+		}
+		else {
+			for(Tramo tramo : this.getListaTramos()){
+				if (StringUtils.isBlank(tramo.getOrigen().getCodigoCadena())){
+					throw new ValidacionException("Origen no seleccionado");
+				}
+				else if (StringUtils.isBlank(tramo.getDestino().getCodigoCadena())){
+					throw new ValidacionException("Destino no seleccionado");
+				}
+				else if (tramo.getAerolinea().getCodigoEntero() == null){
+					throw new ValidacionException("Destino no seleccionado");
+				}
+			}
+		}
+		
+		return true;
 	}
 
 	public void eliminarTramo(Tramo tramo) {
@@ -2111,6 +2175,11 @@ public class ServicioAgenteMBean extends BaseMBean {
 						|| tramo.getAerolinea().getCodigoEntero().intValue() == 0) {
 					throw new ValidacionException(
 							"No se selecciono la aerolinea");
+				} else if (tramo.getFechaSalida().after(tramo.getFechaLlegada())){
+					throw new ValidacionException(
+							"No se han colocado correctamente las fechas, fecha Salida>fecha Llegada");
+				} else if (tramo.getFechaSalida().equals(tramo.getFechaLlegada())){
+					throw new ValidacionException("Las fechas de salida y llegada no pueden ser iguales");
 				}
 			}
 		}
@@ -2234,6 +2303,12 @@ public class ServicioAgenteMBean extends BaseMBean {
 		if (StringUtils.isBlank(this.getPasajero().getApellidoPaterno())) {
 			this.agregarMensaje(idFormulario + ":idTxtApPaterno",
 					"Ingrese el apellido paterno del pasajero", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (this.getPasajero().getPais().getCodigoEntero() == null || this.getPasajero().getPais().getCodigoEntero().intValue() == 0){
+			this.agregarMensaje(idFormulario + ":idSelNacionalidad",
+					"Seleccione la nacionalidad del pasajero", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
@@ -2368,6 +2443,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 	public void ingresarPasajeros() {
 		this.setPasajero(null);
+		this.getPasajero().getPais().setCodigoEntero(UtilWeb.obtenerEnteroPropertieMaestro("codigoPaisPeru", "aplicacionDatos"));
 	}
 
 	public void consultarPasajero() {

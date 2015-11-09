@@ -17,7 +17,6 @@ public class Maestro extends BaseVO {
 	private static final long serialVersionUID = 1L;
 
 	private String descripcion;
-	private String abreviatura;
 	private int orden;
 	private Integer codigoMaestro;
 
@@ -71,21 +70,6 @@ public class Maestro extends BaseVO {
 	 */
 	public void setCodigoMaestro(Integer codigoMaestro) {
 		this.codigoMaestro = codigoMaestro;
-	}
-
-	/**
-	 * @return the abreviatura
-	 */
-	public String getAbreviatura() {
-		return abreviatura;
-	}
-
-	/**
-	 * @param abreviatura
-	 *            the abreviatura to set
-	 */
-	public void setAbreviatura(String abreviatura) {
-		this.abreviatura = abreviatura;
 	}
 
 }

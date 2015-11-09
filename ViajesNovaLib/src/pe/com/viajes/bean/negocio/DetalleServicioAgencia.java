@@ -34,6 +34,7 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private Date fechaRegreso;
 	private int cantidad;
 	private BaseVO moneda;
+	private BaseVO monedaFacturacion;
 	private BigDecimal tipoCambio;
 	private BigDecimal precioUnitarioAnterior;
 	private BigDecimal precioUnitario;
@@ -789,6 +790,23 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setResumenPasajeros(String resumenPasajeros) {
 		this.resumenPasajeros = resumenPasajeros;
+	}
+
+	/**
+	 * @return the monedaFacturacion
+	 */
+	public BaseVO getMonedaFacturacion() {
+		if (monedaFacturacion == null){
+			monedaFacturacion = new BaseVO();
+		}
+		return monedaFacturacion;
+	}
+
+	/**
+	 * @param monedaFacturacion the monedaFacturacion to set
+	 */
+	public void setMonedaFacturacion(BaseVO monedaFacturacion) {
+		this.monedaFacturacion = monedaFacturacion;
 	}
 
 }

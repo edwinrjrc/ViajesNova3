@@ -22,6 +22,8 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 
 import pe.com.viajes.bean.base.BaseVO;
+import pe.com.viajes.bean.negocio.Ruta;
+import pe.com.viajes.bean.negocio.Tramo;
 
 /**
  * @author Edwin
@@ -328,5 +330,30 @@ public class UtilWeb {
 		tamanio = tamanio.multiply(BigDecimal.valueOf(256.0));
 
 		return tamanio.intValue();
+	}
+	
+	public static String rutaCorta(Ruta ruta){
+		String rutaCorta = "";
+		int i=0;
+		if (ruta != null && !ruta.getTramos().isEmpty()){
+			for (Tramo tramo : ruta.getTramos()) {
+				if (i == 0){
+					rutaCorta = tramo.getOrigen().getDescripcion() +"/" + tramo.getDestino().getDescripcion();
+				}
+				else{
+					rutaCorta = rutaCorta + tramo.getDestino().getDescripcion() + "/";
+				}
+				i++;
+			}
+		}
+		
+		return rutaCorta;
+	}
+	
+	public static String nvl(String valor1, String valor2){
+		if (StringUtils.isNotBlank(valor1)){
+			return valor1;
+		}
+		return valor2;
 	}
 }

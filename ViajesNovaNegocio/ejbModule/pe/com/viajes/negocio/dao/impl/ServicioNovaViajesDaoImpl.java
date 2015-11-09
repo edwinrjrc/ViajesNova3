@@ -997,6 +997,9 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						"fecharegreso"));
 				detalleServicio.setCantidad(UtilJdbc.obtenerNumero(rs,
 						"cantidad"));
+				detalleServicio.getMoneda().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idmoneda"));
+				detalleServicio.getMoneda().setNombre(UtilJdbc.obtenerCadena(rs, "nombremoneda"));
+				detalleServicio.getMoneda().setAbreviatura(UtilJdbc.obtenerCadena(rs, "simbolomoneda"));
 				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(
 						rs, "preciobase"));
 				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs,
@@ -1093,6 +1096,9 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 						"fecharegreso"));
 				detalleServicio.setCantidad(UtilJdbc.obtenerNumero(rs,
 						"cantidad"));
+				detalleServicio.getMoneda().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idmoneda"));
+				detalleServicio.getMoneda().setNombre(UtilJdbc.obtenerCadena(rs, "nombremoneda"));
+				detalleServicio.getMoneda().setAbreviatura(UtilJdbc.obtenerCadena(rs, "simbolomoneda"));
 				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(
 						rs, "preciobase"));
 				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs,
@@ -2260,7 +2266,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	public Integer registrarComprobante(Comprobante comprobante, Connection conn)
 			throws SQLException, Exception {
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarcomprobantegenerado(?,?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarcomprobantegenerado(?,?,?,?,?,?,?,?,?,?,?,?)}";
 		int resultado = 0;
 		try {
 			cs = conn.prepareCall(sql);

@@ -554,15 +554,17 @@
 											columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
 
 											<h:outputText value="Tipo valor comisión" />
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												columns="1">
 												<h:selectOneMenu id="idSelTipoValorComision"
 													value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.comision.tipoComision.codigoEntero}">
 													<f:selectItem itemLabel="-Seleccione-" />
 													<f:selectItem itemLabel="Porcentaje (%)" itemValue="1" />
 													<f:selectItem itemLabel="Monto Fijo" itemValue="2" />
 												</h:selectOneMenu>
-												<rich:message showDetail="false" for="idSelTipoValorComision"
-													showSummary="true" ajaxRendered="true"></rich:message>
+												<rich:message showDetail="false"
+													for="idSelTipoValorComision" showSummary="true"
+													ajaxRendered="true"></rich:message>
 											</h:panelGrid>
 
 											<h:outputText value="Valor comisión" />
@@ -693,6 +695,7 @@
 												<h:outputText value="Precio Unitario" />
 											</h:panelGrid>
 										</f:facet>
+										<h:outputText value="#{row.monedaFacturacion.abreviatura}" />
 										<h:outputText value="#{row.precioUnitario}">
 											<f:convertNumber pattern="###,##0.00" locale="en_US" />
 										</h:outputText>
@@ -704,6 +707,7 @@
 												<h:outputText value="Total" />
 											</h:panelGrid>
 										</f:facet>
+										<h:outputText value="#{row.monedaFacturacion.abreviatura}" />
 										<h:outputText value="#{row.totalServicio}">
 											<f:convertNumber pattern="###,##0.00" locale="en_US" />
 										</h:outputText>
@@ -734,22 +738,38 @@
 									border="0" style="width:100%;" id="idTotalesServicios"
 									columnClasses="col1RSPN,col2RSPN">
 									<h:outputText value="Total Comision (Inc. IGV)" />
-									<h:outputText
-										value="#{servicioAgenteMBean.servicioAgencia.montoTotalComision}">
-										<f:convertNumber pattern="###,##0.00" locale="en_US" />
-									</h:outputText>
+									<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+										columns="2" columnClasses="col1RSPN,col2RSPN">
+										<h:outputText
+											value="#{servicioAgenteMBean.servicioAgencia.moneda.abreviatura}" />
+										<h:outputText
+											value="#{servicioAgenteMBean.servicioAgencia.montoTotalComision}">
+											<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										</h:outputText>
+									</h:panelGrid>
+
 
 									<h:outputText value="Total Fee" />
-									<h:outputText
-										value="#{servicioAgenteMBean.servicioAgencia.montoTotalFee}">
-										<f:convertNumber pattern="###,##0.00" locale="en_US" />
-									</h:outputText>
+									<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+										columns="2" columnClasses="col1RSPN,col2RSPN">
+										<h:outputText
+											value="#{servicioAgenteMBean.servicioAgencia.moneda.abreviatura}" />
+										<h:outputText
+											value="#{servicioAgenteMBean.servicioAgencia.montoTotalFee}">
+											<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										</h:outputText>
+									</h:panelGrid>
 
 									<h:outputText value="Total Servicios" />
-									<h:outputText
-										value="#{servicioAgenteMBean.servicioAgencia.montoTotalServicios}">
-										<f:convertNumber pattern="###,##0.00" locale="en_US" />
-									</h:outputText>
+									<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+										columns="2" columnClasses="col1RSPN,col2RSPN">
+										<h:outputText
+											value="#{servicioAgenteMBean.servicioAgencia.moneda.abreviatura}" />
+										<h:outputText
+											value="#{servicioAgenteMBean.servicioAgencia.montoTotalServicios}">
+											<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										</h:outputText>
+									</h:panelGrid>
 								</h:panelGrid>
 							</h:panelGrid>
 						</h:panelGrid>

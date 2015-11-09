@@ -15,6 +15,7 @@ import javax.ejb.Stateless;
 
 import org.apache.commons.lang3.StringUtils;
 
+import pe.com.viajes.bean.base.BaseVO;
 import pe.com.viajes.bean.jasper.DetalleServicio;
 import pe.com.viajes.bean.negocio.ConfiguracionTipoServicio;
 import pe.com.viajes.bean.negocio.Contacto;
@@ -112,6 +113,7 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 				agrupados = 0;
 				montoAgrupado = BigDecimal.ZERO;
 				cantidadAgrupado = 0;
+				BaseVO moneda = null;
 				for (DetalleServicioAgencia detalleHijo : listaServicios) {
 					if (detalleHijo.getTipoServicio().getCodigoEntero()
 							.intValue() == maestroServicio.getCodigoEntero()
@@ -154,6 +156,8 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 								.getNroComprobante());
 						detalle.setIdComprobanteGenerado(detalleHijo
 								.getIdComprobanteGenerado());
+						detalle.setMoneda(detalleHijo.getMoneda());
+						moneda = detalleHijo.getMoneda();
 						detalle.setServicioPadre(detalleHijo.getServicioPadre());
 					}
 				}
@@ -168,6 +172,7 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 							BigDecimal.valueOf(cantidadAgrupado),
 							BigDecimal.ROUND_CEILING);
 					detalle.setPrecioUnitario(precio);
+					detalle.setMoneda(moneda);
 					detalle.setTotal(montoAgrupado);
 					listaServiciosAgrupados.add(detalle);
 				} else if (agrupados > 0) {
@@ -197,11 +202,18 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 			ProveedorDao proveedorDao = new ProveedorDaoImpl();
 			ComunDao comunDao = new ComunDaoImpl();
 			TipoCambioDao tipoCambioDao = new TipoCambioDaoImpl();
+			MaestroDao maestroDao = new MaestroDaoImpl();
 
 			TipoCambio tipoCambio = tipoCambioDao.consultarTipoCambio(
 					detalleServicio.getMoneda().getCodigoEntero(),
 					idMonedaServicio, conn);
 			detalleServicio.setTipoCambio(tipoCambio.getMontoCambio());
+			
+			Maestro hijoMaestro = new Maestro();
+			hijoMaestro.setCodigoMaestro(UtilEjb.obtenerEnteroPropertieMaestro("maestroMonedas", "aplicacionDatosEjb"));
+			hijoMaestro.setCodigoEntero(idMonedaServicio);
+			Maestro hijoMoneda = maestroDao.consultarHijoMaestro(hijoMaestro);
+			detalleServicio.setMonedaFacturacion(hijoMoneda);
 
 			MaestroServicio tipoServicio = maestroServicioDao
 					.consultarMaestroServicio(detalleServicio.getTipoServicio()
@@ -586,6 +598,7 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 			DestinoDao destinoDao = new DestinoDaoImpl();
 			ProveedorDao proveedorDao = new ProveedorDaoImpl();
 			TipoCambioDao tipoCambioDao = new TipoCambioDaoImpl();
+			MaestroDao maestroDao = new MaestroDaoImpl();
 
 			TipoCambio tipoCambio;
 			try {
@@ -597,6 +610,12 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 				tipoCambio.setMontoCambio(BigDecimal.ONE);
 			}
 			detalleServicio.setTipoCambio(tipoCambio.getMontoCambio());
+			
+			Maestro hijoMaestro = new Maestro();
+			hijoMaestro.setCodigoMaestro(UtilEjb.obtenerEnteroPropertieMaestro("maestroMonedas", "aplicacionDatosEjb"));
+			hijoMaestro.setCodigoEntero(idMonedaServicio);
+			Maestro hijoMoneda = maestroDao.consultarHijoMaestro(hijoMaestro);
+			detalleServicio.setMonedaFacturacion(hijoMoneda);
 
 			detalleServicioAgencia.setTipoServicio(maestroServicioDao
 					.consultarMaestroServicio(detalleServicio.getTipoServicio()

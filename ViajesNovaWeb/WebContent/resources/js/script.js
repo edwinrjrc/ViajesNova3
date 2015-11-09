@@ -133,3 +133,19 @@ function mostrarMensajeModal(idModalCerrar) {
 		// alert("ERROR JS::"+e);
 	}
 }
+
+function mostrarMensajeModal2(idModalCerrar) {
+	try {
+		var mostrarModal = document.getElementById('idFormHidden:idShowModal').value;
+		var tipoModal = document.getElementById('idFormHidden:idTipoModal').value;
+
+		if (tipoModal == "1" && eval(mostrarModal)) {
+			mostrarModal3('idModalcorrecto');
+		} else if (tipoModal == "2" && eval(mostrarModal)) {
+			mostrarModal3('idModalError');
+		} 
+
+	} catch (e) {
+		// alert("ERROR JS::"+e);
+	}
+}
