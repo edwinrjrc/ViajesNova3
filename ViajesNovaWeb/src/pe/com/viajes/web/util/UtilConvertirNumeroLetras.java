@@ -143,17 +143,6 @@ public class UtilConvertirNumeroLetras {
 
 		StringBuilder converted = new StringBuilder();
 
-		String patternThreeDecimalPoints = "###,###.##";
-
-		DecimalFormatSymbols decimalSymbols = new DecimalFormatSymbols(Locale.US);
-		DecimalFormat format = new DecimalFormat(patternThreeDecimalPoints, decimalSymbols);
-		format.setRoundingMode(RoundingMode.DOWN);
-
-		// formateamos el numero, para ajustarlo a el formato de tres puntos
-		// decimales
-		String formatedDouble = format.format(doubleNumber);
-		doubleNumber = Double.parseDouble(formatedDouble);
-
 		// Validamos que sea un numero legal
 		if (doubleNumber > 999999999){
 			throw new NumberFormatException(

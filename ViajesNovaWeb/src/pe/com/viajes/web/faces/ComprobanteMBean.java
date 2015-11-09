@@ -4,6 +4,8 @@
 package pe.com.viajes.web.faces;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -555,8 +557,8 @@ public class ComprobanteMBean extends BaseMBean {
 				linea7 = detaComprobante.getConcepto();
 			}
 		}
-		
-		String monto = this.getComprobanteDetalle().getTotalComprobante().toEngineeringString();
+		BigDecimal redondeado = this.getComprobanteDetalle().getTotalComprobante().setScale(2, RoundingMode.HALF_UP);
+		String monto = redondeado.toEngineeringString();
 		String moneda = this.getComprobanteDetalle().getMoneda().getNombre();
 		String simboloMoneda = this.getComprobanteDetalle().getMoneda().getAbreviatura();
 				
@@ -640,6 +642,7 @@ public class ComprobanteMBean extends BaseMBean {
 		if (celda == null){
 			celda = fila.createCell(0);
 		}
+		
 		String montoLetras = UtilConvertirNumeroLetras.convertNumberToLetter(monto);
 		celda.setCellValue("   SON: "+montoLetras+" "+moneda);
 		celda.setCellStyle(estiloCalibriIzquierda);

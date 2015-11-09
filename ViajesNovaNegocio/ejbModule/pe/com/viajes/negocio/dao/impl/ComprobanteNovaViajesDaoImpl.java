@@ -174,6 +174,7 @@ public class ComprobanteNovaViajesDaoImpl implements ComprobanteNovaViajesDao {
 			while (rs.next()) {
 				comprobante = new Comprobante();
 				comprobante.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				comprobante.setIdServicio(UtilJdbc.obtenerNumero(rs, "idservicio"));
 				comprobante.getTipoComprobante().setCodigoEntero(
 						UtilJdbc.obtenerNumero(rs, "idtipocomprobante"));
 				comprobante.getTipoComprobante().setNombre(
@@ -190,6 +191,9 @@ public class ComprobanteNovaViajesDaoImpl implements ComprobanteNovaViajesDao {
 						UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
 				comprobante.setFechaComprobante(UtilJdbc.obtenerFecha(rs,
 						"fechacomprobante"));
+				comprobante.getMoneda().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idmoneda"));
+				comprobante.getMoneda().setNombre(UtilJdbc.obtenerCadena(rs, "nombremoneda"));
+				comprobante.getMoneda().setAbreviatura(UtilJdbc.obtenerCadena(rs, "abreviatura"));
 				comprobante.setTotalComprobante(UtilJdbc.obtenerBigDecimal(rs,
 						"totalcomprobante"));
 				resultado.add(comprobante);

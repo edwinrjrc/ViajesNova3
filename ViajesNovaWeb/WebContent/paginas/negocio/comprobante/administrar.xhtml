@@ -142,6 +142,7 @@
 							<f:facet name="header">
 								<h:outputText value="Total Comprobante" />
 							</f:facet>
+							<h:outputText value="#{fila.moneda.abreviatura}" />
 							<h:outputText value="#{fila.totalComprobante}">
 								<f:convertNumber locale="en_US" pattern="###,##0.00" />
 							</h:outputText>
