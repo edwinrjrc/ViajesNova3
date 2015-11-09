@@ -194,6 +194,8 @@ public class ComprobanteNovaViajesDaoImpl implements ComprobanteNovaViajesDao {
 				comprobante.getMoneda().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idmoneda"));
 				comprobante.getMoneda().setNombre(UtilJdbc.obtenerCadena(rs, "nombremoneda"));
 				comprobante.getMoneda().setAbreviatura(UtilJdbc.obtenerCadena(rs, "abreviatura"));
+				comprobante.setSubTotal(UtilJdbc.obtenerBigDecimal(rs, "subtotalcomprobante"));
+				comprobante.setTotalIGV(UtilJdbc.obtenerBigDecimal(rs, "totaligv"));
 				comprobante.setTotalComprobante(UtilJdbc.obtenerBigDecimal(rs,
 						"totalcomprobante"));
 				resultado.add(comprobante);

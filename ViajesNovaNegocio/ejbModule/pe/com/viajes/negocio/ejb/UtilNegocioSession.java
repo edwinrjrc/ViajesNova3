@@ -504,11 +504,19 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 		return monto;
 	}
 	
-	private BigDecimal desglozarMontoSinIGV(BigDecimal monto) throws SQLException{
+	@Override
+	public BigDecimal desglozarMontoSinIGV(BigDecimal monto) throws SQLException{
 		BigDecimal valorDesglozar = obtenerPorcentajeIGV().add(BigDecimal.ONE);
 		monto = monto.divide(valorDesglozar, RoundingMode.HALF_UP);
 		
 		return monto;
+	}
+	
+	@Override
+	public BigDecimal obtenerMontoIGV(BigDecimal monto) throws SQLException{
+		BigDecimal valor = desglozarMontoSinIGV(monto);
+		BigDecimal valorIGVFinal = monto.subtract(valor); 
+		return valorIGVFinal;
 	}
 
 	private String generarDescripcionServicio(DetalleServicioAgencia detalle) {

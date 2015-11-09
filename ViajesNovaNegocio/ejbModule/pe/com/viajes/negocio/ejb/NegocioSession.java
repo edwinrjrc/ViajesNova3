@@ -1190,6 +1190,9 @@ public class NegocioSession implements NegocioSessionRemote,
 				userTransaction.begin();
 				conn = UtilConexion.obtenerConexion();
 				for (Comprobante comprobante : listaComprobantes2) {
+					if (comprobante.getTipoComprobante().getCodigoEntero().intValue() == UtilEjb.obtenerEnteroPropertieMaestro("comprobanteFactura", "aplicacionDatosEjb")){
+						comprobante.setTotalIGV(this.utilNegocioSessionLocal.obtenerMontoIGV(comprobante.getTotalComprobante()));
+					}
 					Integer idComprobante = servicioNovaViajesDao
 							.registrarComprobante(comprobante, conn);
 					servicioNovaViajesDao.registrarDetalleComprobante(

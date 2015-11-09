@@ -45,4 +45,8 @@ public interface UtilNegocioSessionLocal {
 
 	public String obtenerDireccionCompleta(Direccion direccion)
 			throws SQLException, Exception;
+
+	BigDecimal desglozarMontoSinIGV(BigDecimal monto) throws SQLException;
+
+	BigDecimal obtenerMontoIGV(BigDecimal monto) throws SQLException;
 }
