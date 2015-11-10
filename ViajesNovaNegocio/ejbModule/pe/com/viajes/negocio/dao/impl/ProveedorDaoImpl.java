@@ -327,6 +327,8 @@ public class ProveedorDaoImpl implements ProveedorDao {
 						.obtenerCadena(rs, "ipcreacion"));
 				resultado.getTipoProveedor().setCodigoEntero(
 						UtilJdbc.obtenerNumero(rs, "idtipoproveedor"));
+				resultado.getNacionalidad().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idnacionalidad"));
+				resultado.getNacionalidad().setNombre(UtilJdbc.obtenerCadena(rs, "descnacionalidad"));
 			}
 		} catch (SQLException e) {
 			resultado = null;

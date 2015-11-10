@@ -39,7 +39,7 @@ public class PersonaDaoImpl implements PersonaDao {
 			throws SQLException {
 		int resultado = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarpersona(?,?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarpersona(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 
 		try {
 			cs = conexion.prepareCall(sql);
@@ -121,6 +121,12 @@ public class PersonaDaoImpl implements PersonaDao {
 			} else {
 				cs.setNull(i++, Types.DATE);
 			}
+			if (persona.getNacionalidad().getCodigoEntero() != null && persona.getNacionalidad().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, persona.getNacionalidad().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
 
 			cs.execute();
 			resultado = cs.getInt(1);
@@ -152,7 +158,7 @@ public class PersonaDaoImpl implements PersonaDao {
 			throws SQLException {
 		int resultado = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_actualizarpersona(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_actualizarpersona(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 
 		try {
 			cs = conexion.prepareCall(sql);
@@ -235,6 +241,7 @@ public class PersonaDaoImpl implements PersonaDao {
 			} else {
 				cs.setNull(i++, Types.DATE);
 			}
+			cs.setInt(i++, persona.getNacionalidad().getCodigoEntero().intValue());
 
 			cs.execute();
 			resultado = cs.getInt(1);

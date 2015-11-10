@@ -39,6 +39,7 @@ public abstract class Persona extends BaseNegocio {
 
 	private String nroPasaporte;
 	private Date fechaVctoPasaporte;
+	private BaseVO nacionalidad;
 
 	public Persona() {
 
@@ -300,6 +301,23 @@ public abstract class Persona extends BaseNegocio {
 	 */
 	public void setFechaVctoPasaporte(Date fechaVctoPasaporte) {
 		this.fechaVctoPasaporte = fechaVctoPasaporte;
+	}
+
+	/**
+	 * @return the nacionalidad
+	 */
+	public BaseVO getNacionalidad() {
+		if (nacionalidad == null){
+			nacionalidad = new BaseVO();
+		}
+		return nacionalidad;
+	}
+
+	/**
+	 * @param nacionalidad the nacionalidad to set
+	 */
+	public void setNacionalidad(BaseVO nacionalidad) {
+		this.nacionalidad = nacionalidad;
 	}
 
 }

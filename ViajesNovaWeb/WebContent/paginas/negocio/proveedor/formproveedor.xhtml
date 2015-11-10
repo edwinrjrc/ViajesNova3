@@ -113,8 +113,8 @@
 									columns="1"
 									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero != 1 and proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero != 2}">
 									<h:inputText id="idNomComercialPro"
-										value="#{proveedorMBean.proveedor.nombreComercial}" maxlength="100"
-										size="80" styleClass="estilocampo1" />
+										value="#{proveedorMBean.proveedor.nombreComercial}"
+										maxlength="100" size="80" styleClass="estilocampo1" />
 									<rich:message for="idNomComercialPro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
@@ -156,6 +156,17 @@
 									<h:outputText value="#{proveedorMBean.proveedor.fechaCreacion}">
 										<f:convertDateTime pattern="dd/MM/yyyy" />
 									</h:outputText>
+								</h:panelGrid>
+
+								<h:outputText value="Nacionalidad" />
+								<h:panelGrid cellpadding="0" cellspacing="0" border="0">
+									<h:selectOneMenu id="idSelNacionalidad"
+										value="#{proveedorMBean.proveedor.nacionalidad.codigoEntero}">
+										<f:selectItem itemLabel="-Seleccione-" />
+										<f:selectItems value="#{catalogoMBean.catalogoPais}"></f:selectItems>
+									</h:selectOneMenu>
+									<rich:message for="idSelNacionalidad" showSummary="true"
+										showDetail="false"></rich:message>
 								</h:panelGrid>
 
 							</h:panelGrid>
@@ -328,11 +339,13 @@
 							</rich:dataTable>
 						</h:panelGrid>
 					</rich:tab>
-					<rich:tab header="Cuentas Bancarias" rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 3}">
+					<rich:tab header="Cuentas Bancarias"
+						rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 3}">
 						<h:panelGrid border="0" cellpadding="o" cellspacing="0"
 							style="width:100%;" columns="1" id="idGrdTablaCuentas">
-							<rich:dataTable id="idTabCuentas" value="#{proveedorMBean.proveedor.listaCuentas}"
-								var="cuenta" style="width:100%;">
+							<rich:dataTable id="idTabCuentas"
+								value="#{proveedorMBean.proveedor.listaCuentas}" var="cuenta"
+								style="width:100%;">
 								<rich:column>
 									<f:facet name="header">
 										<h:outputText value="Nombre Cuenta" />
@@ -376,7 +389,8 @@
 									</h:selectOneMenu>
 								</rich:column>
 								<rich:column>
-									<a4j:commandButton render="idGrdTablaCuentas" value="-" action="#{proveedorMBean.removerCuenta(cuenta)}"></a4j:commandButton>
+									<a4j:commandButton render="idGrdTablaCuentas" value="-"
+										action="#{proveedorMBean.removerCuenta(cuenta)}"></a4j:commandButton>
 								</rich:column>
 								<f:facet name="header">
 									<a4j:commandButton value="Agregar" render="idGrdTablaCuentas"
