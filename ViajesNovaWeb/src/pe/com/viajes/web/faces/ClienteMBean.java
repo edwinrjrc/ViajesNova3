@@ -276,7 +276,7 @@ public class ClienteMBean extends BaseMBean {
 				"tipoDocumentoCE", "aplicacionDatos");
 		int tipoDocRUC = UtilWeb.obtenerEnteroPropertieMaestro(
 				"tipoDocumentoRUC", "aplicacionDatos");
-
+		
 		if (StringUtils.isBlank(getCliente().getDocumentoIdentidad()
 				.getNumeroDocumento())) {
 			this.agregarMensaje(idFormulario + ":idFPInNumDoc",

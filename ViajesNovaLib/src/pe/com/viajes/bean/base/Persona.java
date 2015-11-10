@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import pe.com.viajes.bean.negocio.Direccion;
 import pe.com.viajes.bean.negocio.DocumentoIdentidad;
+import pe.com.viajes.bean.negocio.Pais;
 import pe.com.viajes.bean.negocio.Telefono;
 import pe.com.viajes.bean.util.UtilParse;
 
@@ -39,7 +40,7 @@ public abstract class Persona extends BaseNegocio {
 
 	private String nroPasaporte;
 	private Date fechaVctoPasaporte;
-	private BaseVO nacionalidad;
+	private Pais nacionalidad;
 
 	public Persona() {
 
@@ -306,9 +307,9 @@ public abstract class Persona extends BaseNegocio {
 	/**
 	 * @return the nacionalidad
 	 */
-	public BaseVO getNacionalidad() {
+	public Pais getNacionalidad() {
 		if (nacionalidad == null){
-			nacionalidad = new BaseVO();
+			nacionalidad = new Pais();
 		}
 		return nacionalidad;
 	}
@@ -316,7 +317,7 @@ public abstract class Persona extends BaseNegocio {
 	/**
 	 * @param nacionalidad the nacionalidad to set
 	 */
-	public void setNacionalidad(BaseVO nacionalidad) {
+	public void setNacionalidad(Pais nacionalidad) {
 		this.nacionalidad = nacionalidad;
 	}
 

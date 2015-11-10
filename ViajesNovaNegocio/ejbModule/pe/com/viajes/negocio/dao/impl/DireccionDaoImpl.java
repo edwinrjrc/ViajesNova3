@@ -31,7 +31,7 @@ public class DireccionDaoImpl implements DireccionDao {
 			throws SQLException {
 		int resultado = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresardireccion(?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresardireccion(?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 
 		try {
 			cs = conexion.prepareCall(sql);
@@ -94,6 +94,12 @@ public class DireccionDaoImpl implements DireccionDao {
 						UtilJdbc.convertirMayuscula(direccion.getReferencia()));
 			} else {
 				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (direccion.getPais().getCodigoEntero() != null && direccion.getPais().getCodigoEntero().intValue() !=0){
+				cs.setInt(i++, direccion.getPais().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
 			}
 
 			cs.execute();
@@ -244,7 +250,7 @@ public class DireccionDaoImpl implements DireccionDao {
 			throws SQLException {
 		int resultado = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_actualizardireccion(?,?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_actualizardireccion(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 
 		try {
 			cs = conexion.prepareCall(sql);
@@ -307,6 +313,12 @@ public class DireccionDaoImpl implements DireccionDao {
 						UtilJdbc.convertirMayuscula(direccion.getReferencia()));
 			} else {
 				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (direccion.getPais().getCodigoEntero() != null && direccion.getPais().getCodigoEntero().intValue() !=0){
+				cs.setInt(i++, direccion.getPais().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
 			}
 
 			cs.execute();

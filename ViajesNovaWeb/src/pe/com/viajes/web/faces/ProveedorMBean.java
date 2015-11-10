@@ -330,50 +330,63 @@ public class ProveedorMBean extends BaseMBean {
 				"tipoDocumentoCE", "aplicacionDatos");
 		int tipoDocRUC = UtilWeb.obtenerEnteroPropertieMaestro(
 				"tipoDocumentoRUC", "aplicacionDatos");
-
-		if (tipoDocDNI == getProveedor().getDocumentoIdentidad()
-				.getTipoDocumento().getCodigoEntero().intValue()
-				|| tipoDocCE == getProveedor().getDocumentoIdentidad()
-						.getTipoDocumento().getCodigoEntero().intValue()) {
-			if (StringUtils.isBlank(getProveedor().getApellidoMaterno())) {
-				this.agregarMensaje(idFormulario + ":idApeMatPro",
-						"Ingrese el apellido materno", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
+		boolean proveedorNacional = false;
+		
+		if (this.getProveedor().getNacionalidad().getCodigoEntero() == null || this.getProveedor().getNacionalidad().getCodigoEntero().intValue() == 0){
+			this.agregarMensaje(idFormulario + ":idSelNacionalidad",
+					"Seleccione la nacionalidad del proveedor", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		
+		proveedorNacional = (this.getProveedor().getNacionalidad().getCodigoEntero().intValue() == UtilWeb.obtenerEnteroPropertieMaestro("codigoPaisPeru", "aplicacionDatos"));
+		
+		if (proveedorNacional){
+			if (tipoDocDNI == getProveedor().getDocumentoIdentidad()
+					.getTipoDocumento().getCodigoEntero().intValue()
+					|| tipoDocCE == getProveedor().getDocumentoIdentidad()
+							.getTipoDocumento().getCodigoEntero().intValue()) {
+				if (StringUtils.isBlank(getProveedor().getApellidoMaterno())) {
+					this.agregarMensaje(idFormulario + ":idApeMatPro",
+							"Ingrese el apellido materno", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (StringUtils.isBlank(getProveedor().getApellidoPaterno())) {
+					this.agregarMensaje(idFormulario + ":idApePatPro",
+							"Ingrese el apellido paterno", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (StringUtils.isBlank(getProveedor().getApellidoPaterno())) {
+					this.agregarMensaje(idFormulario + ":idApePatPro",
+							"Ingrese el apellido paterno", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (StringUtils.isBlank(getProveedor().getNombres())) {
+					this.agregarMensaje(idFormulario + ":idNomPro",
+							"Ingrese los nombres", "", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
 			}
-			if (StringUtils.isBlank(getProveedor().getApellidoPaterno())) {
-				this.agregarMensaje(idFormulario + ":idApePatPro",
-						"Ingrese el apellido paterno", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-			if (StringUtils.isBlank(getProveedor().getApellidoPaterno())) {
-				this.agregarMensaje(idFormulario + ":idApePatPro",
-						"Ingrese el apellido paterno", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-			if (StringUtils.isBlank(getProveedor().getNombres())) {
-				this.agregarMensaje(idFormulario + ":idNomPro",
-						"Ingrese los nombres", "", FacesMessage.SEVERITY_ERROR);
-				resultado = false;
+			if (tipoDocDNI != getProveedor().getDocumentoIdentidad()
+					.getTipoDocumento().getCodigoEntero().intValue()) {
+				if (StringUtils.isBlank(getProveedor().getRazonSocial())) {
+					this.agregarMensaje(idFormulario + ":idRazSocPro",
+							"Ingrese la razon social", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (StringUtils.isBlank(getProveedor().getNombreComercial())) {
+					this.agregarMensaje(idFormulario + ":idNomComercialPro",
+							"Ingrese la razon social", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
 			}
 		}
-		if (tipoDocDNI != getProveedor().getDocumentoIdentidad()
-				.getTipoDocumento().getCodigoEntero().intValue()) {
-			if (StringUtils.isBlank(getProveedor().getRazonSocial())) {
-				this.agregarMensaje(idFormulario + ":idRazSocPro",
-						"Ingrese la razon social", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-			if (StringUtils.isBlank(getProveedor().getNombreComercial())) {
-				this.agregarMensaje(idFormulario + ":idNomComercialPro",
-						"Ingrese la razon social", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-		}
+		
 		/*
 		 * if (this.getProveedor().getListaServicioProveedor()== null ||
 		 * this.getProveedor().getListaServicioProveedor().isEmpty()){ throw new

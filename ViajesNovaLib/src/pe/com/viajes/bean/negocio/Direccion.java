@@ -27,6 +27,7 @@ public class Direccion extends BaseNegocio {
 	private String referencia;
 	private List<Telefono> telefonos;
 	private BaseVO tipoDireccion;
+	private Pais pais;
 	private Ubigeo ubigeo;
 	private BaseVO via;
 	private BaseVO zona;
@@ -281,6 +282,23 @@ public class Direccion extends BaseNegocio {
 	 */
 	public void setPrincipal(boolean principal) {
 		this.principal = principal;
+	}
+
+	/**
+	 * @return the pais
+	 */
+	public Pais getPais() {
+		if (pais == null){
+			pais = new Pais();
+		}
+		return pais;
+	}
+
+	/**
+	 * @param pais the pais to set
+	 */
+	public void setPais(Pais pais) {
+		this.pais = pais;
 	}
 
 }

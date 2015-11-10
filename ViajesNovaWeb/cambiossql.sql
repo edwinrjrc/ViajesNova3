@@ -1,95 +1,99 @@
--- Function: negocio.fn_consultarpasajeros(integer)
+alter table negocio."Direccion"
+add column idpais integer;
 
--- DROP FUNCTION negocio.fn_consultarpasajeros(integer);
+-- Function: negocio.fn_ingresardireccion(integer, character varying, character varying, character varying, character varying, character varying, character varying, character, character varying, character varying, character varying, character varying)
 
-CREATE OR REPLACE FUNCTION negocio.fn_consultarpasajeroshistorico(p_idtipodocumento integer, p_numerodocumento character varying)
-  RETURNS refcursor AS
+-- DROP FUNCTION negocio.fn_ingresardireccion(integer, character varying, character varying, character varying, character varying, character varying, character varying, character, character varying, character varying, character varying, character varying);
+
+CREATE OR REPLACE FUNCTION negocio.fn_ingresardireccion(p_idvia integer, p_nombrevia character varying, p_numero character varying, p_interior character varying, 
+p_manzana character varying, p_lote character varying, p_principal character varying, p_idubigeo character, p_usuariocreacion character varying, p_ipcreacion character varying, 
+p_observacion character varying, p_referencia character varying, p_idpais integer)
+  RETURNS integer AS
 $BODY$
-declare micursor refcursor;
+
+declare maxdireccion integer;
+declare fechahoy timestamp with time zone;
 
 begin
 
-open micursor for
-SELECT ps.id, idtipodocumento, numerodocumento, nombres, apellidopaterno, apellidomaterno, correoelectronico, 
-       telefono1, telefono2, nropaxfrecuente, idaerolinea, codigoreserva, numeroboleto, fechavctopasaporte, fechanacimiento,
-       idrelacion, idserviciodetalle, idservicio
-  FROM negocio."PasajeroServicio" ps
- WHERE idtipodocumento = p_idtipodocumento
-   AND numerodocumento = p_numerodocumento;
+select coalesce(max(id),0)
+  into maxdireccion
+  from negocio."Direccion";
 
-return micursor;
+maxdireccion = nextval('negocio.seq_direccion');
+
+select current_timestamp AT TIME ZONE 'PET' into fechahoy;
+
+insert into negocio."Direccion"(id, idvia, nombrevia, numero, interior, manzana, lote, principal, idubigeo, 
+            usuariocreacion, fechacreacion, ipcreacion, usuariomodificacion, 
+            fechamodificacion, ipmodificacion, observacion, referencia, idpais)
+values (maxdireccion,p_idvia,p_nombrevia,p_numero,p_interior,p_manzana,p_lote,p_principal,p_idubigeo,p_usuariocreacion,fechahoy,
+	p_ipcreacion,p_usuariocreacion,fechahoy,p_ipcreacion, p_observacion, p_referencia,p_idpais);
+
+return maxdireccion;
 
 end;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 
- -- Function: negocio.fn_consultarcomprobantesgenerados(integer, integer, integer, integer, character varying, date, date)
+  
+-- Function: negocio.fn_actualizardireccion(integer, integer, character varying, character varying, character varying, character varying, character varying, character varying, character, character varying, character varying, character varying, character varying)
 
--- DROP FUNCTION negocio.fn_consultarcomprobantesgenerados(integer, integer, integer, integer, character varying, date, date);
+-- DROP FUNCTION negocio.fn_actualizardireccion(integer, integer, character varying, character varying, character varying, character varying, character varying, character varying, character, character varying, character varying, character varying, character varying);
 
-CREATE OR REPLACE FUNCTION negocio.fn_consultarcomprobantesgenerados(p_idcomprobante integer, p_idservicio integer, p_idadquiriente integer, p_idtipocomprobante integer, p_numerocomprobante character varying, p_fechadesde date, p_fechahasta date)
-  RETURNS refcursor AS
+CREATE OR REPLACE FUNCTION negocio.fn_actualizardireccion(p_id integer, p_idvia integer, p_nombrevia character varying, p_numero character varying, p_interior character varying, 
+p_manzana character varying, p_lote character varying, p_principal character varying, p_idubigeo character, p_usuariomodificacion character varying, p_ipmodificacion character varying, 
+p_observacion character varying, p_referencia character varying, p_idpais integer)
+  RETURNS integer AS
 $BODY$
-declare micursor refcursor;
+declare 
+
+fechahoy    timestamp with time zone;
+iddireccion integer = 0;
+cantidad    integer    = 0;
 
 begin
-open micursor for
-SELECT cg.id, cg.idservicio, cg.idtipocomprobante, tm.nombre, cg.numerocomprobante, cg.idtitular, p.nombres, p.apellidopaterno, p.apellidomaterno,
-       cg.fechacomprobante, cg.idmoneda, tmmo.nombre as nombremoneda, tmmo.abreviatura, cg.totaligv, cg.totalcomprobante, cg.tienedetraccion, 
-       cg.tieneretencion, cg.usuariocreacion, cg.fechacreacion, cg.ipcreacion, cg.usuariomodificacion, 
-       cg.fechamodificacion, cg.ipmodificacion
-  FROM negocio."ComprobanteGenerado" cg
- INNER JOIN soporte."Tablamaestra" tmmo ON tmmo.idmaestro = fn_maestrotipomoneda() AND tmmo.id = cg.idmoneda
- INNER JOIN soporte."Tablamaestra" tm ON cg.idtipocomprobante = tm.id AND tm.idmaestro = fn_maestrotipocomprobante()
- INNER JOIN negocio."Persona" p       ON cg.idtitular         = p.id
- WHERE cg.idestadoregistro  = 1
-   AND cg.fechacomprobante  BETWEEN COALESCE(p_fechadesde,'1900-01-01') AND COALESCE(p_fechahasta,current_date)
-   AND cg.id                = COALESCE(p_idcomprobante, cg.id)
-   AND cg.idservicio        = COALESCE(p_idservicio, cg.idservicio)
-   AND cg.idtitular         = COALESCE(p_idadquiriente, cg.idtitular)
-   AND cg.idtipocomprobante = COALESCE(p_idtipocomprobante, cg.idtipocomprobante)
-   AND cg.numerocomprobante = COALESCE(p_numerocomprobante, cg.numerocomprobante);
-   
 
-return micursor;
+select current_timestamp AT TIME ZONE 'PET' into fechahoy;
 
-end;
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
-  
-  
--- Function: negocio.fn_consultarcomprobantesgenerados(integer, integer, integer, integer, character varying, date, date)
+select count(1)
+  into cantidad
+  from negocio."Direccion"
+ where id               = p_id
+   and idestadoregistro = 1;
 
--- DROP FUNCTION negocio.fn_consultarcomprobantesgenerados(integer, integer, integer, integer, character varying, date, date);
+if cantidad = 1 then
+iddireccion           = p_id;
+UPDATE 
+  negocio."Direccion" 
+SET 
+  idvia                = p_idvia,
+  nombrevia            = p_nombrevia,
+  numero               = p_numero,
+  interior             = p_interior,
+  manzana              = p_manzana,
+  lote                 = p_lote,
+  principal            = p_principal,
+  idubigeo             = p_idubigeo,
+  observacion          = p_observacion,
+  referencia           = p_referencia,
+  usuariomodificacion  = p_usuariomodificacion,
+  fechamodificacion    = fechahoy,
+  ipmodificacion       = p_ipmodificacion,
+  idpais               = p_idpais
+WHERE idestadoregistro = 1
+  AND id               = iddireccion;
 
-CREATE OR REPLACE FUNCTION negocio.fn_consultarcomprobantesgenerados(p_idcomprobante integer, p_idservicio integer, p_idadquiriente integer, p_idtipocomprobante integer, p_numerocomprobante character varying, p_fechadesde date, p_fechahasta date)
-  RETURNS refcursor AS
-$BODY$
-declare micursor refcursor;
+elsif cantidad = 0 then
+select 
+negocio.fn_ingresardireccion(p_idvia, p_nombrevia, p_numero, p_interior, p_manzana, p_lote, p_principal, p_idubigeo, p_usuariomodificacion, p_ipmodificacion, 
+p_observacion, p_referencia, p_idpais)
+into iddireccion;
 
-begin
-open micursor for
-SELECT cg.id, cg.idservicio, cg.idtipocomprobante, tm.nombre, cg.numerocomprobante, cg.idtitular, p.nombres, p.apellidopaterno, p.apellidomaterno,
-       cg.fechacomprobante, cg.idmoneda, tmmo.nombre as nombremoneda, tmmo.abreviatura, (cg.totalcomprobante-cg.totaligv) as subtotalcomprobante, 
-       cg.totaligv, cg.totalcomprobante, cg.tienedetraccion, 
-       cg.tieneretencion, cg.usuariocreacion, cg.fechacreacion, cg.ipcreacion, cg.usuariomodificacion, 
-       cg.fechamodificacion, cg.ipmodificacion
-  FROM negocio."ComprobanteGenerado" cg
- INNER JOIN soporte."Tablamaestra" tmmo ON tmmo.idmaestro = fn_maestrotipomoneda() AND tmmo.id = cg.idmoneda
- INNER JOIN soporte."Tablamaestra" tm ON cg.idtipocomprobante = tm.id AND tm.idmaestro = fn_maestrotipocomprobante()
- INNER JOIN negocio."Persona" p       ON cg.idtitular         = p.id
- WHERE cg.idestadoregistro  = 1
-   AND cg.fechacomprobante  BETWEEN COALESCE(p_fechadesde,'1900-01-01') AND COALESCE(p_fechahasta,current_date)
-   AND cg.id                = COALESCE(p_idcomprobante, cg.id)
-   AND cg.idservicio        = COALESCE(p_idservicio, cg.idservicio)
-   AND cg.idtitular         = COALESCE(p_idadquiriente, cg.idtitular)
-   AND cg.idtipocomprobante = COALESCE(p_idtipocomprobante, cg.idtipocomprobante)
-   AND cg.numerocomprobante = COALESCE(p_numerocomprobante, cg.numerocomprobante);
-   
+end if;
 
-return micursor;
+return iddireccion;
 
 end;
 $BODY$
