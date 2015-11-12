@@ -180,6 +180,7 @@ public class DireccionDaoImpl implements DireccionDao {
 						"principal"));
 				direccion.getUbigeo().setCodigoCadena(
 						UtilJdbc.obtenerCadena(rs, "idubigeo"));
+				direccion.getPais().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idpais"));
 				direccion
 						.getUbigeo()
 						.getDepartamento()

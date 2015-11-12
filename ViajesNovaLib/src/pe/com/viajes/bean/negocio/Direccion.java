@@ -33,6 +33,8 @@ public class Direccion extends BaseNegocio {
 	private BaseVO zona;
 	private String manzana;
 	private String lote;
+	
+	private boolean nacional;
 
 	private boolean principal;
 
@@ -299,6 +301,20 @@ public class Direccion extends BaseNegocio {
 	 */
 	public void setPais(Pais pais) {
 		this.pais = pais;
+	}
+
+	/**
+	 * @return the nacional
+	 */
+	public boolean isNacional() {
+		return nacional;
+	}
+
+	/**
+	 * @param nacional the nacional to set
+	 */
+	public void setNacional(boolean nacional) {
+		this.nacional = nacional;
 	}
 
 }

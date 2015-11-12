@@ -1098,30 +1098,32 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 	@Override
 	public Direccion agregarDireccion(Direccion direccion) throws SQLException,
 			Exception {
-		String iddepartamento = direccion.getUbigeo().getDepartamento()
-				.getCodigoCadena();
-		String idprovincia = direccion.getUbigeo().getProvincia()
-				.getCodigoCadena();
-		String iddistrito = direccion.getUbigeo().getDistrito()
-				.getCodigoCadena();
-		UbigeoDao ubigeoDao = new UbigeoDaoImpl();
-		Ubigeo resultado = ubigeoDao.consultarUbigeo(iddepartamento + "0000");
-		direccion.getUbigeo().setDepartamento(resultado.getDepartamento());
-		direccion.getUbigeo().getDepartamento()
-				.setNombre(resultado.getNombre());
+		if (direccion.isNacional()){
+			String iddepartamento = direccion.getUbigeo().getDepartamento()
+					.getCodigoCadena();
+			String idprovincia = direccion.getUbigeo().getProvincia()
+					.getCodigoCadena();
+			String iddistrito = direccion.getUbigeo().getDistrito()
+					.getCodigoCadena();
+			UbigeoDao ubigeoDao = new UbigeoDaoImpl();
+			Ubigeo resultado = ubigeoDao.consultarUbigeo(iddepartamento + "0000");
+			direccion.getUbigeo().setDepartamento(resultado.getDepartamento());
+			direccion.getUbigeo().getDepartamento()
+					.setNombre(resultado.getNombre());
 
-		resultado = ubigeoDao.consultarUbigeo(iddepartamento + idprovincia
-				+ "00");
-		direccion.getUbigeo().setProvincia(resultado.getProvincia());
-		direccion.getUbigeo().getProvincia().setNombre(resultado.getNombre());
+			resultado = ubigeoDao.consultarUbigeo(iddepartamento + idprovincia
+					+ "00");
+			direccion.getUbigeo().setProvincia(resultado.getProvincia());
+			direccion.getUbigeo().getProvincia().setNombre(resultado.getNombre());
 
-		resultado = ubigeoDao.consultarUbigeo(iddepartamento + idprovincia
-				+ iddistrito);
-		direccion.getUbigeo().setDistrito(resultado.getDistrito());
-		direccion.getUbigeo().getDistrito().setNombre(resultado.getNombre());
+			resultado = ubigeoDao.consultarUbigeo(iddepartamento + idprovincia
+					+ iddistrito);
+			direccion.getUbigeo().setDistrito(resultado.getDistrito());
+			direccion.getUbigeo().getDistrito().setNombre(resultado.getNombre());
 
-		direccion.getUbigeo().setCodigoCadena(
-				iddepartamento + idprovincia + iddistrito);
+			direccion.getUbigeo().setCodigoCadena(
+					iddepartamento + idprovincia + iddistrito);
+		}
 
 		direccion.setDireccion(obtenerDireccionCompleta(direccion));
 

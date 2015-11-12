@@ -450,6 +450,9 @@ public class ProveedorMBean extends BaseMBean {
 	public void agregarDireccion(ActionEvent e) {
 		try {
 			this.setDireccionAgregada(false);
+			
+			this.getDireccion().setNacional((this.getDireccion().getPais().getCodigoEntero().intValue() == UtilWeb.obtenerEnteroPropertieMaestro("codigoPaisPeru", "aplicacionDatos")));
+			
 			if (this.validarDireccion(e)) {
 				if (this.isNuevaDireccion()) {
 					this.getProveedor()
@@ -663,7 +666,15 @@ public class ProveedorMBean extends BaseMBean {
 			resultado = false;
 			this.setPestanaActiva("idFD01");
 		}
-		if (StringUtils.isBlank(getDireccion().getUbigeo().getDepartamento()
+		
+		if (this.getDireccion().getPais().getCodigoEntero() == null || this.getDireccion().getPais().getCodigoEntero().intValue() == 0){
+			this.agregarMensaje(idFormulario + ":idPaisDireccion",
+					"Seleccione el pais de la direccion", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		
+		if (getDireccion().isNacional() && StringUtils.isBlank(getDireccion().getUbigeo().getDepartamento()
 				.getCodigoCadena())) {
 			this.agregarMensaje(idFormulario + ":idDepartamentoDireccion",
 					"Seleccione el departamento", "",
@@ -671,14 +682,14 @@ public class ProveedorMBean extends BaseMBean {
 			resultado = false;
 			this.setPestanaActiva("idFD01");
 		}
-		if (StringUtils.isBlank(getDireccion().getUbigeo().getProvincia()
+		if (getDireccion().isNacional() && StringUtils.isBlank(getDireccion().getUbigeo().getProvincia()
 				.getCodigoCadena())) {
 			this.agregarMensaje(idFormulario + ":idProvinciaDireccion",
 					"Seleccione la provincia", "", FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 			this.setPestanaActiva("idFD01");
 		}
-		if (StringUtils.isBlank(getDireccion().getUbigeo().getDistrito()
+		if (getDireccion().isNacional() && StringUtils.isBlank(getDireccion().getUbigeo().getDistrito()
 				.getCodigoCadena())) {
 			this.agregarMensaje(idFormulario + ":idDistritoDireccion",
 					"Seleccione el distrito", "", FacesMessage.SEVERITY_ERROR);
