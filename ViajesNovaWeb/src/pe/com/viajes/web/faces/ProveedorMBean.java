@@ -116,6 +116,8 @@ public class ProveedorMBean extends BaseMBean {
 		this.setEditarProveedor(false);
 		this.setProveedor(null);
 		this.setNombreFormulario("Nuevo Proveedor");
+		
+		this.getProveedor().getNacionalidad().setCodigoEntero(UtilWeb.obtenerEnteroPropertieMaestro("codigoPaisPeru", "aplicacionDatos"));
 	}
 
 	public void nuevaDireccion() {
@@ -126,6 +128,8 @@ public class ProveedorMBean extends BaseMBean {
 		this.setListaProvincia(null);
 		this.setDireccion(null);
 		this.setDireccionAgregada(false);
+		
+		this.getDireccion().setPais(this.getProveedor().getNacionalidad());
 	}
 
 	public void nuevoContacto() {
