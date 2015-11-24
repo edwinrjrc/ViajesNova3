@@ -1,100 +1,35 @@
-alter table negocio."Direccion"
-add column idpais integer;
+alter table negocio."ObligacionesXPagar"
+ add column idmoneda integer;
+ 
+ -- Function: negocio.fn_ingresarobligacionxpagar(integer, character varying, integer, date, date, character varying, numeric, numeric, boolean, boolean, character varying, character varying)
 
--- Function: negocio.fn_ingresardireccion(integer, character varying, character varying, character varying, character varying, character varying, character varying, character, character varying, character varying, character varying, character varying)
+DROP FUNCTION negocio.fn_ingresarobligacionxpagar(integer, character varying, integer, date, date, character varying, numeric, numeric, boolean, boolean, character varying, character varying);
 
--- DROP FUNCTION negocio.fn_ingresardireccion(integer, character varying, character varying, character varying, character varying, character varying, character varying, character, character varying, character varying, character varying, character varying);
-
-CREATE OR REPLACE FUNCTION negocio.fn_ingresardireccion(p_idvia integer, p_nombrevia character varying, p_numero character varying, p_interior character varying, 
-p_manzana character varying, p_lote character varying, p_principal character varying, p_idubigeo character, p_usuariocreacion character varying, p_ipcreacion character varying, 
-p_observacion character varying, p_referencia character varying, p_idpais integer)
-  RETURNS integer AS
+CREATE OR REPLACE FUNCTION negocio.fn_ingresarobligacionxpagar(p_idtipocomprobante integer, p_numerocomprobante character varying, p_idproveedor integer, 
+p_fechacomprobante date, p_fechapago date, p_detallecomprobante character varying, p_totaligv numeric, p_totalcomprobante numeric, 
+p_tienedetraccion boolean, p_tieneretencion boolean, p_usuariocreacion character varying, p_ipcreacion character varying, p_idmoneda integer)
+  RETURNS boolean AS
 $BODY$
 
-declare maxdireccion integer;
+declare maxid integer;
 declare fechahoy timestamp with time zone;
 
 begin
 
-select coalesce(max(id),0)
-  into maxdireccion
-  from negocio."Direccion";
-
-maxdireccion = nextval('negocio.seq_direccion');
+maxid = nextval('negocio.seq_obligacionxpagar');
 
 select current_timestamp AT TIME ZONE 'PET' into fechahoy;
 
-insert into negocio."Direccion"(id, idvia, nombrevia, numero, interior, manzana, lote, principal, idubigeo, 
-            usuariocreacion, fechacreacion, ipcreacion, usuariomodificacion, 
-            fechamodificacion, ipmodificacion, observacion, referencia, idpais)
-values (maxdireccion,p_idvia,p_nombrevia,p_numero,p_interior,p_manzana,p_lote,p_principal,p_idubigeo,p_usuariocreacion,fechahoy,
-	p_ipcreacion,p_usuariocreacion,fechahoy,p_ipcreacion, p_observacion, p_referencia,p_idpais);
+INSERT INTO negocio."ObligacionesXPagar"(
+            id, idtipocomprobante, numerocomprobante, idproveedor, fechacomprobante, 
+            fechapago, detallecomprobante, totaligv, totalcomprobante, saldocomprobante, tienedetraccion, tieneretencion, usuariocreacion, 
+            fechacreacion, ipcreacion, usuariomodificacion, fechamodificacion, 
+            ipmodificacion, idmoneda)
+    VALUES (maxid, p_idtipocomprobante, p_numerocomprobante, p_idproveedor, p_fechacomprobante, 
+            p_fechapago, p_detallecomprobante, p_totaligv, p_totalcomprobante, p_totalcomprobante, p_tienedetraccion, p_tieneretencion, p_usuariocreacion, 
+            fechahoy, p_ipcreacion, p_usuariocreacion, fechahoy, p_ipcreacion, p_idmoneda);
 
-return maxdireccion;
-
-end;
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
-
-  
--- Function: negocio.fn_actualizardireccion(integer, integer, character varying, character varying, character varying, character varying, character varying, character varying, character, character varying, character varying, character varying, character varying)
-
--- DROP FUNCTION negocio.fn_actualizardireccion(integer, integer, character varying, character varying, character varying, character varying, character varying, character varying, character, character varying, character varying, character varying, character varying);
-
-CREATE OR REPLACE FUNCTION negocio.fn_actualizardireccion(p_id integer, p_idvia integer, p_nombrevia character varying, p_numero character varying, p_interior character varying, 
-p_manzana character varying, p_lote character varying, p_principal character varying, p_idubigeo character, p_usuariomodificacion character varying, p_ipmodificacion character varying, 
-p_observacion character varying, p_referencia character varying, p_idpais integer)
-  RETURNS integer AS
-$BODY$
-declare 
-
-fechahoy    timestamp with time zone;
-iddireccion integer = 0;
-cantidad    integer    = 0;
-
-begin
-
-select current_timestamp AT TIME ZONE 'PET' into fechahoy;
-
-select count(1)
-  into cantidad
-  from negocio."Direccion"
- where id               = p_id
-   and idestadoregistro = 1;
-
-if cantidad = 1 then
-iddireccion           = p_id;
-UPDATE 
-  negocio."Direccion" 
-SET 
-  idvia                = p_idvia,
-  nombrevia            = p_nombrevia,
-  numero               = p_numero,
-  interior             = p_interior,
-  manzana              = p_manzana,
-  lote                 = p_lote,
-  principal            = p_principal,
-  idubigeo             = p_idubigeo,
-  observacion          = p_observacion,
-  referencia           = p_referencia,
-  usuariomodificacion  = p_usuariomodificacion,
-  fechamodificacion    = fechahoy,
-  ipmodificacion       = p_ipmodificacion,
-  idpais               = p_idpais
-WHERE idestadoregistro = 1
-  AND id               = iddireccion;
-
-elsif cantidad = 0 then
-select 
-negocio.fn_ingresardireccion(p_idvia, p_nombrevia, p_numero, p_interior, p_manzana, p_lote, p_principal, p_idubigeo, p_usuariomodificacion, p_ipmodificacion, 
-p_observacion, p_referencia, p_idpais)
-into iddireccion;
-
-end if;
-
-return iddireccion;
-
+return true;
 end;
 $BODY$
   LANGUAGE plpgsql VOLATILE

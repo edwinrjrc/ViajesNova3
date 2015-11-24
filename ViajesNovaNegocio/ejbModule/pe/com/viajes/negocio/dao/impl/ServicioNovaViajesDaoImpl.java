@@ -2950,7 +2950,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarobligacionxpagar(?,?,?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarobligacionxpagar(?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -2973,6 +2973,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.setBoolean(i++, comprobante.isTieneRetencion());
 			cs.setString(i++, comprobante.getUsuarioCreacion());
 			cs.setString(i++, comprobante.getIpCreacion());
+			cs.setInt(i++, comprobante.getMoneda().getCodigoEntero().intValue());
 			cs.execute();
 
 			resultado = cs.getBoolean(1);
