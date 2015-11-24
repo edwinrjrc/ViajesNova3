@@ -130,7 +130,7 @@
 						<h:outputText value="Moneda" />
 						<h:panelGrid columns="1" border="0" cellpadding="0"
 							cellspacing="0">
-							<h:selectOneMenu id="idSelMonedaComprobante"
+							<h:selectOneMenu id="idSelMonedaComprobante" required="true" requiredMessage="Seleccione la moneda de la obligacion"
 								value="#{obligacionPorPagarMBean.comprobante.moneda.codigoEntero}">
 								<f:selectItem itemLabel="-Seleccione-" />
 								<f:selectItems value="#{catalogoMBean.catalogoMoneda}"></f:selectItems>
@@ -160,7 +160,8 @@
 							cellspacing="0">
 							<h:inputText id="idTotalIGV"
 								value="#{obligacionPorPagarMBean.comprobante.totalIGV}"
-								onkeypress="return js_soloDecimal(event);" />
+								onkeypress="return js_soloDecimal(event)"
+								style="text-align:right;" />
 							<rich:message for="idTotalIGV" ajaxRendered="true"
 								showSummary="true" showDetail="false"></rich:message>
 						</h:panelGrid>
@@ -171,7 +172,8 @@
 							<h:inputText id="idTotalComprobante" required="true"
 								requiredMessage="Ingrese el total comprobante"
 								value="#{obligacionPorPagarMBean.comprobante.totalComprobante}"
-								onkeypress="return js_soloDecimal(event);" />
+								onkeypress="return js_soloDecimal(event)"
+								style="text-align:right;" />
 							<rich:message for="idTotalComprobante" ajaxRendered="true"
 								showSummary="true" showDetail="false"></rich:message>
 						</h:panelGrid>
