@@ -23,6 +23,7 @@ import pe.com.viajes.web.servicio.ConsultaNegocioServicio;
 import pe.com.viajes.web.servicio.NegocioServicio;
 import pe.com.viajes.web.servicio.impl.ConsultaNegocioServicioImpl;
 import pe.com.viajes.web.servicio.impl.NegocioServicioImpl;
+import pe.com.viajes.web.util.UtilWeb;
 
 /**
  * @author Edwin
@@ -89,6 +90,16 @@ public class TipoCambioMBean extends BaseMBean {
 		}
 
 	}
+	
+	public void buscar(){
+		try {
+			this.setListaTipoCambio(this.consultaNegocioServicio
+					.listarTipoCambio(this.getTipoCambio().getFechaTipoCambio()));
+
+		} catch (SQLException ex) {
+			logger.error(ex.getMessage(), ex);
+		}
+	}
 
 	private boolean validatTipoCambio() {
 		// TODO Auto-generated method stub
@@ -97,8 +108,9 @@ public class TipoCambioMBean extends BaseMBean {
 
 	public void listarTipoCambio(ActionEvent e) {
 		try {
+			this.getTipoCambio().setFechaTipoCambio(UtilWeb.fechaHoy());
 			this.setListaTipoCambio(this.consultaNegocioServicio
-					.listarTipoCambio(new Date()));
+					.listarTipoCambio(this.getTipoCambio().getFechaTipoCambio()));
 
 		} catch (SQLException ex) {
 			logger.error(ex.getMessage(), ex);
