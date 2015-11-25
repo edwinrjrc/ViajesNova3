@@ -180,6 +180,12 @@ public class ObligacionPorPagarMBean extends BaseMBean {
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
+		if (this.getComprobante().getMoneda().getCodigoEntero() ==null || this.getComprobante().getMoneda().getCodigoEntero().intValue() == 0){
+			this.agregarMensaje(idFormulario + ":idSelMonedaComprobante",
+					"Seleccione la moneda de la obligacion", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
 
 		return resultado;
 	}
