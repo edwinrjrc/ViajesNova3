@@ -138,8 +138,10 @@
 				</table>
 			</h:panelGrid>
 
-			<h:inputHidden id="idTxtHidCredvencida"
-				value="#{usuarioMBean.usuario.credencialVencida}" />
+			<h:panelGrid id="idPnHdCredVencida">
+				<h:inputHidden id="idTxtHidCredvencida"
+					value="#{usuarioMBean.usuario.credencialVencida}" />
+			</h:panelGrid>
 		</h:form>
 
 		<ui:include src="/resources/modal/detallecheckin.xhtml" />
@@ -147,7 +149,7 @@
 		<ui:include src="/resources/includes/includemensaje.xhtml">
 			<ui:param name="backBean" value="#{usuarioMBean}" />
 			<ui:param name="idModalForm" value="idCredencialVencida" />
-			<ui:param name="idrender" value="#{null}" />
+			<ui:param name="idrender" value="idPnHdCredVencida" />
 		</ui:include>
 		<script type="text/javascript">
 		mostrarModalCredencial('idCredencialVencida');
