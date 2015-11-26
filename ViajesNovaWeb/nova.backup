@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.2.3
 -- Dumped by pg_dump version 9.2.3
--- Started on 2015-11-25 00:04:27
+-- Started on 2015-11-26 00:20:40
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -404,7 +404,7 @@ $$;
 ALTER FUNCTION negocio.fn_actualizardireccion(p_id integer, p_idvia integer, p_nombrevia character varying, p_numero character varying, p_interior character varying, p_manzana character varying, p_lote character varying, p_principal character varying, p_idubigeo character, p_usuariomodificacion character varying, p_ipmodificacion character varying, p_observacion character varying, p_referencia character varying) OWNER TO postgres;
 
 --
--- TOC entry 521 (class 1255 OID 269997)
+-- TOC entry 519 (class 1255 OID 269997)
 -- Name: fn_actualizardireccion(integer, integer, character varying, character varying, character varying, character varying, character varying, character varying, character, character varying, character varying, character varying, character varying, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -495,7 +495,7 @@ $$;
 ALTER FUNCTION negocio.fn_actualizarestadoservicio(p_idservicio integer, p_idestadoservicio integer, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 519 (class 1255 OID 269960)
+-- TOC entry 517 (class 1255 OID 269960)
 -- Name: fn_actualizarpersona(integer, integer, character varying, character varying, character varying, character varying, integer, integer, character varying, character varying, character varying, date, character varying, date, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -677,7 +677,7 @@ $$;
 ALTER FUNCTION negocio.fn_actualizarproveedorcuentabancaria(p_idcuenta integer, p_idproveedor integer, p_nombrecuenta character varying, p_numerocuenta character varying, p_idtipocuenta integer, p_idbanco integer, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 507 (class 1255 OID 268566)
+-- TOC entry 505 (class 1255 OID 268566)
 -- Name: fn_actualizarproveedorservicio(integer, integer, integer, numeric, numeric, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -734,7 +734,7 @@ $$;
 ALTER FUNCTION negocio.fn_actualizarproveedorservicio(p_idproveedor integer, p_idtiposervicio integer, p_idproveedorservicio integer, p_porcencomision numeric, p_porcencominternacional numeric, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 513 (class 1255 OID 269936)
+-- TOC entry 511 (class 1255 OID 269936)
 -- Name: fn_actualizarproveedortipo(integer, integer, character varying, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -881,7 +881,7 @@ $$;
 ALTER FUNCTION negocio.fn_actualizarserviciocabecera1(p_idservicio integer, p_idcliente1 integer, p_idcliente2 integer, p_fechacompra date, p_cantidadservicios integer, p_montototal numeric, p_montototalfee numeric, p_montototalcomision numeric, p_montototaligv numeric, p_iddestino integer, p_descdestino character varying, p_idmediopago integer, p_idestadopago integer, p_idestadoservicio integer, p_nrocuotas integer, p_tea numeric, p_valorcuota numeric, p_fechaprimercuota date, p_fechaultcuota date, p_idvendedor integer, p_observacion text, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 505 (class 1255 OID 269929)
+-- TOC entry 503 (class 1255 OID 269929)
 -- Name: fn_actualizarservicioproveedor(integer, integer, integer, numeric, numeric, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1031,7 +1031,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultacuentabancaria(p_idcuenta integer) OWNER TO postgres;
 
 --
--- TOC entry 479 (class 1255 OID 268575)
+-- TOC entry 478 (class 1255 OID 268575)
 -- Name: fn_consultararchivoscargados(integer, date, date, integer, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1103,7 +1103,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarcheckinpendientes(p_fechahasta timestamp without time zone, p_idvendedor integer) OWNER TO postgres;
 
 --
--- TOC entry 480 (class 1255 OID 268577)
+-- TOC entry 479 (class 1255 OID 268577)
 -- Name: fn_consultarclientescumple(); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1134,7 +1134,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarclientescumple() OWNER TO postgres;
 
 --
--- TOC entry 481 (class 1255 OID 268578)
+-- TOC entry 480 (class 1255 OID 268578)
 -- Name: fn_consultarclientesnovios(character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1167,7 +1167,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarclientesnovios(p_genero character varying) OWNER TO postgres;
 
 --
--- TOC entry 482 (class 1255 OID 268579)
+-- TOC entry 481 (class 1255 OID 268579)
 -- Name: fn_consultarclientesnovios(character varying, integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1203,7 +1203,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarclientesnovios(p_genero character varying, p_idtipodocumento integer, p_numerodocumento character varying, p_nombres character varying) OWNER TO postgres;
 
 --
--- TOC entry 501 (class 1255 OID 268580)
+-- TOC entry 499 (class 1255 OID 268580)
 -- Name: fn_consultarcompbtobligcnservdethijo(integer, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1300,7 +1300,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarcompbtobligcnservdethijo(p_idservicio integer, p_iddetservicio integer) OWNER TO postgres;
 
 --
--- TOC entry 517 (class 1255 OID 268581)
+-- TOC entry 515 (class 1255 OID 268581)
 -- Name: fn_consultarcomprobantesgenerados(integer, integer, integer, integer, character varying, date, date); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1338,7 +1338,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarcomprobantesgenerados(p_idcomprobante integer, p_idservicio integer, p_idadquiriente integer, p_idtipocomprobante integer, p_numerocomprobante character varying, p_fechadesde date, p_fechahasta date) OWNER TO postgres;
 
 --
--- TOC entry 486 (class 1255 OID 268582)
+-- TOC entry 485 (class 1255 OID 268582)
 -- Name: fn_consultarcomprobantesobligacionservdet(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1435,7 +1435,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarcomprobantesobligacionservdet(p_idservicio integer) OWNER TO postgres;
 
 --
--- TOC entry 503 (class 1255 OID 268583)
+-- TOC entry 501 (class 1255 OID 268583)
 -- Name: fn_consultarcomprobantesserviciodetalle(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1510,7 +1510,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarcomprobantesserviciodetalle(p_idservicio integer) OWNER TO postgres;
 
 --
--- TOC entry 500 (class 1255 OID 268584)
+-- TOC entry 498 (class 1255 OID 268584)
 -- Name: fn_consultarcompserviciodethijo(integer, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1613,7 +1613,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarconsolidador(p_idconsolidador integer) OWNER TO postgres;
 
 --
--- TOC entry 483 (class 1255 OID 268586)
+-- TOC entry 482 (class 1255 OID 268586)
 -- Name: fn_consultarcontactoxpersona(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1884,7 +1884,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarnovios(p_id integer, p_codnovios character varying, p_idnovia integer, p_idnovio integer) OWNER TO postgres;
 
 --
--- TOC entry 484 (class 1255 OID 268594)
+-- TOC entry 483 (class 1255 OID 268594)
 -- Name: fn_consultarobligacion(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1913,7 +1913,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarobligacion(p_idobligacion integer) OWNER TO postgres;
 
 --
--- TOC entry 485 (class 1255 OID 268595)
+-- TOC entry 484 (class 1255 OID 268595)
 -- Name: fn_consultarobligacionxpagar(integer, character varying, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1948,7 +1948,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarobligacionxpagar(p_idtipocomprobante integer, p_numerocomprobante character varying, p_idproveedor integer) OWNER TO postgres;
 
 --
--- TOC entry 499 (class 1255 OID 268596)
+-- TOC entry 497 (class 1255 OID 268596)
 -- Name: fn_consultarpasajeros(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1980,7 +1980,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarpasajeros(p_idserviciodetalle integer) OWNER TO postgres;
 
 --
--- TOC entry 515 (class 1255 OID 269957)
+-- TOC entry 513 (class 1255 OID 269957)
 -- Name: fn_consultarpasajeroshistorico(integer, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -2039,7 +2039,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarpersona(p_id integer, p_idtipopersona integer) OWNER TO postgres;
 
 --
--- TOC entry 487 (class 1255 OID 268598)
+-- TOC entry 486 (class 1255 OID 268598)
 -- Name: fn_consultarpersonas(integer, integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -2083,7 +2083,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarpersonas(p_idtipopersona integer, p_idtipodocumento integer, p_numerodocumento character varying, p_nombres character varying) OWNER TO postgres;
 
 --
--- TOC entry 509 (class 1255 OID 268599)
+-- TOC entry 507 (class 1255 OID 268599)
 -- Name: fn_consultarpersonas2(integer, integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -2294,7 +2294,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarserviciosinvisibles(p_idservicio integer) OWNER TO postgres;
 
 --
--- TOC entry 489 (class 1255 OID 268606)
+-- TOC entry 488 (class 1255 OID 268606)
 -- Name: fn_consultarservicioventa(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -2335,7 +2335,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarservicioventa(p_idservicio integer) OWNER TO postgres;
 
 --
--- TOC entry 488 (class 1255 OID 268607)
+-- TOC entry 487 (class 1255 OID 268607)
 -- Name: fn_consultarservicioventa(integer, character varying, character varying, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -2378,7 +2378,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarservicioventa(p_tipodocumento integer, p_numerodocumento character varying, p_nombres character varying, p_idvendedor integer) OWNER TO postgres;
 
 --
--- TOC entry 490 (class 1255 OID 268608)
+-- TOC entry 489 (class 1255 OID 268608)
 -- Name: fn_consultarservicioventa(integer, character varying, character varying, integer, integer, date, date); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -2473,7 +2473,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarservicioventadetalle(p_idservicio integer) OWNER TO postgres;
 
 --
--- TOC entry 508 (class 1255 OID 268610)
+-- TOC entry 506 (class 1255 OID 268610)
 -- Name: fn_consultarservicioventadetallehijo(integer, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -2508,7 +2508,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarservicioventadetallehijo(p_idservicio integer, p_idserdeta integer) OWNER TO postgres;
 
 --
--- TOC entry 504 (class 1255 OID 268611)
+-- TOC entry 502 (class 1255 OID 268611)
 -- Name: fn_consultarservicioventadetallepadre(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -2571,7 +2571,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarservicioventajr(p_idservicio integer) OWNER TO postgres;
 
 --
--- TOC entry 491 (class 1255 OID 268613)
+-- TOC entry 490 (class 1255 OID 268613)
 -- Name: fn_consultartipocambio(integer, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -2659,18 +2659,18 @@ $$;
 ALTER FUNCTION negocio.fn_consultartipocambio(p_idmonedaorigen integer, p_idmonedadestino integer) OWNER TO postgres;
 
 --
--- TOC entry 492 (class 1255 OID 268614)
--- Name: fn_consultartipocambiomonto(integer, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
+-- TOC entry 522 (class 1255 OID 270983)
+-- Name: fn_consultartipocambiomonto(integer, integer, date); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
-CREATE FUNCTION fn_consultartipocambiomonto(p_idmonedaorigen integer, p_idmonedadestino integer) RETURNS numeric
+CREATE FUNCTION fn_consultartipocambiomonto(p_idmonedaorigen integer, p_idmonedadestino integer, p_fecha date) RETURNS numeric
     LANGUAGE plpgsql
     AS $$
 
 declare fechahoy date;
 declare v_cantidad integer;
 declare v_idtipocambio integer;
-declare v_mensaje character varying(15);
+declare v_mensaje character varying(100);
 declare v_tipocambio decimal(9,6);
 
 begin
@@ -2680,7 +2680,7 @@ select current_date into fechahoy;
 select count(1)
   into v_cantidad
   from negocio."TipoCambio"
- where fechatipocambio = fechahoy
+ where fechatipocambio = p_fecha
    and idmonedaorigen  = p_idmonedaorigen
    and idmonedadestino = p_idmonedadestino;
 
@@ -2688,43 +2688,29 @@ if v_cantidad = 1 then
     select id
       into v_idtipocambio
       from negocio."TipoCambio"
-     where fechatipocambio = fechahoy
+     where fechatipocambio = p_fecha
        and idmonedaorigen  = p_idmonedaorigen
        and idmonedadestino = p_idmonedadestino;
 elsif v_cantidad > 1 then
     select max(id)
       into v_idtipocambio
       from negocio."TipoCambio"
-     where fechatipocambio = fechahoy
+     where fechatipocambio = p_fecha
        and idmonedaorigen  = p_idmonedaorigen
        and idmonedadestino = p_idmonedadestino;
 else
-    select count(1)
-      into v_cantidad
-      from negocio."TipoCambio"
-     where idmonedaorigen  = p_idmonedaorigen
-       and idmonedadestino = p_idmonedadestino;
-
-    if v_cantidad >= 1 then
-        select max(id)
-          into v_idtipocambio
-	  from negocio."TipoCambio"
-	 where idmonedaorigen  = p_idmonedaorigen
-	   and idmonedadestino = p_idmonedadestino;
-    else
-        v_mensaje = 'Tipo de cambio de '+(select nombre
+    v_mensaje = 'Tipo de cambio de ' || (select nombre
                                             from soporte."Tablamaestra" 
                                            where idmaestro = fn_maestrotipomoneda()
                                              and id        = p_idmonedaorigen);
-        v_mensaje = v_mensaje + ' a ' + (select nombre
+        v_mensaje = v_mensaje || ' a ' || (select nombre
                                            from soporte."Tablamaestra" 
                                           where idmaestro = fn_maestrotipomoneda()
                                             and id        = p_idmonedadestino);
 
-        v_mensaje = v_mensaje + ' no fue registrado';
+        v_mensaje = v_mensaje || ' no fue registrado';
         
-        RAISE USING MESSAGE = v_mensaje;
-    end if;
+        RAISE EXCEPTION USING MESSAGE = v_mensaje;
 end if;
 
 SELECT montocambio
@@ -2738,7 +2724,7 @@ end;
 $$;
 
 
-ALTER FUNCTION negocio.fn_consultartipocambiomonto(p_idmonedaorigen integer, p_idmonedadestino integer) OWNER TO postgres;
+ALTER FUNCTION negocio.fn_consultartipocambiomonto(p_idmonedaorigen integer, p_idmonedadestino integer, p_fecha date) OWNER TO postgres;
 
 --
 -- TOC entry 362 (class 1255 OID 268615)
@@ -3179,7 +3165,7 @@ $$;
 ALTER FUNCTION negocio.fn_eliminarpersonadirecciones(p_idpersona integer, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 511 (class 1255 OID 269928)
+-- TOC entry 509 (class 1255 OID 269928)
 -- Name: fn_eliminarproveedorservicio(integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -3843,7 +3829,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresardireccion(p_idvia integer, p_nombrevia character varying, p_numero character varying, p_interior character varying, p_manzana character varying, p_lote character varying, p_principal character varying, p_idubigeo character, p_usuariocreacion character varying, p_ipcreacion character varying, p_observacion character varying, p_referencia character varying) OWNER TO postgres;
 
 --
--- TOC entry 520 (class 1255 OID 269996)
+-- TOC entry 518 (class 1255 OID 269996)
 -- Name: fn_ingresardireccion(integer, character varying, character varying, character varying, character varying, character varying, character varying, character, character varying, character varying, character varying, character varying, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -3879,7 +3865,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresardireccion(p_idvia integer, p_nombrevia character varying, p_numero character varying, p_interior character varying, p_manzana character varying, p_lote character varying, p_principal character varying, p_idubigeo character, p_usuariocreacion character varying, p_ipcreacion character varying, p_observacion character varying, p_referencia character varying, p_idpais integer) OWNER TO postgres;
 
 --
--- TOC entry 522 (class 1255 OID 270982)
+-- TOC entry 520 (class 1255 OID 270982)
 -- Name: fn_ingresarobligacionxpagar(integer, character varying, integer, date, date, character varying, numeric, numeric, boolean, boolean, character varying, character varying, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -3979,7 +3965,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarpais(p_idtipocomprobante integer, p_numerocomprobante character varying, p_idproveedor integer, p_fechacomprobante date, p_fechapago date, p_detallecomprobante character varying, p_totaligv numeric, p_totalcomprobante numeric, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 516 (class 1255 OID 269956)
+-- TOC entry 514 (class 1255 OID 269956)
 -- Name: fn_ingresarpasajero(integer, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, integer, integer, character varying, character varying, date, date, integer, integer, character varying, character varying, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -4015,7 +4001,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarpasajero(p_idtipodocumento integer, p_numerodocumento character varying, p_nombres character varying, p_apellidopaterno character varying, p_apellidomaterno character varying, p_correoelectronico character varying, p_telefono1 character varying, p_telefono2 character varying, p_nropaxfrecuente character varying, p_idrelacion integer, p_idaerolinea integer, p_codigoreserva character varying, p_numeroboleto character varying, p_fechavctopasaporte date, p_fechanacimiento date, p_idserviciodetalle integer, p_idservicio integer, p_usuariocreacion character varying, p_ipcreacion character varying, p_idpais integer) OWNER TO postgres;
 
 --
--- TOC entry 518 (class 1255 OID 269959)
+-- TOC entry 516 (class 1255 OID 269959)
 -- Name: fn_ingresarpersona(integer, character varying, character varying, character varying, character varying, integer, integer, character varying, character varying, character varying, date, character varying, date, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -4141,7 +4127,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarprogramanovios(p_idnovia integer, p_idnovio integer, p_iddestino integer, p_fechaboda date, p_fechaviaje date, p_idmoneda integer, p_cuotainicial numeric, p_dias integer, p_noches integer, p_fechashower date, p_observaciones text, p_montototal numeric, p_idservicio integer, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 514 (class 1255 OID 269935)
+-- TOC entry 512 (class 1255 OID 269935)
 -- Name: fn_ingresarproveedortipo(integer, integer, character varying, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -4235,7 +4221,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarservicio(p_nombreservicio character varying, p_desccorta character varying, p_desclarga character varying, p_requierefee boolean, p_idmaeserfee integer, p_pagaimpto boolean, p_idmaeserimpto integer, p_cargacomision boolean, p_cargaigv boolean, p_valorcomision numeric, p_usuariocreacion character varying, p_ipcreacion character varying, p_idparametro integer, p_visible boolean, p_serviciopadre boolean) OWNER TO postgres;
 
 --
--- TOC entry 506 (class 1255 OID 269892)
+-- TOC entry 504 (class 1255 OID 269892)
 -- Name: fn_ingresarserviciocabecera(integer, integer, date, numeric, numeric, numeric, numeric, integer, integer, integer, numeric, numeric, date, date, integer, integer, text, character varying, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -4274,7 +4260,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarserviciocabecera(p_idcliente1 integer, p_idcliente2 integer, p_fechaservicio date, p_montototaligv numeric, p_montototal numeric, p_montototalfee numeric, p_montototalcomision numeric, p_idestadopago integer, p_idestadoservicio integer, p_nrocuotas integer, p_tea numeric, p_valorcuota numeric, p_fechaprimercuota date, p_fechaultcuota date, p_idmoneda integer, p_idvendedor integer, p_observacion text, p_usuariocreacion character varying, p_ipcreacion character varying, p_codigonovios character varying) OWNER TO postgres;
 
 --
--- TOC entry 502 (class 1255 OID 269431)
+-- TOC entry 500 (class 1255 OID 269431)
 -- Name: fn_ingresarserviciodetalle(integer, character varying, integer, timestamp with time zone, timestamp with time zone, integer, integer, character varying, integer, character varying, integer, character varying, integer, character varying, integer, integer, numeric, numeric, numeric, boolean, boolean, numeric, integer, boolean, numeric, numeric, numeric, numeric, integer, boolean, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -4352,7 +4338,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarserviciomaestroservicio(p_idservicio integer, p_idserviciodepente integer) OWNER TO postgres;
 
 --
--- TOC entry 510 (class 1255 OID 268662)
+-- TOC entry 508 (class 1255 OID 268662)
 -- Name: fn_ingresarservicioproveedor(integer, integer, integer, numeric, numeric, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -4627,7 +4613,7 @@ $$;
 ALTER FUNCTION negocio.fn_listarconsolidadores() OWNER TO postgres;
 
 --
--- TOC entry 493 (class 1255 OID 268671)
+-- TOC entry 491 (class 1255 OID 268671)
 -- Name: fn_listarcuentasbancarias(); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -4721,7 +4707,7 @@ $$;
 ALTER FUNCTION negocio.fn_listarcuentasbancariasproveedor(p_idproveedor integer) OWNER TO postgres;
 
 --
--- TOC entry 494 (class 1255 OID 268674)
+-- TOC entry 492 (class 1255 OID 268674)
 -- Name: fn_listardocumentosadicionales(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -4886,7 +4872,7 @@ $$;
 ALTER FUNCTION negocio.fn_listarmaestroserviciosimpto() OWNER TO postgres;
 
 --
--- TOC entry 495 (class 1255 OID 268680)
+-- TOC entry 493 (class 1255 OID 268680)
 -- Name: fn_listarmovimientosxcuenta(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -4929,7 +4915,7 @@ $$;
 ALTER FUNCTION negocio.fn_listarmovimientosxcuenta(p_idcuenta integer) OWNER TO postgres;
 
 --
--- TOC entry 498 (class 1255 OID 268681)
+-- TOC entry 496 (class 1255 OID 268681)
 -- Name: fn_listarpagos(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -4992,7 +4978,7 @@ $$;
 ALTER FUNCTION negocio.fn_listarpagosobligaciones(p_idobligacion integer) OWNER TO postgres;
 
 --
--- TOC entry 496 (class 1255 OID 268683)
+-- TOC entry 494 (class 1255 OID 268683)
 -- Name: fn_listartipocambio(date); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -5024,7 +5010,7 @@ $$;
 ALTER FUNCTION negocio.fn_listartipocambio(p_fecha date) OWNER TO postgres;
 
 --
--- TOC entry 448 (class 1255 OID 268684)
+-- TOC entry 447 (class 1255 OID 268684)
 -- Name: fn_proveedorxservicio(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -5316,7 +5302,7 @@ $$;
 ALTER FUNCTION negocio.fn_registrarpagoobligacion(p_idobligacion integer, p_idformapago integer, p_idcuentaorigen integer, p_idcuentadestino integer, p_idbancotarjeta integer, p_idtipotarjeta integer, p_nombretitular character varying, p_numerotarjeta character varying, p_fechapago date, p_numerooperacion character varying, p_montopago numeric, p_idmoneda integer, p_sustentopago bytea, p_nombrearchivo character varying, p_extensionarchivo character varying, p_tipocontenido character varying, p_comentario character varying, p_espagodetraccion boolean, p_espagoretencion boolean, p_usuarioautoriza integer, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 424 (class 1255 OID 268691)
+-- TOC entry 521 (class 1255 OID 268691)
 -- Name: fn_registrarpagoservicio(integer, integer, integer, integer, integer, character varying, character varying, date, character varying, numeric, integer, bytea, character varying, character varying, character varying, character varying, boolean, boolean, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -5339,6 +5325,7 @@ declare v_monedaservicio integer;
 declare v_tipocambio decimal(12,3);
 declare v_montoaplicar decimal(12,3);
 declare v_registrotranstc integer;
+declare error_tipocambio1 integer = 1;
 
 begin
 
@@ -5359,7 +5346,8 @@ select min(montosaldoservicio)
  where ss.idservicio = p_idservicio;
 
 if p_idmoneda <> v_monedaservicio then
-    select negocio.fn_consultartipocambiomonto(p_idmoneda,v_monedaservicio) into v_tipocambio;
+    select negocio.fn_consultartipocambiomonto(p_idmoneda,v_monedaservicio, p_fechapago) into v_tipocambio;
+    error_tipocambio1 = 0;
     v_montoaplicar = p_montopago * v_tipocambio;
 else
     v_montoaplicar = p_montopago;
@@ -5426,6 +5414,10 @@ select negocio.fn_registrarmovimientocuenta(p_idcuentadestino, 1, v_tipotransacc
 
 return maxid;
 
+exception
+when others THEN
+   raise exception using MESSAGE = SQLERRM;
+
 end;
 $$;
 
@@ -5433,7 +5425,7 @@ $$;
 ALTER FUNCTION negocio.fn_registrarpagoservicio(p_idservicio integer, p_idformapago integer, p_idcuentadestino integer, p_idbancotarjeta integer, p_idtipotarjeta integer, p_nombretitular character varying, p_numerotarjeta character varying, p_fechapago date, p_numerooperacion character varying, p_montopago numeric, p_idmoneda integer, p_sustentopago bytea, p_nombrearchivo character varying, p_extensionarchivo character varying, p_tipocontenido character varying, p_comentario character varying, p_espagodetraccion boolean, p_espagoretencion boolean, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 425 (class 1255 OID 268692)
+-- TOC entry 424 (class 1255 OID 268692)
 -- Name: fn_registrarsaldoservicio(integer, integer, date, numeric, integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -5466,7 +5458,7 @@ $$;
 ALTER FUNCTION negocio.fn_registrarsaldoservicio(p_idservicio integer, p_idpago integer, p_fechaservicio date, p_montototalservicio numeric, idreferencia integer, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 426 (class 1255 OID 268693)
+-- TOC entry 425 (class 1255 OID 268693)
 -- Name: fn_registrartransacciontipocambio(integer, numeric, numeric, integer, numeric, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -5497,7 +5489,7 @@ $$;
 ALTER FUNCTION negocio.fn_registrartransacciontipocambio(p_idmonedainicio integer, p_montoinicio numeric, p_tipocambio numeric, p_idmonedafin integer, p_montofin numeric, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 427 (class 1255 OID 268694)
+-- TOC entry 426 (class 1255 OID 268694)
 -- Name: fn_siguienteruta(); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -5580,7 +5572,7 @@ $$;
 ALTER FUNCTION negocio.fn_telefonosxpersona(p_idpersona integer) OWNER TO postgres;
 
 --
--- TOC entry 428 (class 1255 OID 268697)
+-- TOC entry 427 (class 1255 OID 268697)
 -- Name: fn_validareliminarcuentasproveedor(integer, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -5617,7 +5609,7 @@ ALTER FUNCTION negocio.fn_validareliminarcuentasproveedor(p_idcuenta integer, p_
 SET search_path = public, pg_catalog;
 
 --
--- TOC entry 476 (class 1255 OID 269366)
+-- TOC entry 475 (class 1255 OID 269366)
 -- Name: fn_maestrobanco(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5635,7 +5627,7 @@ $$;
 ALTER FUNCTION public.fn_maestrobanco() OWNER TO postgres;
 
 --
--- TOC entry 461 (class 1255 OID 269351)
+-- TOC entry 460 (class 1255 OID 269351)
 -- Name: fn_maestrocontinente(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5653,7 +5645,7 @@ $$;
 ALTER FUNCTION public.fn_maestrocontinente() OWNER TO postgres;
 
 --
--- TOC entry 477 (class 1255 OID 269367)
+-- TOC entry 476 (class 1255 OID 269367)
 -- Name: fn_maestrodocumentoadjunto(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5671,7 +5663,7 @@ $$;
 ALTER FUNCTION public.fn_maestrodocumentoadjunto() OWNER TO postgres;
 
 --
--- TOC entry 470 (class 1255 OID 269360)
+-- TOC entry 469 (class 1255 OID 269360)
 -- Name: fn_maestroestadocivil(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5689,7 +5681,7 @@ $$;
 ALTER FUNCTION public.fn_maestroestadocivil() OWNER TO postgres;
 
 --
--- TOC entry 472 (class 1255 OID 269362)
+-- TOC entry 471 (class 1255 OID 269362)
 -- Name: fn_maestroestadopago(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5707,7 +5699,7 @@ $$;
 ALTER FUNCTION public.fn_maestroestadopago() OWNER TO postgres;
 
 --
--- TOC entry 473 (class 1255 OID 269363)
+-- TOC entry 472 (class 1255 OID 269363)
 -- Name: fn_maestroestadoservicio(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5725,7 +5717,7 @@ $$;
 ALTER FUNCTION public.fn_maestroestadoservicio() OWNER TO postgres;
 
 --
--- TOC entry 471 (class 1255 OID 269361)
+-- TOC entry 470 (class 1255 OID 269361)
 -- Name: fn_maestroformapago(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5743,7 +5735,7 @@ $$;
 ALTER FUNCTION public.fn_maestroformapago() OWNER TO postgres;
 
 --
--- TOC entry 462 (class 1255 OID 269352)
+-- TOC entry 461 (class 1255 OID 269352)
 -- Name: fn_maestromoneda(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5761,7 +5753,7 @@ $$;
 ALTER FUNCTION public.fn_maestromoneda() OWNER TO postgres;
 
 --
--- TOC entry 465 (class 1255 OID 269355)
+-- TOC entry 464 (class 1255 OID 269355)
 -- Name: fn_maestrotipocomprobante(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5779,7 +5771,7 @@ $$;
 ALTER FUNCTION public.fn_maestrotipocomprobante() OWNER TO postgres;
 
 --
--- TOC entry 475 (class 1255 OID 269365)
+-- TOC entry 474 (class 1255 OID 269365)
 -- Name: fn_maestrotipocuenta(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5797,7 +5789,7 @@ $$;
 ALTER FUNCTION public.fn_maestrotipocuenta() OWNER TO postgres;
 
 --
--- TOC entry 460 (class 1255 OID 269350)
+-- TOC entry 459 (class 1255 OID 269350)
 -- Name: fn_maestrotipodestino(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5815,7 +5807,7 @@ $$;
 ALTER FUNCTION public.fn_maestrotipodestino() OWNER TO postgres;
 
 --
--- TOC entry 464 (class 1255 OID 269354)
+-- TOC entry 463 (class 1255 OID 269354)
 -- Name: fn_maestrotipodocumento(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5833,7 +5825,7 @@ $$;
 ALTER FUNCTION public.fn_maestrotipodocumento() OWNER TO postgres;
 
 --
--- TOC entry 474 (class 1255 OID 269364)
+-- TOC entry 473 (class 1255 OID 269364)
 -- Name: fn_maestrotipomoneda(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5851,7 +5843,7 @@ $$;
 ALTER FUNCTION public.fn_maestrotipomoneda() OWNER TO postgres;
 
 --
--- TOC entry 468 (class 1255 OID 269358)
+-- TOC entry 467 (class 1255 OID 269358)
 -- Name: fn_maestrotiporelacion(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5869,7 +5861,7 @@ $$;
 ALTER FUNCTION public.fn_maestrotiporelacion() OWNER TO postgres;
 
 --
--- TOC entry 439 (class 1255 OID 269368)
+-- TOC entry 438 (class 1255 OID 269368)
 -- Name: fn_maestrotipotransaccion(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5887,7 +5879,7 @@ $$;
 ALTER FUNCTION public.fn_maestrotipotransaccion() OWNER TO postgres;
 
 --
--- TOC entry 469 (class 1255 OID 269359)
+-- TOC entry 468 (class 1255 OID 269359)
 -- Name: fn_maestrotipovia(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5905,7 +5897,7 @@ $$;
 ALTER FUNCTION public.fn_maestrotipovia() OWNER TO postgres;
 
 --
--- TOC entry 497 (class 1255 OID 269370)
+-- TOC entry 495 (class 1255 OID 269370)
 -- Name: fn_rubroagenciaviajes(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5923,7 +5915,7 @@ $$;
 ALTER FUNCTION public.fn_rubroagenciaviajes() OWNER TO postgres;
 
 --
--- TOC entry 463 (class 1255 OID 269353)
+-- TOC entry 462 (class 1255 OID 269353)
 -- Name: fn_tipopersonacliente(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5941,7 +5933,7 @@ $$;
 ALTER FUNCTION public.fn_tipopersonacliente() OWNER TO postgres;
 
 --
--- TOC entry 466 (class 1255 OID 269356)
+-- TOC entry 465 (class 1255 OID 269356)
 -- Name: fn_tipopersonacontacto(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5959,7 +5951,7 @@ $$;
 ALTER FUNCTION public.fn_tipopersonacontacto() OWNER TO postgres;
 
 --
--- TOC entry 467 (class 1255 OID 269357)
+-- TOC entry 466 (class 1255 OID 269357)
 -- Name: fn_tipopersonaproveedor(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -5979,7 +5971,7 @@ ALTER FUNCTION public.fn_tipopersonaproveedor() OWNER TO postgres;
 SET search_path = reportes, pg_catalog;
 
 --
--- TOC entry 429 (class 1255 OID 268698)
+-- TOC entry 428 (class 1255 OID 268698)
 -- Name: fn_re_generalventas(date, date); Type: FUNCTION; Schema: reportes; Owner: postgres
 --
 
@@ -6009,7 +6001,7 @@ $$;
 ALTER FUNCTION reportes.fn_re_generalventas(p_desde date, p_hasta date) OWNER TO postgres;
 
 --
--- TOC entry 430 (class 1255 OID 268699)
+-- TOC entry 429 (class 1255 OID 268699)
 -- Name: fn_re_generalventas(date, date, integer); Type: FUNCTION; Schema: reportes; Owner: postgres
 --
 
@@ -6042,7 +6034,7 @@ ALTER FUNCTION reportes.fn_re_generalventas(p_desde date, p_hasta date, p_idvend
 SET search_path = seguridad, pg_catalog;
 
 --
--- TOC entry 431 (class 1255 OID 268700)
+-- TOC entry 430 (class 1255 OID 268700)
 -- Name: fn_actualizarclaveusuario(integer, character varying); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -6070,7 +6062,7 @@ $$;
 ALTER FUNCTION seguridad.fn_actualizarclaveusuario(p_idusuario integer, p_credencialnueva character varying) OWNER TO postgres;
 
 --
--- TOC entry 432 (class 1255 OID 268701)
+-- TOC entry 431 (class 1255 OID 268701)
 -- Name: fn_actualizarcredencialvencida(integer, character varying); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -6112,7 +6104,7 @@ $$;
 ALTER FUNCTION seguridad.fn_actualizarcredencialvencida(p_idusuario integer, p_credencialnueva character varying) OWNER TO postgres;
 
 --
--- TOC entry 433 (class 1255 OID 268702)
+-- TOC entry 432 (class 1255 OID 268702)
 -- Name: fn_actualizarusuario(integer, integer, character varying, character varying, character varying); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -6138,7 +6130,7 @@ $$;
 ALTER FUNCTION seguridad.fn_actualizarusuario(p_id integer, p_rol integer, p_nombres character varying, p_apepaterno character varying, p_apematerno character varying) OWNER TO postgres;
 
 --
--- TOC entry 434 (class 1255 OID 268703)
+-- TOC entry 433 (class 1255 OID 268703)
 -- Name: fn_cambiarclaveusuario(character varying, character varying, character varying); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -6173,7 +6165,7 @@ $$;
 ALTER FUNCTION seguridad.fn_cambiarclaveusuario(p_usuario character varying, p_credencialactual character varying, p_credencialnueva character varying) OWNER TO postgres;
 
 --
--- TOC entry 440 (class 1255 OID 268704)
+-- TOC entry 439 (class 1255 OID 268704)
 -- Name: fn_consultarusuarios(character varying); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -6196,7 +6188,7 @@ end;$$;
 ALTER FUNCTION seguridad.fn_consultarusuarios(p_usuario character varying) OWNER TO postgres;
 
 --
--- TOC entry 435 (class 1255 OID 268705)
+-- TOC entry 434 (class 1255 OID 268705)
 -- Name: fn_ingresarusuario(character varying, character varying, integer, character varying, character varying, character varying, date, boolean); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -6232,7 +6224,7 @@ $$;
 ALTER FUNCTION seguridad.fn_ingresarusuario(p_usuario character varying, p_credencial character varying, p_rol integer, p_nombres character varying, p_apepaterno character varying, p_apematerno character varying, p_fecnacimiento date, p_vendedor boolean) OWNER TO postgres;
 
 --
--- TOC entry 436 (class 1255 OID 268706)
+-- TOC entry 435 (class 1255 OID 268706)
 -- Name: fn_iniciosesion(character varying, character varying); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -6269,7 +6261,7 @@ $$;
 ALTER FUNCTION seguridad.fn_iniciosesion(p_usuario character varying, p_credencial character varying) OWNER TO postgres;
 
 --
--- TOC entry 437 (class 1255 OID 268707)
+-- TOC entry 436 (class 1255 OID 268707)
 -- Name: fn_listarusuarios(); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -6290,7 +6282,7 @@ end;$$;
 ALTER FUNCTION seguridad.fn_listarusuarios() OWNER TO postgres;
 
 --
--- TOC entry 438 (class 1255 OID 268708)
+-- TOC entry 437 (class 1255 OID 268708)
 -- Name: fn_listarvendedores(); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -6315,7 +6307,7 @@ ALTER FUNCTION seguridad.fn_listarvendedores() OWNER TO postgres;
 SET search_path = soporte, pg_catalog;
 
 --
--- TOC entry 441 (class 1255 OID 268709)
+-- TOC entry 440 (class 1255 OID 268709)
 -- Name: fn_actualizardestino(integer, integer, integer, integer, character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6349,7 +6341,7 @@ $$;
 ALTER FUNCTION soporte.fn_actualizardestino(p_id integer, p_idcontinente integer, p_idpais integer, p_idtipodestino integer, p_codigoiata character varying, p_descripcion character varying, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 442 (class 1255 OID 268710)
+-- TOC entry 441 (class 1255 OID 268710)
 -- Name: fn_actualizarmaestro(integer, integer, character varying, character varying, character varying, integer, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6377,7 +6369,7 @@ $$;
 ALTER FUNCTION soporte.fn_actualizarmaestro(p_id integer, p_idtipo integer, p_nombre character varying, p_descripcion character varying, p_estado character varying, p_orden integer, p_abreviatura character varying) OWNER TO postgres;
 
 --
--- TOC entry 443 (class 1255 OID 268711)
+-- TOC entry 442 (class 1255 OID 268711)
 -- Name: fn_actualizarparametro(integer, character varying, character varying, character varying, character varying, boolean); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6409,7 +6401,7 @@ $$;
 ALTER FUNCTION soporte.fn_actualizarparametro(p_id integer, p_nombre character varying, p_descripcion character varying, p_valor character varying, p_estado character varying, p_editable boolean) OWNER TO postgres;
 
 --
--- TOC entry 456 (class 1255 OID 268712)
+-- TOC entry 455 (class 1255 OID 268712)
 -- Name: fn_buscardestinos1(character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6448,7 +6440,7 @@ $$;
 ALTER FUNCTION soporte.fn_buscardestinos1(p_nombre character varying) OWNER TO postgres;
 
 --
--- TOC entry 444 (class 1255 OID 268713)
+-- TOC entry 443 (class 1255 OID 268713)
 -- Name: fn_consultarconfiguracionservicio(integer); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6477,7 +6469,7 @@ $$;
 ALTER FUNCTION soporte.fn_consultarconfiguracionservicio(p_idservicio integer) OWNER TO postgres;
 
 --
--- TOC entry 445 (class 1255 OID 268714)
+-- TOC entry 444 (class 1255 OID 268714)
 -- Name: fn_consultardestino(integer); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6509,7 +6501,7 @@ $$;
 ALTER FUNCTION soporte.fn_consultardestino(p_iddestino integer) OWNER TO postgres;
 
 --
--- TOC entry 446 (class 1255 OID 268715)
+-- TOC entry 445 (class 1255 OID 268715)
 -- Name: fn_consultardestinoiata(character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6541,7 +6533,7 @@ $$;
 ALTER FUNCTION soporte.fn_consultardestinoiata(p_codigoiata character varying) OWNER TO postgres;
 
 --
--- TOC entry 447 (class 1255 OID 268716)
+-- TOC entry 446 (class 1255 OID 268716)
 -- Name: fn_eliminarconfiguracion(character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6570,7 +6562,7 @@ $$;
 ALTER FUNCTION soporte.fn_eliminarconfiguracion(p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 512 (class 1255 OID 268717)
+-- TOC entry 510 (class 1255 OID 268717)
 -- Name: fn_ingresardestino(integer, integer, integer, character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6614,7 +6606,7 @@ $$;
 ALTER FUNCTION soporte.fn_ingresardestino(p_idcontinente integer, p_idpais integer, p_idtipodestino integer, p_codigoiata character varying, p_descripcion character varying, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 449 (class 1255 OID 268718)
+-- TOC entry 448 (class 1255 OID 268718)
 -- Name: fn_ingresardestino(integer, integer, integer, character varying, character varying, boolean, character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6648,7 +6640,7 @@ $$;
 ALTER FUNCTION soporte.fn_ingresardestino(p_idcontinente integer, p_idpais integer, p_idtipodestino integer, p_codigoiata character varying, p_descripcion character varying, p_aplicaigv boolean, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 450 (class 1255 OID 268719)
+-- TOC entry 449 (class 1255 OID 268719)
 -- Name: fn_ingresarhijomaestro(integer, character varying, character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6683,7 +6675,7 @@ $$;
 ALTER FUNCTION soporte.fn_ingresarhijomaestro(p_idmaestro integer, p_nombre character varying, p_descripcion character varying, p_abreviatura character varying) OWNER TO postgres;
 
 --
--- TOC entry 451 (class 1255 OID 268720)
+-- TOC entry 450 (class 1255 OID 268720)
 -- Name: fn_ingresarmaestro(character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6721,7 +6713,7 @@ $$;
 ALTER FUNCTION soporte.fn_ingresarmaestro(p_nombre character varying, p_descripcion character varying) OWNER TO postgres;
 
 --
--- TOC entry 452 (class 1255 OID 268721)
+-- TOC entry 451 (class 1255 OID 268721)
 -- Name: fn_ingresarpais(character varying, integer, character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6755,7 +6747,7 @@ $$;
 ALTER FUNCTION soporte.fn_ingresarpais(p_descripcion character varying, p_idcontinente integer, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 453 (class 1255 OID 268722)
+-- TOC entry 452 (class 1255 OID 268722)
 -- Name: fn_ingresarparametro(character varying, character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6792,7 +6784,7 @@ $$;
 ALTER FUNCTION soporte.fn_ingresarparametro(p_nombre character varying, p_descripcion character varying, p_valor character varying) OWNER TO postgres;
 
 --
--- TOC entry 454 (class 1255 OID 268723)
+-- TOC entry 453 (class 1255 OID 268723)
 -- Name: fn_listarconfiguracionservicio(); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6820,7 +6812,7 @@ $$;
 ALTER FUNCTION soporte.fn_listarconfiguracionservicio() OWNER TO postgres;
 
 --
--- TOC entry 478 (class 1255 OID 268724)
+-- TOC entry 477 (class 1255 OID 268724)
 -- Name: fn_listardestinos(); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6859,7 +6851,7 @@ $$;
 ALTER FUNCTION soporte.fn_listardestinos() OWNER TO postgres;
 
 --
--- TOC entry 457 (class 1255 OID 268725)
+-- TOC entry 456 (class 1255 OID 268725)
 -- Name: fn_listarpaises(integer); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6888,7 +6880,7 @@ $$;
 ALTER FUNCTION soporte.fn_listarpaises(p_idcontinente integer) OWNER TO postgres;
 
 --
--- TOC entry 455 (class 1255 OID 268726)
+-- TOC entry 454 (class 1255 OID 268726)
 -- Name: fn_listartiposservicio(); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6915,7 +6907,7 @@ $$;
 ALTER FUNCTION soporte.fn_listartiposservicio() OWNER TO postgres;
 
 --
--- TOC entry 458 (class 1255 OID 268727)
+-- TOC entry 457 (class 1255 OID 268727)
 -- Name: fn_registrarconfiguracionservicio(integer, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean, character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -6951,7 +6943,7 @@ $$;
 ALTER FUNCTION soporte.fn_registrarconfiguracionservicio(p_idtiposervicio integer, p_muestraaerolinea boolean, p_muestraempresatransporte boolean, p_muestrahotel boolean, p_muestraproveedor boolean, p_muestradescservicio boolean, p_muestrafechaservicio boolean, p_muestrafecharegreso boolean, p_muestracantidad boolean, p_muestraprecio boolean, p_muestraruta boolean, p_muestracomision boolean, p_muestraoperador boolean, p_muestratarifanegociada boolean, p_muestracodigoreserva boolean, p_muestranumeroboleto boolean, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 459 (class 1255 OID 268728)
+-- TOC entry 458 (class 1255 OID 268728)
 -- Name: fn_siguientesequencia(); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -9135,6 +9127,11 @@ INSERT INTO eventosesionsistema VALUES (176, 1, 'admin', '2015-11-24 23:45:38.05
 INSERT INTO eventosesionsistema VALUES (177, 6, 'carlos', '2015-11-24 23:46:02.069-05', 1);
 INSERT INTO eventosesionsistema VALUES (178, 1, 'admin', '2015-11-24 23:47:39.829-05', 1);
 INSERT INTO eventosesionsistema VALUES (179, 6, 'carlos', '2015-11-24 23:48:04.485-05', 1);
+INSERT INTO eventosesionsistema VALUES (180, 5, 'liliam', '2015-11-25 23:11:57.279-05', 1);
+INSERT INTO eventosesionsistema VALUES (181, 5, 'liliam', '2015-11-25 23:22:24.812-05', 1);
+INSERT INTO eventosesionsistema VALUES (182, 5, 'liliam', '2015-11-25 23:56:37.436-05', 1);
+INSERT INTO eventosesionsistema VALUES (183, 5, 'liliam', '2015-11-25 23:58:11.203-05', 1);
+INSERT INTO eventosesionsistema VALUES (184, 5, 'liliam', '2015-11-26 00:18:42.738-05', 1);
 
 
 --
@@ -9143,7 +9140,7 @@ INSERT INTO eventosesionsistema VALUES (179, 6, 'carlos', '2015-11-24 23:48:04.4
 -- Name: seq_eventosesionsistema; Type: SEQUENCE SET; Schema: auditoria; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_eventosesionsistema', 179, true);
+SELECT pg_catalog.setval('seq_eventosesionsistema', 184, true);
 
 
 SET search_path = negocio, pg_catalog;
@@ -9255,7 +9252,7 @@ INSERT INTO "CorreoElectronico" VALUES (50, 'D.VERANO@CTMTOURS.COM', 94, 'PAOLA'
 -- Data for Name: CuentaBancaria; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
 
-INSERT INTO "CuentaBancaria" VALUES (1, 'bcp soles chevere', '4544644545454545', 1, 1, 1, 600.000000, 'liliam', '2015-11-24 20:05:57.543-05', '127.0.0.1      ', 'liliam', '2015-11-24 20:06:37.39-05', '127.0.0.1      ', 1);
+INSERT INTO "CuentaBancaria" VALUES (1, 'bcp soles chevere', '4544644545454545', 1, 1, 1, 1031.000000, 'liliam', '2015-11-24 20:05:57.543-05', '127.0.0.1      ', 'liliam', '2015-11-26 00:00:00.235-05', '127.0.0.1      ', 1);
 
 
 --
@@ -9418,6 +9415,7 @@ INSERT INTO "MaestroServicios" VALUES (13, 'HOTEL', 'HOTEL', 'HOTEL', true, 1, f
 --
 
 INSERT INTO "MovimientoCuenta" VALUES (1, 1, 1, 1, 'Deposito en cuenta', 600.000000, NULL, NULL, 'liliam', '2015-11-24 20:06:37.39-05', '127.0.0.1      ', 'liliam', '2015-11-24 20:06:37.39-05', '127.0.0.1      ', 1);
+INSERT INTO "MovimientoCuenta" VALUES (2, 1, 1, 1, 'Deposito en cuenta', 431.000000, NULL, NULL, 'liliam', '2015-11-26 00:00:00.235-05', '127.0.0.1      ', 'liliam', '2015-11-26 00:00:00.235-05', '127.0.0.1      ', 1);
 
 
 --
@@ -9443,6 +9441,7 @@ INSERT INTO "MovimientoCuenta" VALUES (1, 1, 1, 1, 'Deposito en cuenta', 600.000
 --
 
 INSERT INTO "PagosServicio" VALUES (1, 28, 2, 1, NULL, NULL, NULL, NULL, NULL, '2015-11-24', 600.000, 1, NULL, NULL, NULL, NULL, 'pago isdjfdsnfosdjdsf', NULL, NULL, 'liliam', '2015-11-24 20:06:37.39-05', '127.0.0.1      ', 'liliam', '2015-11-24 20:06:37.39-05', '127.0.0.1      ', 1);
+INSERT INTO "PagosServicio" VALUES (2, 28, 2, 1, NULL, NULL, NULL, NULL, NULL, '2015-11-25', 431.000, 1, NULL, NULL, NULL, NULL, 'adsfassdsd', NULL, NULL, 'liliam', '2015-11-26 00:00:00.235-05', '127.0.0.1      ', 'liliam', '2015-11-26 00:00:00.235-05', '127.0.0.1      ', 1);
 
 
 --
@@ -9964,6 +9963,7 @@ INSERT INTO "SaldosServicio" VALUES (21, 26, 0, '2015-11-10', 1638.000, 1638.000
 INSERT INTO "SaldosServicio" VALUES (22, 27, 0, '2015-11-10', 1696.000, 1696.000, NULL, 'paola', '2015-11-10 22:38:34.891-05', '192.168.1.34   ', 'paola', '2015-11-10 22:38:34.891-05', '192.168.1.34   ', 1);
 INSERT INTO "SaldosServicio" VALUES (23, 28, 0, '2015-11-24', 708.386, 708.386, NULL, 'carlos', '2015-11-24 19:46:32.011-05', '127.0.0.1      ', 'carlos', '2015-11-24 19:46:32.011-05', '127.0.0.1      ', 1);
 INSERT INTO "SaldosServicio" VALUES (24, 28, 1, '2015-11-24', 708.386, 520.586, 1, 'liliam', '2015-11-24 20:06:37.39-05', '127.0.0.1      ', 'liliam', '2015-11-24 20:06:37.39-05', '127.0.0.1      ', 1);
+INSERT INTO "SaldosServicio" VALUES (25, 28, 2, '2015-11-24', 708.386, 390.855, 2, 'liliam', '2015-11-26 00:00:00.235-05', '127.0.0.1      ', 'liliam', '2015-11-26 00:00:00.235-05', '127.0.0.1      ', 1);
 
 
 --
@@ -10423,6 +10423,8 @@ INSERT INTO "TipoCambio" VALUES (5, '2015-11-24', 2, 1, 3.320000, 'liliam', '201
 INSERT INTO "TipoCambio" VALUES (6, '2015-11-24', 1, 2, 0.250000, 'liliam', '2015-11-24 20:08:07.678-05', '127.0.0.1      ', 'liliam', '2015-11-24 20:08:07.678-05', '127.0.0.1      ', 1);
 INSERT INTO "TipoCambio" VALUES (7, '2015-11-25', 2, 1, 3.310000, 'liliam', '2015-11-24 20:08:34.87-05', '127.0.0.1      ', 'liliam', '2015-11-24 20:08:34.87-05', '127.0.0.1      ', 1);
 INSERT INTO "TipoCambio" VALUES (8, '2015-11-03', 2, 1, 3.140000, 'liliam', '2015-11-24 20:20:35.472-05', '127.0.0.1      ', 'liliam', '2015-11-24 20:20:35.472-05', '127.0.0.1      ', 1);
+INSERT INTO "TipoCambio" VALUES (9, '2015-11-25', 2, 1, 3.325000, 'liliam', '2015-11-25 23:59:26.929-05', '127.0.0.1      ', 'liliam', '2015-11-25 23:59:26.929-05', '127.0.0.1      ', 1);
+INSERT INTO "TipoCambio" VALUES (10, '2015-11-25', 1, 2, 0.300752, 'liliam', '2015-11-25 23:59:26.937-05', '127.0.0.1      ', 'liliam', '2015-11-25 23:59:26.937-05', '127.0.0.1      ', 1);
 
 
 --
@@ -10493,6 +10495,7 @@ INSERT INTO "Tramo" VALUES (57, 17, 'MADRID', '2016-04-20 23:55:00-05', 2, 'LIMA
 --
 
 INSERT INTO "TransaccionTipoCambio" VALUES (1, 1, 600.00, 0.313000, 2, 187.80, 'liliam', '2015-11-24 20:06:37.39-05', '127.0.0.1      ', 'liliam', '2015-11-24 20:06:37.39-05', '127.0.0.1      ', 1);
+INSERT INTO "TransaccionTipoCambio" VALUES (2, 1, 431.00, 0.301000, 2, 129.73, 'liliam', '2015-11-26 00:00:00.235-05', '127.0.0.1      ', 'liliam', '2015-11-26 00:00:00.235-05', '127.0.0.1      ', 1);
 
 
 --
@@ -10546,7 +10549,7 @@ SELECT pg_catalog.setval('seq_correoelectronico', 50, true);
 -- Name: seq_cuentabancaria; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_cuentabancaria', 2, true);
+SELECT pg_catalog.setval('seq_cuentabancaria', 3, true);
 
 
 --
@@ -10618,7 +10621,7 @@ SELECT pg_catalog.setval('seq_maestroservicio', 13, true);
 -- Name: seq_movimientocuenta; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_movimientocuenta', 1, true);
+SELECT pg_catalog.setval('seq_movimientocuenta', 2, true);
 
 
 --
@@ -10645,7 +10648,7 @@ SELECT pg_catalog.setval('seq_obligacionxpagar', 1, false);
 -- Name: seq_pago; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_pago', 1, true);
+SELECT pg_catalog.setval('seq_pago', 2, true);
 
 
 --
@@ -10690,7 +10693,7 @@ SELECT pg_catalog.setval('seq_ruta', 25, true);
 -- Name: seq_salsoservicio; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_salsoservicio', 24, true);
+SELECT pg_catalog.setval('seq_salsoservicio', 25, true);
 
 
 --
@@ -10735,7 +10738,7 @@ SELECT pg_catalog.setval('seq_telefono', 143, true);
 -- Name: seq_tipocambio; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_tipocambio', 8, true);
+SELECT pg_catalog.setval('seq_tipocambio', 10, true);
 
 
 --
@@ -10753,7 +10756,7 @@ SELECT pg_catalog.setval('seq_tramo', 57, true);
 -- Name: seq_transacciontipocambio; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_transacciontipocambio', 1, true);
+SELECT pg_catalog.setval('seq_transacciontipocambio', 2, true);
 
 
 SET search_path = seguridad, pg_catalog;
@@ -13876,7 +13879,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2015-11-25 00:04:29
+-- Completed on 2015-11-26 00:20:42
 
 --
 -- PostgreSQL database dump complete
