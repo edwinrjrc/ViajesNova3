@@ -112,6 +112,7 @@ public class TipoCambioMBean extends BaseMBean {
 			this.setListaTipoCambio(this.consultaNegocioServicio
 					.listarTipoCambio(this.getTipoCambio().getFechaTipoCambio()));
 
+			this.setShowModal(false);
 		} catch (SQLException ex) {
 			logger.error(ex.getMessage(), ex);
 		}

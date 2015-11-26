@@ -18,6 +18,7 @@ import javax.ejb.TransactionManagementType;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 import javax.mail.internet.AddressException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.apache.commons.lang3.StringUtils;
@@ -183,7 +184,7 @@ public class NegocioSession implements NegocioSessionRemote,
 					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
 			}
-			
+
 			if (proveedor.getListaServicioProveedor() != null) {
 				for (ServicioProveedor servicio : proveedor
 						.getListaServicioProveedor()) {
@@ -313,7 +314,8 @@ public class NegocioSession implements NegocioSessionRemote,
 					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
 			}
-			if (!proveedorDao.eliminarTipoServicioProveedor(proveedor, conexion)){
+			if (!proveedorDao
+					.eliminarTipoServicioProveedor(proveedor, conexion)) {
 				throw new ResultadoCeroDaoException(
 						"No se pudo eliminar el registro de servicio");
 			}
@@ -613,7 +615,7 @@ public class NegocioSession implements NegocioSessionRemote,
 			throws ErrorRegistroDataException, SQLException, Exception {
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 		ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
-		
+
 		userTransaction.begin();
 		Connection conexion = null;
 		Integer idServicio = 0;
@@ -670,7 +672,7 @@ public class NegocioSession implements NegocioSessionRemote,
 										"No se pudo registrar los servicios de la venta");
 							}
 						}
-						
+
 						// INGRESO DE DETALLE DE SERVICIO PADRE
 						Integer idSerDetaPadre = servicioNovaViajesDao
 								.ingresarDetalleServicio(detalleServicio,
@@ -704,12 +706,14 @@ public class NegocioSession implements NegocioSessionRemote,
 								}
 							}
 						}
-						
+
 						// INGRESO DE LOS PASAJEROS DEL SERVICIO
-						for (Pasajero pasajero : detalleServicio.getListaPasajeros()){
+						for (Pasajero pasajero : detalleServicio
+								.getListaPasajeros()) {
 							pasajero.setIdServicio(idServicio);
 							pasajero.setIdServicioDetalle(idSerDetaPadre);
-							servicioNegocioDao.ingresarPasajero(pasajero, conexion);
+							servicioNegocioDao.ingresarPasajero(pasajero,
+									conexion);
 						}
 					}
 				}
@@ -906,14 +910,14 @@ public class NegocioSession implements NegocioSessionRemote,
 				throw new ErrorRegistroDataException(
 						"No se pudo completar el registro de servicio");
 			}
-						
+
 			userTransaction.commit();
 			return true;
 		} catch (Exception e) {
 			userTransaction.rollback();
 			throw new ErrorRegistroDataException(e);
-		} finally{
-			if (conn != null){
+		} finally {
+			if (conn != null) {
 				conn.close();
 			}
 		}
@@ -927,7 +931,7 @@ public class NegocioSession implements NegocioSessionRemote,
 		try {
 			userTransaction.begin();
 			conn = UtilConexion.obtenerConexion();
-			
+
 			if (!maestroServicioDao.actualizarMaestroServicio(servicio)) {
 				throw new ErrorRegistroDataException(
 						"No se pudo completar la actualizacion de servicio");
@@ -944,8 +948,8 @@ public class NegocioSession implements NegocioSessionRemote,
 		} catch (Exception e) {
 			userTransaction.rollback();
 			throw new ErrorRegistroDataException(e);
-		} finally{
-			if (conn != null){
+		} finally {
+			if (conn != null) {
 				conn.close();
 			}
 		}
@@ -1076,17 +1080,28 @@ public class NegocioSession implements NegocioSessionRemote,
 	}
 
 	@Override
-	public void registrarPago(PagoServicio pago) throws SQLException, Exception {
+	public void registrarPago(PagoServicio pago) throws ErrorRegistroDataException {
 		try {
-			userTransaction.begin();
-			ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+			try {
+				userTransaction.begin();
+				ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 
-			servicioNovaViajesDao.registrarPagoServicio(pago);
-			
-			userTransaction.commit();
-		} catch (Exception e) {
-			userTransaction.rollback();
-			e.printStackTrace();
+				servicioNovaViajesDao.registrarPagoServicio(pago);
+
+				userTransaction.commit();
+			} catch (SQLException e) {
+				userTransaction.rollback();
+				throw new ErrorRegistroDataException(e.getMessage(), e);
+			} catch (Exception e){
+				userTransaction.rollback();
+				throw new ErrorRegistroDataException("No se pudo completar el registro del pago",e);
+			}
+		} catch (IllegalStateException e) {
+			throw new ErrorRegistroDataException("No se pudo completar el registro del pago",e);
+		} catch (SecurityException e) {
+			throw new ErrorRegistroDataException("No se pudo completar el registro del pago",e);
+		} catch (SystemException e) {
+			throw new ErrorRegistroDataException("No se pudo completar el registro del pago",e);
 		}
 	}
 
@@ -1112,7 +1127,7 @@ public class NegocioSession implements NegocioSessionRemote,
 					ServicioAgencia.ESTADO_ANULADO);
 
 			servicioNovaViajesDao.actualizarServicioVenta(servicioAgencia);
-			
+
 			userTransaction.commit();
 		} catch (Exception e) {
 			userTransaction.rollback();
@@ -1191,8 +1206,13 @@ public class NegocioSession implements NegocioSessionRemote,
 				userTransaction.begin();
 				conn = UtilConexion.obtenerConexion();
 				for (Comprobante comprobante : listaComprobantes2) {
-					if (comprobante.getTipoComprobante().getCodigoEntero().intValue() == UtilEjb.obtenerEnteroPropertieMaestro("comprobanteFactura", "aplicacionDatosEjb")){
-						comprobante.setTotalIGV(this.utilNegocioSessionLocal.obtenerMontoIGV(comprobante.getTotalComprobante()));
+					if (comprobante.getTipoComprobante().getCodigoEntero()
+							.intValue() == UtilEjb
+							.obtenerEnteroPropertieMaestro(
+									"comprobanteFactura", "aplicacionDatosEjb")) {
+						comprobante.setTotalIGV(this.utilNegocioSessionLocal
+								.obtenerMontoIGV(comprobante
+										.getTotalComprobante()));
 					}
 					Integer idComprobante = servicioNovaViajesDao
 							.registrarComprobante(comprobante, conn);
@@ -1203,7 +1223,7 @@ public class NegocioSession implements NegocioSessionRemote,
 
 				servicioNovaViajesDao.actualizarComprobantesServicio(true,
 						servicioAgencia, conn);
-				
+
 				userTransaction.commit();
 			} catch (SQLException e) {
 				userTransaction.rollback();
@@ -1278,7 +1298,7 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 			servicioNovaViajesDao.actualizarRelacionComprobantes(true,
 					servicioAgencia, conn);
-			
+
 			userTransaction.commit();
 		} catch (SQLException e) {
 			userTransaction.rollback();
@@ -1328,7 +1348,7 @@ public class NegocioSession implements NegocioSessionRemote,
 				userTransaction.commit();
 				return true;
 			}
-			
+
 		} catch (ErrorRegistroDataException e) {
 			userTransaction.rollback();
 			throw new ErrorRegistroDataException(e);
@@ -1386,14 +1406,16 @@ public class NegocioSession implements NegocioSessionRemote,
 
 		try {
 			BigDecimal monto = BigDecimal.ZERO;
-			if (dataExcel != null){
-				for (ColumnasExcel columnaExcel : dataExcel){
-					if (columnaExcel.isSeleccionar()){
-						monto = monto.add(UtilEjb.convertirCadenaDecimal(columnaExcel.getColumna9().getValorCadena()));
+			if (dataExcel != null) {
+				for (ColumnasExcel columnaExcel : dataExcel) {
+					if (columnaExcel.isSeleccionar()) {
+						monto = monto.add(UtilEjb
+								.convertirCadenaDecimal(columnaExcel
+										.getColumna9().getValorCadena()));
 					}
 				}
 			}
-			
+
 			{
 				ParametroDao parametroDao = new ParametroDaoImpl();
 				Parametro param = parametroDao
@@ -1401,17 +1423,20 @@ public class NegocioSession implements NegocioSessionRemote,
 								.obtenerEnteroPropertieMaestro(
 										"codigoParametroImptoIGV",
 										"aplicacionDatosEjb"));
-				
+
 				reporteArchivo.setMontoTotal(monto);
-				BigDecimal igv = UtilEjb.convertirCadenaDecimal(param.getValor());
-				BigDecimal subtotal = reporteArchivo.getMontoTotal().divide(igv.add(BigDecimal.ONE), RoundingMode.HALF_UP);
+				BigDecimal igv = UtilEjb.convertirCadenaDecimal(param
+						.getValor());
+				BigDecimal subtotal = reporteArchivo.getMontoTotal().divide(
+						igv.add(BigDecimal.ONE), RoundingMode.HALF_UP);
 				reporteArchivo.setMontoSubtotal(subtotal);
-				reporteArchivo.setMontoIGV( reporteArchivo.getMontoTotal().subtract(reporteArchivo.getMontoSubtotal()) );
+				reporteArchivo.setMontoIGV(reporteArchivo.getMontoTotal()
+						.subtract(reporteArchivo.getMontoSubtotal()));
 			}
-			
+
 			userTransaction.begin();
 			conn = UtilConexion.obtenerConexion();
-			
+
 			int idArchivo = archivoReporteDao.registrarArchivoReporteCabecera(
 					reporteArchivo, conn);
 			columnasExcel.setIdArchivo(idArchivo);
@@ -1515,16 +1540,18 @@ public class NegocioSession implements NegocioSessionRemote,
 	public boolean registrarTipoCambio(TipoCambio tipoCambio)
 			throws SQLException {
 		TipoCambioDao tipoCambioDao = new TipoCambioDaoImpl();
-		
+
 		tipoCambioDao.registrarTipoCambio(tipoCambio);
-		
-		BigDecimal tipoCambioReversa = BigDecimal.ONE.divide(tipoCambio.getMontoCambio(), 6, RoundingMode.HALF_UP);
-		
-		BaseVO monedaOrigen = new BaseVO(tipoCambio.getMonedaDestino().getCodigoEntero());
+
+		BigDecimal tipoCambioReversa = BigDecimal.ONE.divide(
+				tipoCambio.getMontoCambio(), 6, RoundingMode.HALF_UP);
+
+		BaseVO monedaOrigen = new BaseVO(tipoCambio.getMonedaDestino()
+				.getCodigoEntero());
 		tipoCambio.setMontoCambio(tipoCambioReversa);
 		tipoCambio.setMonedaDestino(tipoCambio.getMonedaOrigen());
 		tipoCambio.setMonedaOrigen(monedaOrigen);
-		
+
 		return tipoCambioDao.registrarTipoCambio(tipoCambio);
 	}
 }

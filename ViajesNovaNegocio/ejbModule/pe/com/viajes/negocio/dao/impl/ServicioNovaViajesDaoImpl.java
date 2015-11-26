@@ -1963,7 +1963,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.execute();
 
 		} catch (SQLException e) {
-			throw new SQLException(e);
+			throw new SQLException(e.getMessage(), e);
 		} finally {
 			try {
 				if (cs != null) {
