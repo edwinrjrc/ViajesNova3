@@ -529,15 +529,19 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 			while (rs.next()) {
 				bean = new Comprobante();
 				bean.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
-				/*bean.getCliente().setNombre(UtilJdbc.obtenerCadena(rs, "nombrecliente"));
-				bean.getOrigen().setNombre(UtilJdbc.obtenerCadena(rs, "descripcionorigen"));
-				bean.getDestino().setNombre(UtilJdbc.obtenerCadena(rs, "descripciondestino"));
-				bean.setFechaSalida(UtilJdbc.obtenerFechaTimestamp(rs, "fechasalida"));
-				bean.setFechaLlegada(UtilJdbc.obtenerFechaTimestamp(rs, "fechallegada"));
-				bean.getAerolinea().setNombre(UtilJdbc.obtenerCadena(rs, "nombreaerolinea"));
-				bean.setIdServicioDetalle(UtilJdbc.obtenerNumero(rs, "iddetalle"));
-				bean.setIdTramo(UtilJdbc.obtenerNumero(rs, "idtramo"));
-				bean.setIdRuta(UtilJdbc.obtenerNumero(rs, "idruta"));*/
+				bean.getTipoComprobante().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipocomprobante"));
+				bean.setNumeroComprobante(UtilJdbc.obtenerCadena(rs, "numerocomprobante"));
+				bean.getProveedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idproveedor"));
+				bean.getProveedor().setNombres(UtilJdbc.obtenerCadena(rs, "nombreproveedor"));
+				bean.setFechaComprobante(UtilJdbc.obtenerFecha(rs, "fechacomprobante"));
+				bean.setFechaPago(UtilJdbc.obtenerFecha(rs, "fechapago"));
+				bean.setDetalleTextoComprobante(UtilJdbc.obtenerCadena(rs, "detallecomprobante"));
+				bean.setTotalIGV(UtilJdbc.obtenerBigDecimal(rs, "totaligv"));
+				bean.setTotalComprobante(UtilJdbc.obtenerBigDecimal(rs, "totalcomprobante"));
+				bean.setSaldoComprobante(UtilJdbc.obtenerBigDecimal(rs, "saldocomprobante"));
+				bean.setTieneDetraccion(UtilJdbc.obtenerBoolean(rs, "tienedetraccion"));
+				bean.setTieneRetencion(UtilJdbc.obtenerBoolean(rs, "tieneretencion"));
+				bean.getMoneda().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idmoneda"));
 				
 				resultado.add(bean);
 			}
