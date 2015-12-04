@@ -839,7 +839,9 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 						calcularIGV);
 			}
 
-			for (DetalleServicioAgencia detalleServicioAgencia2 : listaServiciosVenta) {
+			for (int i=0; i<listaServiciosVenta.size(); i++){
+				DetalleServicioAgencia detalleServicioAgencia2 = listaServiciosVenta.get(i);
+				
 				if (detalleServicioAgencia2.getServicioPadre()
 						.getCodigoEntero() != null
 						&& detalleServicioAgencia2.getServicioPadre()

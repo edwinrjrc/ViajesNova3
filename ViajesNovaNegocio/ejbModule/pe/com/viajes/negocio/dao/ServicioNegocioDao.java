@@ -11,6 +11,7 @@ import java.util.List;
 
 import pe.com.viajes.bean.base.BaseVO;
 import pe.com.viajes.bean.jasper.DetalleServicio;
+import pe.com.viajes.bean.negocio.Comprobante;
 import pe.com.viajes.bean.negocio.Pasajero;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.bean.negocio.ServicioProveedor;
@@ -41,4 +42,6 @@ public interface ServicioNegocioDao {
 
 	List<Pasajero> consultarPasajeroHistorico(Pasajero pasajero)
 			throws SQLException;
+	
+	List<Comprobante> consultarObligacionesPendientes(Date fechaHasta) throws SQLException;
 }

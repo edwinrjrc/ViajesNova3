@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import pe.com.viajes.bean.base.BaseVO;
 import pe.com.viajes.bean.jasper.DetalleServicio;
+import pe.com.viajes.bean.negocio.Comprobante;
 import pe.com.viajes.bean.negocio.Pasajero;
 import pe.com.viajes.bean.negocio.ServicioAgencia;
 import pe.com.viajes.bean.negocio.ServicioProveedor;
@@ -499,6 +500,60 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 				cs.close();
 			}
 			if (conn != null){
+				conn.close();
+			}
+		}
+	}
+
+	@Override
+	public List<Comprobante> consultarObligacionesPendientes(Date fechaHasta)
+			throws SQLException {
+		List<Comprobante> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "";
+		try {
+			sql = "{ ? = call negocio.fn_consultarobligacionespendientespago(?) }";
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(1, Types.OTHER);
+			cs.setDate(2, UtilJdbc.convertirUtilDateSQLDate(fechaHasta));
+			
+			cs.execute();
+
+			rs = (ResultSet) cs.getObject(1);
+			Comprobante bean = null;
+			resultado = new ArrayList<Comprobante>();
+			
+			while (rs.next()) {
+				bean = new Comprobante();
+				bean.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				/*bean.getCliente().setNombre(UtilJdbc.obtenerCadena(rs, "nombrecliente"));
+				bean.getOrigen().setNombre(UtilJdbc.obtenerCadena(rs, "descripcionorigen"));
+				bean.getDestino().setNombre(UtilJdbc.obtenerCadena(rs, "descripciondestino"));
+				bean.setFechaSalida(UtilJdbc.obtenerFechaTimestamp(rs, "fechasalida"));
+				bean.setFechaLlegada(UtilJdbc.obtenerFechaTimestamp(rs, "fechallegada"));
+				bean.getAerolinea().setNombre(UtilJdbc.obtenerCadena(rs, "nombreaerolinea"));
+				bean.setIdServicioDetalle(UtilJdbc.obtenerNumero(rs, "iddetalle"));
+				bean.setIdTramo(UtilJdbc.obtenerNumero(rs, "idtramo"));
+				bean.setIdRuta(UtilJdbc.obtenerNumero(rs, "idruta"));*/
+				
+				resultado.add(bean);
+			}
+
+			return resultado;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLException(e);
+		} finally {
+			if (rs != null) {
+				rs.close();
+			}
+			if (cs != null) {
+				cs.close();
+			}
+			if (conn != null) {
 				conn.close();
 			}
 		}
