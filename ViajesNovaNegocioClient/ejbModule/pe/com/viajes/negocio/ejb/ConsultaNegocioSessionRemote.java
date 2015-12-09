@@ -169,4 +169,7 @@ public interface ConsultaNegocioSessionRemote {
 
 	List<Pasajero> consultarPasajeroHistorico(Pasajero pasajero)
 			throws ErrorConsultaDataException;
+
+	List<Comprobante> consultarObligacionesPendientes()
+			throws ErrorConsultaDataException;
 }

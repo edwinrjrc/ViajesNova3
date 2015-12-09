@@ -829,4 +829,21 @@ public class ConsultaNegocioSession implements ConsultaNegocioSessionRemote,
 			throw new ErrorConsultaDataException(e.getMessage());
 		}
 	}
+	
+	@Override
+	public List<Comprobante> consultarObligacionesPendientes() throws ErrorConsultaDataException {
+		try {
+			ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
+			
+			Date fechaHasta = new Date();
+			
+			return servicioNegocioDao.consultarObligacionesPendientes(fechaHasta);
+		} catch (SQLException e) {
+			throw new ErrorConsultaDataException(e.getMessage(),e);
+		} catch (Exception e){
+			throw new ErrorConsultaDataException("Ha ocurrido un error al realizar la consulta");
+		}
+		
+		
+	}
 }

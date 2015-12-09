@@ -137,6 +137,66 @@
 					</tr>
 				</table>
 			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+				style="width:100%;text-align:center;"
+				rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 3}">
+				<h:outputText
+						value="Obligaciones que deben pagarse hoy, #{clienteMBean.fechaHoy}"
+						styleClass="textNegrita" />
+				<table style="width: 70%;" align="center" border="0">
+					<tr>
+						<td align="center"><rich:dataTable id="idTablaPagosPendientes"
+								value="#{inicioMBean.obligacionesPendientes}" var="fila"
+								style="width:100%;" rows="5">
+								<f:facet name="noData">
+									<h:outputText value="No obligaciones pendientes" />
+								</f:facet>
+								<f:facet name="header">
+									<h:outputText value="Obligaciones Pendientes" />
+								</f:facet>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Proveedor" />
+									</f:facet>
+									<h:outputText value="#{fila.proveedor.nombreCompleto}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Tipo Comprobante" />
+									</f:facet>
+									<h:outputText value="#{fila.tipoComprobante.nombre}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Numero Comprobante" />
+									</f:facet>	
+									<h:outputText value="#{fila.numeroComprobante}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Fecha Comprobante" />
+									</f:facet>
+									<h:outputText value="#{fila.fechaComprobante}">
+										<f:convertDateTime pattern="dd/MM/yyyy"
+											timeZone="GMT-05" />
+									</h:outputText>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Total Comprobante" />
+									</f:facet>
+									<h:outputText value="#{fila.totalComprobante}">
+										<f:convertNumber locale="en_US" pattern="###,##0.00" />
+									</h:outputText>
+								</rich:column>
+								<f:facet name="footer">
+									<rich:dataScroller for="idTablaPagosPendientes"></rich:dataScroller>
+								</f:facet>
+							</rich:dataTable></td>
+					</tr>
+				</table>
+			</h:panelGrid>
 
 			<h:panelGrid id="idPnHdCredVencida">
 				<h:inputHidden id="idTxtHidCredvencida"

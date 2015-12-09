@@ -172,4 +172,7 @@ public interface ConsultaNegocioServicio {
 
 	List<Pasajero> consultarPasajeroHistorico(Pasajero pasajero)
 			throws ErrorConsultaDataException;
+
+	List<Comprobante> consultarObligacionesPendientes()
+			throws ErrorConsultaDataException;
 }
