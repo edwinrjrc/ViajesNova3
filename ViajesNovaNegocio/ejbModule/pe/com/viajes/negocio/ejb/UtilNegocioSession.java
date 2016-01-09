@@ -838,7 +838,12 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 								.getCodigoEntero(), detalleServicio,
 						calcularIGV);
 			}
-
+			for (int i=0; i<listaServiciosVenta.size(); i++){
+				DetalleServicioAgencia detalleServicioAgencia2 = listaServiciosVenta.get(i);
+				if (!detalleServicioAgencia2.getTipoServicio().isVisible()){
+					listaServiciosVenta.remove(i);
+				}
+			}
 			for (int i=0; i<listaServiciosVenta.size(); i++){
 				DetalleServicioAgencia detalleServicioAgencia2 = listaServiciosVenta.get(i);
 				
@@ -847,7 +852,7 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote,
 						&& detalleServicioAgencia2.getServicioPadre()
 								.getCodigoEntero().intValue() == detalleServicio
 								.getCodigoEntero().intValue()) {
-					listaServiciosVenta.remove(detalleServicioAgencia2);
+					//listaServiciosVenta.remove(detalleServicioAgencia2);
 				}
 			}
 
